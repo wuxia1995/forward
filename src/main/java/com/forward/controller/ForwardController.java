@@ -34,8 +34,9 @@ public class ForwardController {
     @RequestMapping("/pre/**")
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println(request.getMethod());
         PrintWriter out = response.getWriter();
-        String reply = new MethodUtil().requestForword(request, response, out);
+        String reply = MethodUtil.requestForword(request, response);
         out.println(reply);
     }
 }
