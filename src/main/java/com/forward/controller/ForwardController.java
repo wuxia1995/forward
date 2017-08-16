@@ -39,7 +39,7 @@ public class ForwardController {
         test.put("ccc","bb");
         return test;
     }
-    @RequestMapping("/pre/**")
+    @RequestMapping("/n-tech/**")
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         System.out.println(request.getMethod());

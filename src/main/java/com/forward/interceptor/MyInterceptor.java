@@ -1,5 +1,6 @@
 package com.forward.interceptor;
 
+import com.forward.util.Constant;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -44,7 +45,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
         log.info("requestUri:"+requestUri);
         log.info("contextPath:"+contextPath);
         log.info("url:"+url);
-        if(requestUri.startsWith("/pre")){
+        if(requestUri.startsWith(Constant.CONTEXT)){
             return true;
         }else{
             log.info("invalid request for uri");

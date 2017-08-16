@@ -15,6 +15,8 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 
 public class MethodUtil {
@@ -42,6 +44,7 @@ public class MethodUtil {
 			try {
 				List<FileItem> items = upload.parseRequest(request);
 				Iterator<FileItem> iterator = items.iterator();
+
 				while(iterator.hasNext()) {
 					FileItem item = iterator.next();
 					if(item.isFormField()) {
@@ -84,7 +87,7 @@ public class MethodUtil {
 		header.put("Method",request.getMethod());
 		header.put("Authorization","Hhhzp023j1nckca9OsauXr-T4Onmf7Bp");
 		/*param.put("Authorization","iqwpYL6jTEnnebA2WIYeluFZCtBV4kx3");*/
-		header.put("API",request.getRequestURI().split("pre")[1]);
+		header.put("API",request.getRequestURI().split(Constant.CONTEXT)[1]);
 		
 		/*String SDKreply = new ConnectionSDK().httpURLConnectionPOST(header, param, file, meta);*/
 		String SDKreply = HttpUploadFile.forwardRequest(header, param, file, meta);
