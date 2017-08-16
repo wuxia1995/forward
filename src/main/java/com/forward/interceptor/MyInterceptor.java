@@ -41,18 +41,25 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
         String requestUri = request.getRequestURI();
         String contextPath = request.getContextPath();
         String url = requestUri.substring(contextPath.length());
-
         log.info("requestUri:"+requestUri);
         log.info("contextPath:"+contextPath);
         log.info("url:"+url);
+        if(requestUri.startsWith("/pre")){
+            return true;
+        }else{
+            log.info("invalid request for uri");
+            return true;
+        }
 
-        String username =  (String)request.getSession().getAttribute("user");
-        if(username == null){
-            log.info("Interceptor：跳转到login页面！");
-//            request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
-            return true;
-        }else
-            return true;
+
+
+//        String username =  (String)request.getSession().getAttribute("user");
+//        if(username == null){
+//            log.info("Interceptor：跳转到login页面！");
+////            request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+//            return true;
+//        }else
+//            return true;
     }
 
     /**

@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/")
@@ -21,15 +23,21 @@ public class ForwardController {
     private HttpServletRequest request;
 
     private final static Logger logger = Logger.getLogger(ForwardController.class);
+
     @RequestMapping("face")
     @ResponseBody
-    public String testRequest(){
+    public Map testRequest(){
         logger.info("start testRequest method");
         logger.info(request.toString());
         logger.info(request.getRequestURI());
         logger.info(request.getServletPath());
         logger.info("end testRequest method");
-        return "aaaa";
+        HashMap test = new HashMap();
+        test.put("aa","bb");
+        test.put("bb","bb");
+        test.put("cc","bb");
+        test.put("ccc","bb");
+        return test;
     }
     @RequestMapping("/pre/**")
     public void doGet(HttpServletRequest request, HttpServletResponse response)

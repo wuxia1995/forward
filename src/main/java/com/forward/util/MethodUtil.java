@@ -84,7 +84,7 @@ public class MethodUtil {
 		header.put("Method",request.getMethod());
 		header.put("Authorization","Hhhzp023j1nckca9OsauXr-T4Onmf7Bp");
 		/*param.put("Authorization","iqwpYL6jTEnnebA2WIYeluFZCtBV4kx3");*/
-		header.put("API",request.getRequestURI().split(request.getContextPath())[1]);
+		header.put("API",request.getRequestURI().split("pre")[1]);
 		
 		/*String SDKreply = new ConnectionSDK().httpURLConnectionPOST(header, param, file, meta);*/
 		String SDKreply = HttpUploadFile.forwardRequest(header, param, file, meta);
