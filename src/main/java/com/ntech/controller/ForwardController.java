@@ -1,6 +1,6 @@
-package com.forward.controller;
+package com.ntech.controller;
 
-import com.forward.util.MethodUtil;
+import com.ntech.util.MethodUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

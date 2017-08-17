@@ -1,7 +1,7 @@
-package com.forward.dao;
+package com.ntech.dao;
 
-import com.forward.model.User;
-import com.forward.model.UserExample;
+import com.ntech.model.User;
+import com.ntech.model.UserExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

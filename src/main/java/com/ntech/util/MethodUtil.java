@@ -1,4 +1,4 @@
-package com.forward.util;
+package com.ntech.util;
 
 import java.io.IOException;
 import java.util.Enumeration;
@@ -15,8 +15,6 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 
 public class MethodUtil {

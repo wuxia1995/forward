@@ -1,6 +1,6 @@
-package com.forward.service.inf;
+package com.ntech.service.inf;
 
-import com.forward.model.User;
+import com.ntech.model.User;
 
 import java.util.List;
 

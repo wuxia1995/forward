@@ -1,4 +1,4 @@
-package com.forward.model;
+package com.ntech.model;
 
 import java.util.ArrayList;
 import java.util.List;

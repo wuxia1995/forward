@@ -1,4 +1,4 @@
-package com.forward.model;
+package com.ntech.model;
 
 public class User {
     private Integer id;

@@ -1,9 +1,9 @@
-package com.forward.service.impl;
+package com.ntech.service.impl;
 
-import com.forward.dao.UserMapper;
-import com.forward.model.User;
-import com.forward.model.UserExample;
-import com.forward.service.inf.IUserService;
+import com.ntech.dao.UserMapper;
+import com.ntech.model.User;
+import com.ntech.model.UserExample;
+import com.ntech.service.inf.IUserService;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

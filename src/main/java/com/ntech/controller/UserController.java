@@ -1,6 +1,6 @@
-package com.forward.controller;
+package com.ntech.controller;
 
-import com.forward.service.inf.IUserService;
+import com.ntech.service.inf.IUserService;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
