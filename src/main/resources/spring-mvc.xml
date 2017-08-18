@@ -35,11 +35,37 @@
     <mvc:annotation-driven/>
 
 
-    <!-- 定义跳转的文件的前后缀 ，视图模式配置 -->
+
+    <bean id="freemarkerConfig"
+          class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPaths">
+            <list>
+                <value>/WEB-INF/html/</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="exposeRequestAttributes" value="true" />
+        <property name="exposeSessionAttributes" value="true" />
+        <property name="viewClass">
+            <value>org.springframework.web.servlet.view.freemarker.FreeMarkerView</value>
+        </property>
+        <property name="cache"><value>true</value></property>
+        <!--这里需要注意一下，我注释了下面这样一行代码，这行代码的意思就是指引freemarker需要解析的文件的位置。注释掉原因是因为
+         applicationContext.xml里有这样一行代码：<property name="templateLoaderPath" value="/WEB-INF/views/" /> 已经指定了视图位置。如果我们这里依然保留下方代码，页面回报406的找不到的错误 -->
+        <!--<property name="prefix"><value>/WEB-INF/views/</value></property>-->
+        <property name="suffix"><value>.html</value></property>
+        <property name="contentType">
+            <value>text/html; charset=UTF-8</value>
+        </property>
+    </bean>
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/jsp/" />
+        <!--<property name="prefix" value="/"/>-->
         <property name="suffix" value=".jsp"/>
     </bean>
+    <mvc:resources location="WEB-INF/html/" mapping="/html/*.html"/>
+    <mvc:resources location="WEB-INF/js/" mapping="/js/**"/>
+    <mvc:resources location="WEB-INF/css/" mapping="/css/**"/>
 
     <!--&lt;!&ndash; 文件上传配置 &ndash;&gt;-->
     <!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->

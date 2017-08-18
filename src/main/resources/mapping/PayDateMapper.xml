@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ntech.dao.UserMapper">
-  <resultMap id="BaseResultMap" type="com.ntech.model.User">
+<mapper namespace="com.ntech.dao.PayDateMapper">
+  <resultMap id="BaseResultMap" type="com.ntech.model.PayDate">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="contype" jdbcType="VARCHAR" property="contype" />
+    <result column="begin_time" jdbcType="DATE" property="beginTime" />
+    <result column="end_time" jdbcType="DATE" property="endTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,15 +67,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_name, password, age
+    id, user_name, contype, begin_time, end_time
   </sql>
-  <select id="selectByExample" parameterType="com.ntech.model.UserExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ntech.model.PayDateExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from user
+    from pay_date
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -85,27 +86,27 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from user
+    from pay_date
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from user
+    delete from pay_date
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ntech.model.UserExample">
-    delete from user
+  <delete id="deleteByExample" parameterType="com.ntech.model.PayDateExample">
+    delete from pay_date
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ntech.model.User">
-    insert into user (id, user_name, password, 
-      age)
-    values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{age,jdbcType=INTEGER})
+  <insert id="insert" parameterType="com.ntech.model.PayDate">
+    insert into pay_date (id, user_name, contype, 
+      begin_time, end_time)
+    values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{contype,jdbcType=VARCHAR}, 
+      #{beginTime,jdbcType=DATE}, #{endTime,jdbcType=DATE})
   </insert>
-  <insert id="insertSelective" parameterType="com.ntech.model.User">
-    insert into user
+  <insert id="insertSelective" parameterType="com.ntech.model.PayDate">
+    insert into pay_date
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -113,11 +114,14 @@
       <if test="userName != null">
         user_name,
       </if>
-      <if test="password != null">
-        password,
+      <if test="contype != null">
+        contype,
       </if>
-      <if test="age != null">
-        age,
+      <if test="beginTime != null">
+        begin_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -127,22 +131,25 @@
       <if test="userName != null">
         #{userName,jdbcType=VARCHAR},
       </if>
-      <if test="password != null">
-        #{password,jdbcType=VARCHAR},
+      <if test="contype != null">
+        #{contype,jdbcType=VARCHAR},
       </if>
-      <if test="age != null">
-        #{age,jdbcType=INTEGER},
+      <if test="beginTime != null">
+        #{beginTime,jdbcType=DATE},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=DATE},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ntech.model.UserExample" resultType="java.lang.Long">
-    select count(*) from user
+  <select id="countByExample" parameterType="com.ntech.model.PayDateExample" resultType="java.lang.Long">
+    select count(*) from pay_date
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update user
+    update pay_date
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -150,11 +157,14 @@
       <if test="record.userName != null">
         user_name = #{record.userName,jdbcType=VARCHAR},
       </if>
-      <if test="record.password != null">
-        password = #{record.password,jdbcType=VARCHAR},
+      <if test="record.contype != null">
+        contype = #{record.contype,jdbcType=VARCHAR},
       </if>
-      <if test="record.age != null">
-        age = #{record.age,jdbcType=INTEGER},
+      <if test="record.beginTime != null">
+        begin_time = #{record.beginTime,jdbcType=DATE},
+      </if>
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=DATE},
       </if>
     </set>
     <if test="_parameter != null">
@@ -162,35 +172,40 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update user
+    update pay_date
     set id = #{record.id,jdbcType=INTEGER},
       user_name = #{record.userName,jdbcType=VARCHAR},
-      password = #{record.password,jdbcType=VARCHAR},
-      age = #{record.age,jdbcType=INTEGER}
+      contype = #{record.contype,jdbcType=VARCHAR},
+      begin_time = #{record.beginTime,jdbcType=DATE},
+      end_time = #{record.endTime,jdbcType=DATE}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ntech.model.User">
-    update user
+  <update id="updateByPrimaryKeySelective" parameterType="com.ntech.model.PayDate">
+    update pay_date
     <set>
       <if test="userName != null">
         user_name = #{userName,jdbcType=VARCHAR},
       </if>
-      <if test="password != null">
-        password = #{password,jdbcType=VARCHAR},
+      <if test="contype != null">
+        contype = #{contype,jdbcType=VARCHAR},
       </if>
-      <if test="age != null">
-        age = #{age,jdbcType=INTEGER},
+      <if test="beginTime != null">
+        begin_time = #{beginTime,jdbcType=DATE},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=DATE},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ntech.model.User">
-    update user
+  <update id="updateByPrimaryKey" parameterType="com.ntech.model.PayDate">
+    update pay_date
     set user_name = #{userName,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      age = #{age,jdbcType=INTEGER}
+      contype = #{contype,jdbcType=VARCHAR},
+      begin_time = #{beginTime,jdbcType=DATE},
+      end_time = #{endTime,jdbcType=DATE}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

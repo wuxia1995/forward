@@ -1,6 +1,7 @@
 package com.ntech.controller;
 
 import com.ntech.util.MethodUtil;
+import com.ntech.util.PutUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,10 @@ public class ForwardController {
 
     private final static Logger logger = Logger.getLogger(ForwardController.class);
 
+//    @RequestMapping("/index")
+//    public String indexControl(){
+//        return "index.html";
+//    }
     @RequestMapping("face")
     @ResponseBody
     public Map testRequest(){
@@ -39,12 +44,27 @@ public class ForwardController {
         test.put("ccc","bb");
         return test;
     }
+    @RequestMapping("/user/register")
+    public String register(){
+        logger.info("register");
+        return "register";
+    }
+
+
+
     @RequestMapping("/n-tech/**")
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
+    @ResponseBody
+    public String methodHandler(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println(request.getMethod());
-        PrintWriter out = response.getWriter();
-        String reply = MethodUtil.requestForword(request, response);
-        out.println(reply);
+        String reply;
+//        PrintWriter out = response.getWriter();
+        String method = request.getMethod();
+        if(method.equals("PUT")||method.equals("DELETE")){
+            reply = PutUtil.requestForword(request,response);
+        }else{
+            reply = MethodUtil.requestForword(request, response);
+        }
+//        out.println(reply);
+        return reply;
     }
 }
