@@ -10,4 +10,5 @@ public interface ICustomerService {
     void modify();
     List<Customer> findAll();
     Customer findByName();
+    boolean checkUserName(String userName);
 }

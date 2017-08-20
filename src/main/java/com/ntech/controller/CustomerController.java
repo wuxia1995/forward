@@ -5,6 +5,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
@@ -20,6 +22,12 @@ public class CustomerController {
     public String jumpToRegister(){
         logger.info("jump to register page");
         return "register";
+    }
+    @RequestMapping("/check")
+    @ResponseBody
+    public Boolean checkUserName(@RequestParam String userName){
+        logger.info("check ");
+        return customerService.checkUserName(userName);
     }
     @RequestMapping("/commitReg")
     public String register(){

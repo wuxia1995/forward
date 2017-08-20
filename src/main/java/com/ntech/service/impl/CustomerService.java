@@ -42,4 +42,12 @@ public class CustomerService implements ICustomerService {
     public Customer findByName() {
         return null;
     }
+
+    public boolean checkUserName(String userName) {
+        logger.info("check user name");
+        CustomerExample example = new CustomerExample();
+        example.createCriteria().andContypeEqualTo(userName);
+        List<Customer> result = customerMapper.selectByExample(example);
+        return result.size()>0?true:false;
+    }
 }

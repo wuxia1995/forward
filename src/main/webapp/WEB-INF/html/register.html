@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <!--<link rel="stylesheet" type="text/css" href="css/bootstrap.css">-->
@@ -14,14 +14,17 @@
     <form class="form-signin">
         <h2 class="form-signin-heading">Please sign in</h2>
 
-        <label for="username" class="sr-only">User name</label>
-        <input type="text" id="username" class="form-control" placeholder="User name" required autofocus>
+        <label for="userName" class="sr-only">User name</label>
+        <input type="text" id="userName" class="form-control" placeholder="User Name" required autofocus>
         <br>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <label for="userPassword" class="sr-only">Password</label>
+        <input type="password" id="userPassword" class="form-control" placeholder="Password" required>
 
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <label for="surePassword" class="sr-only">Sure Password</label>
+        <input type="password" id="surePassword" class="form-control" placeholder="Sure Password" required>
+
+        <label for="email" class="sr-only">Email address</label>
+        <input type="email" id="email" class="form-control" placeholder="Email address" required autofocus>
         <div class="checkbox">
             <label>
                 <input type="checkbox" value="remember-me"> Remember me
@@ -31,7 +34,58 @@
     </form>
 
 </div> <!-- /container -->
+
+<!--<div class="container bg-success ">-->
+    <!--<div class="col-lg-offset-3 col-md-offset-3 col-lg-6 col-md-6">-->
+
+        <!--<div class="panel panel-primary">-->
+            <!--<div class="panel-heading">-->
+                <!--<h3 class="panel-title">用户注册</h3>-->
+            <!--</div>-->
+            <!--<div class="panel-body">-->
+
+                <!--<form id="register" action="regSuccess.action"  method="post">-->
+                    <!--<div class="form-group" id="test">-->
+                        <!--&lt;!&ndash; 	<label class="control-label" for="userNumber">用户编号</label> &ndash;&gt;-->
+                        <!--<input type="text" placeholder="用户编号" name="user.UserNumber"-->
+                               <!--class="  required form-control " id="userNumber">-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                        <!--&lt;!&ndash; 	<label class="control-label" for="userName">用户名</label>&ndash;&gt;-->
+                        <!--<input type="text" placeholder="用户名" name="user.userName"-->
+                               <!--class=" required form-control" id="userName" />-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                        <!--<label class="control-label" for="userPassword">密码</label> <input-->
+                            <!--type="password" name="user.userPassword"-->
+                            <!--class=" required form-control" id="userPassword" />-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                        <!--<label class="control-label" for="surePassword">确认密码</label> <input-->
+                            <!--type="password" class="required form-control" id="surePassword" />-->
+                    <!--</div>-->
+                    <!--<div class="form-group ">-->
+                        <!--<label class="control-label " for="userRole">用户类型:&nbsp;</label> <select-->
+                            <!--class="required form-control" name="user.userRole" id="userRole">-->
+                        <!--<option value="教师">教师</option>-->
+                        <!--<option value="教学秘书">教学秘书</option>-->
+                    <!--</select>-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<input class="btn btn-success btn-block btn-lg"-->
+                               <!--type="submit" value="确认注册" id="send" />-->
+                    <!--</div>-->
+                <!--</form>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
 </body>
-<script href="../js/bootstrap.js"></script>
+<script src="../js/jquery.js"></script>
+<script src="../js/bootstrap.js"></script>
+<script src="../js/register.js"></script>
 <!--<script href="js/bootstrap.js"></script>-->
 </html>
