@@ -11,27 +11,41 @@
 <body>
 <div class="container">
 
-    <form class="form-signin">
-        <h2 class="form-signin-heading">Please sign in</h2>
+    <form id="register" class="form-signin" method="post" action="/customer/commitReg">
+        <h2 class="form-signin-heading ">恩钛智能</h2>
 
-        <label for="userName" class="sr-only">User name</label>
-        <input type="text" id="userName" class="form-control" placeholder="User Name" required autofocus>
-        <br>
-        <label for="userPassword" class="sr-only">Password</label>
-        <input type="password" id="userPassword" class="form-control" placeholder="Password" required>
-
-        <label for="surePassword" class="sr-only">Sure Password</label>
-        <input type="password" id="surePassword" class="form-control" placeholder="Sure Password" required>
-
-        <label for="email" class="sr-only">Email address</label>
-        <input type="email" id="email" class="form-control" placeholder="Email address" required autofocus>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" value="remember-me"> Remember me
-            </label>
+        <div class="form-group">
+        <label for="userName">用户名</label>
+        <input name="name" type="text" id="userName" class="form-control" placeholder="User Name" required>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-    </form>
+
+        <div class="form-group">
+        <label for="userPassword" >密码</label>
+        <input name="password" type="password" id="userPassword" class="form-control" placeholder="Password" required>
+        </div>
+
+        <div class="form-group">
+        <label for="surePassword" >确认密码</label>
+        <input type="password" id="surePassword" class="form-control" placeholder="Sure Password" required>
+        </div>
+
+        <div class="form-group">
+        <label for="email" >邮箱</label>
+        <input name="email" type="email" id="email" class="form-control" placeholder="Email address" required>
+        </div>
+
+        <!--<div class="checkbox">-->
+            <!--<label>-->
+                <!--<input type="checkbox" value="remember-me"> Remember me-->
+            <!--</label>-->
+        <!--</div>-->
+
+        <!--<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>-->
+        <div class="form-group">
+        <input class="btn btn-success btn-block btn-lg"
+        type="submit" value="确认注册" id="send" />
+        </div>
+</form>
 
 </div> <!-- /container -->
 

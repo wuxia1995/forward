@@ -4,11 +4,13 @@ import com.ntech.dao.CustomerMapper;
 import com.ntech.model.Customer;
 import com.ntech.model.CustomerExample;
 import com.ntech.service.inf.ICustomerService;
+import com.ntech.util.SHAencrypt;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,16 +22,17 @@ public class CustomerService implements ICustomerService {
     CustomerMapper customerMapper;
 
     @Transactional
-    public void add(Customer customer) {
-        customerMapper.insert(customer);
+    public int add(Customer customer) {
+        customer.setRegtime(new Date());
+        return customerMapper.insert(customer);
     }
 
-    public void delete() {
-
+    public int delete() {
+        return 1;
     }
 
-    public void modify() {
-
+    public int modify() {
+        return 1;
     }
 
     public List<Customer> findAll() {
@@ -46,8 +49,21 @@ public class CustomerService implements ICustomerService {
     public boolean checkUserName(String userName) {
         logger.info("check user name");
         CustomerExample example = new CustomerExample();
-        example.createCriteria().andContypeEqualTo(userName);
+        example.createCriteria().andNameEqualTo(userName);
         List<Customer> result = customerMapper.selectByExample(example);
+        return result.size()>0?true:false;
+    }
+
+    public boolean loginCheck(String name, String password) {
+        logger.info("check login info");
+        try {
+            password= SHAencrypt.encryptSHA(password);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        CustomerExample example = new CustomerExample();
+        example.createCriteria().andNameEqualTo(name).andPasswordEqualTo(password);
+        List<Customer> result =customerMapper.selectByExample(example);
         return result.size()>0?true:false;
     }
 }

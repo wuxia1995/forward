@@ -5,10 +5,11 @@ import com.ntech.model.Customer;
 import java.util.List;
 
 public interface ICustomerService {
-    void add(Customer customer);
-    void delete();
-    void modify();
+    int add(Customer customer);
+    int delete();
+    int modify();
     List<Customer> findAll();
     Customer findByName();
     boolean checkUserName(String userName);
+    boolean loginCheck(String name,String password);
 }

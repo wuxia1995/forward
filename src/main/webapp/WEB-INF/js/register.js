@@ -26,11 +26,11 @@ $(function() {
 
         // 验证用户编号
         if ($(this).is('#userName')) {
-            if (this.value == "" ||this.value != "" && !/^([0-9]{6,20})$/.test(this.value)) {
-                var errorMsg = '用户编号由6位以上数字组成';
+            if (this.value == "" ||this.value != "" && !/^([a-zA-Z0-9_]{6,20})$/.test(this.value)) {
+                var errorMsg = '用户名由6位以上数字、字母或下划线组成';
                 $parent.addClass("has-error");
                 $parent.append('<span class="formtips onError">' + errorMsg + '</span>');
-            } else {
+            }else {
 
                 $.ajax({
                     url : 'check',
@@ -39,11 +39,12 @@ $(function() {
                     async: false,
                     dataType : 'json',
                     success : function(data) {
-                        if(data){
-                            $parent.append('<span class="formtips">编号可以使用</span>');
+                        if(!data){
+                            // $parent.append('<span class="formtips">用户名可以使用</span>');
                             $parent.removeClass("has-error");
                             $parent.addClass("has-success");
-                        }else{
+                        }
+                        else{
                             $parent.addClass("has-error");
                             $parent.append('<span class="formtips onError">已被注册</span>');
                         }
@@ -74,7 +75,8 @@ $(function() {
             if(this.value == ""||this.value.length<6){
                 $parent.append('<span class="onError formtips">密码长度必须大于6位</span>');
                 $parent.addClass("has-error");
-            }else {
+            }
+            else {
                 $parent.removeClass("has-error");
                 $parent.addClass("has-success");
 
@@ -123,8 +125,6 @@ $(function() {
             else {
                 $parent.removeClass("has-error");
                 $parent.addClass("has-success")
-
-
             }
         }
 

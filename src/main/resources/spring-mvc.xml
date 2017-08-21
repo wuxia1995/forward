@@ -76,6 +76,7 @@
     <mvc:resources location="WEB-INF/html/" mapping="/html/*.html"/>
     <mvc:resources location="WEB-INF/js/" mapping="/js/**"/>
     <mvc:resources location="WEB-INF/css/" mapping="/css/**"/>
+    <mvc:resources location="WEB-INF/images/" mapping="/images/**"/>
 
     <!--&lt;!&ndash; 文件上传配置 &ndash;&gt;-->
     <!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
