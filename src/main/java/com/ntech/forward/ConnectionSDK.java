@@ -1,4 +1,4 @@
-package com.ntech.util;
+package com.ntech.forward;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -13,7 +13,7 @@ import org.json.simple.JSONObject;
 
 public class ConnectionSDK {
 	
-	public static final String POST_URL = "http://192.168.10.208:8000";
+	public static final String FORWARD_URL = Constant.SDK_IP;
 
 	public static String httpURLConnectionPOST (Map<String,String> param,Map<String,Object> body
 			,String meta) {
@@ -21,8 +21,9 @@ public class ConnectionSDK {
 		StringBuffer stringBuffer= new StringBuffer();
 		BufferedReader bufferedReader = null;
 		BufferedWriter bufferedWriter = null;
+		String reply="";
 		try {
-			url = new URL(POST_URL+param.get("API"));
+			url = new URL(FORWARD_URL+param.get("API"));
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 	           connection.setDoOutput(true);  
 	           connection.setDoInput(true); 
@@ -48,6 +49,7 @@ public class ConnectionSDK {
 	            	   stringBuffer.append(lines);   
 	               }
 	           }
+	           reply = stringBuffer.toString();
 	           connection.disconnect();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
@@ -66,6 +68,6 @@ public class ConnectionSDK {
 				e.printStackTrace();
 			}
 		}
-		return stringBuffer.toString();
+		return reply;
 	}
 }

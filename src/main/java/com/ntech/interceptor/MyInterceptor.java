@@ -1,6 +1,6 @@
 package com.ntech.interceptor;
 
-import com.ntech.util.Constant;
+import com.ntech.forward.Constant;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;

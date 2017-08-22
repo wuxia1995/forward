@@ -1,6 +1,7 @@
-package com.ntech.util;
+package com.ntech.forward;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,6 +17,8 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 
+import com.ntech.exception.PermissionDeniedException;
+
 
 public class MethodUtil {
 	
@@ -23,10 +26,8 @@ public class MethodUtil {
 	private static Logger logger = Logger.getLogger(MethodUtil.class);
 	private static FileItemFactory factory = new DiskFileItemFactory();
 	public static String requestForword(HttpServletRequest request,
-			HttpServletResponse response) throws IOException{
+			HttpServletResponse response) throws IOException, PermissionDeniedException {
 		logger.info("*************START***********");
-		request.setCharacterEncoding("utf-8");
-		response.setCharacterEncoding("utf-8");
 		Map<String ,String> header = new HashMap<String,String>();
 		Map<String,String> param = new HashMap<String,String>();
 		Map<String,Object> file = new HashMap<String,Object>();
@@ -42,14 +43,17 @@ public class MethodUtil {
 			try {
 				List<FileItem> items = upload.parseRequest(request);
 				Iterator<FileItem> iterator = items.iterator();
-
 				while(iterator.hasNext()) {
 					FileItem item = iterator.next();
 					if(item.isFormField()) {
 						String filedName = item.getFieldName();
-						param.put(filedName, item.getString());
-						logger.info("文本域："+filedName+"——"+item.getString());
+						String value = new String(item.getString().getBytes("iso-8859-1"));
+						if(filedName.equals("galleries")) 
+							throw new PermissionDeniedException("BAD-GALLERY");
+						param.put(filedName, value);
+						logger.info("文本域："+filedName+"——"+value);
 					}else {
+						param.put("galleries", (String)request.getAttribute("userName"));
 						file.put("contentType",item.getContentType());
 						logger.info("contentType:"+item.getContentType());
 						String filedName = item.getFieldName();
@@ -59,6 +63,8 @@ public class MethodUtil {
 							logger.info("*******上传图片过大*******");
 						}
 						byte[] pic = item.get();
+						/*pic = Base64.getEncoder().encode(pic);
+						pic = Base64.getDecoder().decode(pic);*/
 						logger.info("PICTURE.LENGTH:"+pic.length);
 						
 						file.put(filedName+":"+fileName, pic);
@@ -67,7 +73,7 @@ public class MethodUtil {
 			} catch (FileUploadException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			} 
 		}else {
 			header.put("Content-Type", "application/json");
 		}
@@ -83,10 +89,10 @@ public class MethodUtil {
 		}
 		//转发和设定报头信息
 		header.put("Method",request.getMethod());
-		header.put("Authorization","Hhhzp023j1nckca9OsauXr-T4Onmf7Bp");
-		/*param.put("Authorization","iqwpYL6jTEnnebA2WIYeluFZCtBV4kx3");*/
-		header.put("API",request.getRequestURI().split(Constant.CONTEXT)[1]);
-		
+		header.put("Authorization",Constant.TOKEN);
+		header.put("API",(String)request.getAttribute("API"));
+		logger.info((String)request.getAttribute("API"));
+		logger.info("--------"+request.getHeader("Token"));
 		/*String SDKreply = new ConnectionSDK().httpURLConnectionPOST(header, param, file, meta);*/
 		String SDKreply = HttpUploadFile.forwardRequest(header, param, file, meta);
 		

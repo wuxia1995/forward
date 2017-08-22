@@ -1,4 +1,4 @@
-package com.ntech.util;
+package com.ntech.forward;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,22 +6,22 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
 
 
 public class PutUtil {
 	
 	private static Logger logger = Logger.getLogger(PutUtil.class);
-
+	
 	public static String requestForword(HttpServletRequest request,
 			HttpServletResponse response) throws IOException{
 		logger.info("METHOD:"+request.getMethod());
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
-		JSONObject jsonObject = null;
 		BufferedReader bufferedReader = null;
 		InputStream inputStream = request.getInputStream();
 		StringBuffer stringBuffer = new StringBuffer();
@@ -34,7 +34,6 @@ public class PutUtil {
 		if(inputStream.available()!=0) {
 			logger.info("HAS PARAM");
 			meta = "yes";
-			int b;
 			int flag = -1;
 			bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"utf-8"));
 			stringBuffer.append(bufferedReader.readLine());
@@ -76,9 +75,7 @@ public class PutUtil {
 		}*/
 		//转发和设定报头信息
 		param.put("Method",request.getMethod());
-		param.put("Authorization","Hhhzp023j1nckca9OsauXr-T4Onmf7Bp");
-	/*	param.put("Authorization","iqwpYL6jTEnnebA2WIYeluFZCtBV4kx3");
-		param.put("Authorization","kXa75ctpbTqoS6vo1QtYe-Gae9gNLnGR");*/
+		param.put("Authorization",Constant.TOKEN);
 		param.put("Content-Type", "application/json");
 		param.put("API",request.getRequestURI().split("n-tech")[1]);
 		

@@ -6,6 +6,16 @@
          version="3.0">
   <display-name>Archetype Created Web Application</display-name>
   <!--<display-name>clas</display-name>-->
+
+  <filter>
+    <filter-name>APIFilter</filter-name>
+    <filter-class>com.ntech.filter.APIFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>APIFilter</filter-name>
+    <url-pattern>/n-tech/*</url-pattern>
+  </filter-mapping>
+
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath:spring-mybatis.xml</param-value>

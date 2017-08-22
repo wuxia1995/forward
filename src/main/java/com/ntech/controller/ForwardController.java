@@ -1,7 +1,8 @@
 package com.ntech.controller;
 
-import com.ntech.util.MethodUtil;
-import com.ntech.util.PutUtil;
+import com.ntech.exception.PermissionDeniedException;
+import com.ntech.forward.MethodUtil;
+import com.ntech.forward.PutUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,15 +57,21 @@ public class ForwardController {
     @ResponseBody
     public String methodHandler(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String reply;
+        String reply="";
 //        PrintWriter out = response.getWriter();
         String method = request.getMethod();
         if(method.equals("PUT")||method.equals("DELETE")){
             reply = PutUtil.requestForword(request,response);
         }else{
-            reply = MethodUtil.requestForword(request, response);
+            try {
+                reply = MethodUtil.requestForword(request, response);
+            } catch (PermissionDeniedException e) {
+                e.printStackTrace();
+                logger.info("BAD_GALLERY");
+            }
         }
-//        out.println(reply);
+        if(reply.equals(""))
+            reply="BAD_INPUT";
         return reply;
     }
 }

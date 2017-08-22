@@ -1,4 +1,4 @@
-package com.ntech.util;
+package com.ntech.forward;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
@@ -13,12 +13,13 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
+import org.omg.IOP.Codec;
 
 /**
  * java通过模拟post方式提交表单实现图片上传功能
  */
-public  class HttpUploadFile {
-	private static final String POST_URL = "http://192.168.10.208:8000";
+public class HttpUploadFile {
+	private static final String POST_URL = Constant.SDK_IP;
 	private static Logger logger = Logger.getLogger(HttpUploadFile.class);
 
     public static String forwardRequest( Map<String,String> header,Map<String, String> param,
@@ -129,6 +130,9 @@ public  class HttpUploadFile {
 	        } 
             // 读取返回数据
             StringBuffer strBuf = new StringBuffer();
+            int code = connection.getResponseCode();
+            if(code!=200)
+            	strBuf.append("HTTP Code:"+code);
             bufferedReader = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
             String line = null;
