@@ -9,6 +9,8 @@ public class Customer {
 
     private String contype;
 
+    private String active;
+
     private String email;
 
     private String token;
@@ -37,6 +39,14 @@ public class Customer {
 
     public void setContype(String contype) {
         this.contype = contype == null ? null : contype.trim();
+    }
+
+    public String getActive() {
+        return active;
+    }
+
+    public void setActive(String active) {
+        this.active = active == null ? null : active.trim();
     }
 
     public String getEmail() {
