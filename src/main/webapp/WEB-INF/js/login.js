@@ -13,7 +13,7 @@ $(function() {
                 if(msg){
                     result = true
                 }else{
-                    $('#msg').text("用户名或密码错误");
+                    $('#msg').text("用户未激活或者用户名或密码错误");
                     result = false
                 }
             }

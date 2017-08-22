@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.mail.MessagingException;
+
 
 @Controller
 @RequestMapping("/customer")
@@ -32,14 +34,21 @@ public class CustomerController {
         return customerService.checkUserName(userName);
     }
     @RequestMapping("/commitReg")
-    public String register(@RequestParam("name") String name, String password, String email){
+    public ModelAndView register(@RequestParam("name") String name, String password, String email){
+        ModelAndView mav = new ModelAndView("msg");
         logger.info("commit register");
         Customer customer = new Customer();
         customer.setName(name);
         customer.setPassword(SHAencrypt.encryptSHA(password));
         customer.setEmail(email);
-        customerService.add(customer);
-        return "msg";
+        try {
+            customerService.add(customer);
+        } catch (MessagingException e) {
+            logger.error(e.getMessage());
+            mav.addObject("msg","注册失败");
+            mav.setViewName("error");
+        }
+        return mav;
 
     }
 
@@ -55,16 +64,28 @@ public class CustomerController {
         return "login";
     }
 
+    //登录成功后进入主页面
     @RequestMapping("index")
     public String customerInfo(String name,String password){
         if(customerService.loginCheck(name,password)){
             return "info";
         }
-        return "msg";
+        return "error";
     }
 
-    @RequestMapping("/all")
-    public void addCustomer(){
-        System.out.println(customerService.findAll());
+    @RequestMapping("active")
+    public String activeEmail(String name,String validateCode,String email){
+        if(true){
+
+        }
+        return "error";
     }
+
+//    @RequestMapping("")
+//    public
+//
+//    @RequestMapping("/all")
+//    public void addCustomer(){
+//        System.out.println(customerService.findAll());
+//    }
 }
