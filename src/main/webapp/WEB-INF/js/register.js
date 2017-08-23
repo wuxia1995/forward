@@ -137,8 +137,9 @@ $(function() {
         $(this).triggerHandler("blur");
     }); // end blur
     // 提交，最终验证。
-    $('#send').click(function() {
 
+    $('#send').click(function() {
+        var flag= false
         if($('#authCode').val()==''){
             $('#codeMsg').text("验证码不能为空");
             return false;
@@ -147,14 +148,15 @@ $(function() {
             url : 'checkCode',
             type : 'POST',
             data : {authCode:$('#authCode').val()},
-            async: true,
+            async: false,
             dataType : 'json',
             success : function(data) {
                 if(!data){
                     $('#codeMsg').text("验证码错误");
-                    return false;
+                    flag=false;
                 }else{
                     $('#codeMsg').text("");
+                    flag=true;
                 }
             }
         });
@@ -162,8 +164,9 @@ $(function() {
         $("form :input.required").trigger('blur');
         var numError = $('.onError').length;
         if (numError) {
-            return false;
+            flag=false
         }
+        return flag;
     });
 
 
