@@ -8,7 +8,7 @@ import java.util.List;
 public interface ICustomerService {
     int add(Customer customer) throws MessagingException;
     int delete();
-    int modify();
+    int modify(Customer customer);
     List<Customer> findAll();
     Customer findByName(String name);
     boolean checkUserName(String userName);

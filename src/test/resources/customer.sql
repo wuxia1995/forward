@@ -7,8 +7,8 @@ create table customer
 (
   name varchar(32) not null,
   password varchar(64) not null,
-  contype varchar(2) DEFAULT '0',
-  active VARCHAR(2) DEFAULT '0',
+  contype int DEFAULT 0,
+  active int DEFAULT 0,
   email varchar(64),
   token varchar(32),
   regtime datetime,

@@ -26,6 +26,8 @@ public class CustomerService implements ICustomerService {
     @Transactional
     public int add(Customer customer) throws MessagingException {
         customer.setRegtime(new Date());
+        customer.setActive(0);
+        customer.setContype(0);
         sendEmail(customer);
         return customerMapper.insert(customer);
     }
@@ -34,8 +36,12 @@ public class CustomerService implements ICustomerService {
         return 1;
     }
 
-    public int modify() {
-        return 1;
+    public int modify(Customer customer) {
+        logger.info("modify customer:" + customer.getName());
+        CustomerExample example = new CustomerExample();
+        example.createCriteria().andNameEqualTo(customer.getName());
+        return customerMapper.updateByExampleSelective(customer, example);
+
     }
 
     public List<Customer> findAll() {
@@ -46,50 +52,50 @@ public class CustomerService implements ICustomerService {
     }
 
     public Customer findByName(String name) {
-        logger.info("get user name:"+name);
-        Customer customer=null;
+        logger.info("get user name:" + name);
+        Customer customer = null;
         CustomerExample example = new CustomerExample();
         example.createCriteria().andNameEqualTo(name);
         List<Customer> list = customerMapper.selectByExample(example);
-        if(list.size()>0){
-            customer=list.get(0);
+        if (list.size() > 0) {
+            customer = list.get(0);
         }
         return customer;
     }
 
     public boolean checkUserName(String userName) {
-        logger.info("check user name");
+        logger.info("check user name:" + userName);
         CustomerExample example = new CustomerExample();
         example.createCriteria().andNameEqualTo(userName);
         List<Customer> result = customerMapper.selectByExample(example);
-        return result.size()>0?true:false;
+        return result.size() > 0 ? true : false;
     }
 
     public boolean loginCheck(String name, String password) {
-        Customer customer= findByName(name);
-        if(null != customer){
-            if("0".equals(customer.getActive())){
-                logger.warn(name+" user is not active");
+        Customer customer = findByName(name);
+        if (null != customer) {
+            if (0 == customer.getActive()) {
+                logger.warn(name + " user is not active");
                 return false;
             }
             logger.info("check login info");
             try {
-                password= SHAencrypt.encryptSHA(password);
+                password = SHAencrypt.encryptSHA(password);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             CustomerExample example = new CustomerExample();
             example.createCriteria().andNameEqualTo(name).andPasswordEqualTo(password);
-            List<Customer> result =customerMapper.selectByExample(example);
-            return result.size()>0?true:false;
-        }else{
+            List<Customer> result = customerMapper.selectByExample(example);
+            return result.size() > 0 ? true : false;
+        } else {
             return false;
         }
     }
 
     private void sendEmail(Customer customer) throws MessagingException {
-        String validateCode=SHAencrypt.encryptSHA(customer.getEmail());
-        StringBuffer content=new StringBuffer("点击下面链接激活账号，48小时生效，否则重新注册账号，链接只能使用一次，请尽快激活！</br>");
+        String validateCode = SHAencrypt.encryptSHA(customer.getEmail());
+        StringBuffer content = new StringBuffer("点击下面链接激活账号，48小时生效，否则重新注册账号，链接只能使用一次，请尽快激活！</br>");
         content.append("<a href=\"http://localhost:8080/customer/active?email=");
         content.append(customer.getEmail());
         content.append("&name=");
@@ -100,6 +106,7 @@ public class CustomerService implements ICustomerService {
         content.append(customer.getEmail());
         content.append("&validateCode=");
         content.append(validateCode);
-        MailUtil.send_mail(customer.getEmail(),content.toString());
+        content.append("</a>");
+        MailUtil.send_mail(customer.getEmail(), content.toString());
     }
 }

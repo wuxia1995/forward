@@ -38,7 +38,13 @@ body {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+.formtips{
+    color: #df4b33 !important;
+}
 
 #msg{
+    color: #df4b33 !important;
+}
+#codeMsg{
     color: #df4b33 !important;
 }

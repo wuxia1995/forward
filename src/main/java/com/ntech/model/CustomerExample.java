@@ -255,62 +255,52 @@ public class CustomerExample {
             return (Criteria) this;
         }
 
-        public Criteria andContypeEqualTo(String value) {
+        public Criteria andContypeEqualTo(Integer value) {
             addCriterion("contype =", value, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeNotEqualTo(String value) {
+        public Criteria andContypeNotEqualTo(Integer value) {
             addCriterion("contype <>", value, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeGreaterThan(String value) {
+        public Criteria andContypeGreaterThan(Integer value) {
             addCriterion("contype >", value, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeGreaterThanOrEqualTo(String value) {
+        public Criteria andContypeGreaterThanOrEqualTo(Integer value) {
             addCriterion("contype >=", value, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeLessThan(String value) {
+        public Criteria andContypeLessThan(Integer value) {
             addCriterion("contype <", value, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeLessThanOrEqualTo(String value) {
+        public Criteria andContypeLessThanOrEqualTo(Integer value) {
             addCriterion("contype <=", value, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeLike(String value) {
-            addCriterion("contype like", value, "contype");
-            return (Criteria) this;
-        }
-
-        public Criteria andContypeNotLike(String value) {
-            addCriterion("contype not like", value, "contype");
-            return (Criteria) this;
-        }
-
-        public Criteria andContypeIn(List<String> values) {
+        public Criteria andContypeIn(List<Integer> values) {
             addCriterion("contype in", values, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeNotIn(List<String> values) {
+        public Criteria andContypeNotIn(List<Integer> values) {
             addCriterion("contype not in", values, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeBetween(String value1, String value2) {
+        public Criteria andContypeBetween(Integer value1, Integer value2) {
             addCriterion("contype between", value1, value2, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeNotBetween(String value1, String value2) {
+        public Criteria andContypeNotBetween(Integer value1, Integer value2) {
             addCriterion("contype not between", value1, value2, "contype");
             return (Criteria) this;
         }
@@ -325,62 +315,52 @@ public class CustomerExample {
             return (Criteria) this;
         }
 
-        public Criteria andActiveEqualTo(String value) {
+        public Criteria andActiveEqualTo(Integer value) {
             addCriterion("active =", value, "active");
             return (Criteria) this;
         }
 
-        public Criteria andActiveNotEqualTo(String value) {
+        public Criteria andActiveNotEqualTo(Integer value) {
             addCriterion("active <>", value, "active");
             return (Criteria) this;
         }
 
-        public Criteria andActiveGreaterThan(String value) {
+        public Criteria andActiveGreaterThan(Integer value) {
             addCriterion("active >", value, "active");
             return (Criteria) this;
         }
 
-        public Criteria andActiveGreaterThanOrEqualTo(String value) {
+        public Criteria andActiveGreaterThanOrEqualTo(Integer value) {
             addCriterion("active >=", value, "active");
             return (Criteria) this;
         }
 
-        public Criteria andActiveLessThan(String value) {
+        public Criteria andActiveLessThan(Integer value) {
             addCriterion("active <", value, "active");
             return (Criteria) this;
         }
 
-        public Criteria andActiveLessThanOrEqualTo(String value) {
+        public Criteria andActiveLessThanOrEqualTo(Integer value) {
             addCriterion("active <=", value, "active");
             return (Criteria) this;
         }
 
-        public Criteria andActiveLike(String value) {
-            addCriterion("active like", value, "active");
-            return (Criteria) this;
-        }
-
-        public Criteria andActiveNotLike(String value) {
-            addCriterion("active not like", value, "active");
-            return (Criteria) this;
-        }
-
-        public Criteria andActiveIn(List<String> values) {
+        public Criteria andActiveIn(List<Integer> values) {
             addCriterion("active in", values, "active");
             return (Criteria) this;
         }
 
-        public Criteria andActiveNotIn(List<String> values) {
+        public Criteria andActiveNotIn(List<Integer> values) {
             addCriterion("active not in", values, "active");
             return (Criteria) this;
         }
 
-        public Criteria andActiveBetween(String value1, String value2) {
+        public Criteria andActiveBetween(Integer value1, Integer value2) {
             addCriterion("active between", value1, value2, "active");
             return (Criteria) this;
         }
 
-        public Criteria andActiveNotBetween(String value1, String value2) {
+        public Criteria andActiveNotBetween(Integer value1, Integer value2) {
             addCriterion("active not between", value1, value2, "active");
             return (Criteria) this;
         }

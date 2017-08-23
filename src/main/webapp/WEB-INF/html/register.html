@@ -39,8 +39,16 @@
                 <!--<input type="checkbox" value="remember-me"> Remember me-->
             <!--</label>-->
         <!--</div>-->
+        <!--<div><a href="#">忘记密码</a></div>-->
 
         <!--<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>-->
+        <div class="form-group">
+            <label for="authCode" >验证码</label>
+            <input  id="authCode" name="authCode" required type="text"/>
+            <img type="image"  src="verifyCode" id="codeImage" onclick="chageCode()" title="图片看不清？点击重新得到验证码" style="cursor:pointer;"/>
+            <span id="codeMsg"></span>
+        </div>
+        <!--${Session["strCode"]}-->
         <div class="form-group">
         <input class="btn btn-success btn-block btn-lg"
         type="submit" value="确认注册" id="send" />
@@ -49,54 +57,7 @@
 
 </div> <!-- /container -->
 
-<!--<div class="container bg-success ">-->
-    <!--<div class="col-lg-offset-3 col-md-offset-3 col-lg-6 col-md-6">-->
 
-        <!--<div class="panel panel-primary">-->
-            <!--<div class="panel-heading">-->
-                <!--<h3 class="panel-title">用户注册</h3>-->
-            <!--</div>-->
-            <!--<div class="panel-body">-->
-
-                <!--<form id="register" action="regSuccess.action"  method="post">-->
-                    <!--<div class="form-group" id="test">-->
-                        <!--&lt;!&ndash; 	<label class="control-label" for="userNumber">用户编号</label> &ndash;&gt;-->
-                        <!--<input type="text" placeholder="用户编号" name="user.UserNumber"-->
-                               <!--class="  required form-control " id="userNumber">-->
-                    <!--</div>-->
-
-                    <!--<div class="form-group">-->
-                        <!--&lt;!&ndash; 	<label class="control-label" for="userName">用户名</label>&ndash;&gt;-->
-                        <!--<input type="text" placeholder="用户名" name="user.userName"-->
-                               <!--class=" required form-control" id="userName" />-->
-                    <!--</div>-->
-
-                    <!--<div class="form-group">-->
-                        <!--<label class="control-label" for="userPassword">密码</label> <input-->
-                            <!--type="password" name="user.userPassword"-->
-                            <!--class=" required form-control" id="userPassword" />-->
-                    <!--</div>-->
-
-                    <!--<div class="form-group">-->
-                        <!--<label class="control-label" for="surePassword">确认密码</label> <input-->
-                            <!--type="password" class="required form-control" id="surePassword" />-->
-                    <!--</div>-->
-                    <!--<div class="form-group ">-->
-                        <!--<label class="control-label " for="userRole">用户类型:&nbsp;</label> <select-->
-                            <!--class="required form-control" name="user.userRole" id="userRole">-->
-                        <!--<option value="教师">教师</option>-->
-                        <!--<option value="教学秘书">教学秘书</option>-->
-                    <!--</select>-->
-                    <!--</div>-->
-                    <!--<div class="form-group">-->
-                        <!--<input class="btn btn-success btn-block btn-lg"-->
-                               <!--type="submit" value="确认注册" id="send" />-->
-                    <!--</div>-->
-                <!--</form>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
 </body>
 <script src="../js/jquery.js"></script>
 <script src="../js/bootstrap.js"></script>

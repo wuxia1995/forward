@@ -7,9 +7,9 @@ public class Customer {
 
     private String password;
 
-    private String contype;
+    private Integer contype;
 
-    private String active;
+    private Integer active;
 
     private String email;
 
@@ -33,20 +33,20 @@ public class Customer {
         this.password = password == null ? null : password.trim();
     }
 
-    public String getContype() {
+    public Integer getContype() {
         return contype;
     }
 
-    public void setContype(String contype) {
-        this.contype = contype == null ? null : contype.trim();
+    public void setContype(Integer contype) {
+        this.contype = contype;
     }
 
-    public String getActive() {
+    public Integer getActive() {
         return active;
     }
 
-    public void setActive(String active) {
-        this.active = active == null ? null : active.trim();
+    public void setActive(Integer active) {
+        this.active = active;
     }
 
     public String getEmail() {

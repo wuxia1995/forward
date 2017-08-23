@@ -4,8 +4,8 @@
   <resultMap id="BaseResultMap" type="com.ntech.model.Customer">
     <id column="name" jdbcType="VARCHAR" property="name" />
     <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="contype" jdbcType="VARCHAR" property="contype" />
-    <result column="active" jdbcType="VARCHAR" property="active" />
+    <result column="contype" jdbcType="INTEGER" property="contype" />
+    <result column="active" jdbcType="INTEGER" property="active" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="token" jdbcType="VARCHAR" property="token" />
     <result column="regtime" jdbcType="TIMESTAMP" property="regtime" />
@@ -105,8 +105,8 @@
     insert into customer (name, password, contype, 
       active, email, token, 
       regtime)
-    values (#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{contype,jdbcType=VARCHAR}, 
-      #{active,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR}, 
+    values (#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{contype,jdbcType=INTEGER}, 
+      #{active,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR}, 
       #{regtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.ntech.model.Customer">
@@ -142,10 +142,10 @@
         #{password,jdbcType=VARCHAR},
       </if>
       <if test="contype != null">
-        #{contype,jdbcType=VARCHAR},
+        #{contype,jdbcType=INTEGER},
       </if>
       <if test="active != null">
-        #{active,jdbcType=VARCHAR},
+        #{active,jdbcType=INTEGER},
       </if>
       <if test="email != null">
         #{email,jdbcType=VARCHAR},
@@ -174,10 +174,10 @@
         password = #{record.password,jdbcType=VARCHAR},
       </if>
       <if test="record.contype != null">
-        contype = #{record.contype,jdbcType=VARCHAR},
+        contype = #{record.contype,jdbcType=INTEGER},
       </if>
       <if test="record.active != null">
-        active = #{record.active,jdbcType=VARCHAR},
+        active = #{record.active,jdbcType=INTEGER},
       </if>
       <if test="record.email != null">
         email = #{record.email,jdbcType=VARCHAR},
@@ -197,8 +197,8 @@
     update customer
     set name = #{record.name,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
-      contype = #{record.contype,jdbcType=VARCHAR},
-      active = #{record.active,jdbcType=VARCHAR},
+      contype = #{record.contype,jdbcType=INTEGER},
+      active = #{record.active,jdbcType=INTEGER},
       email = #{record.email,jdbcType=VARCHAR},
       token = #{record.token,jdbcType=VARCHAR},
       regtime = #{record.regtime,jdbcType=TIMESTAMP}
@@ -213,10 +213,10 @@
         password = #{password,jdbcType=VARCHAR},
       </if>
       <if test="contype != null">
-        contype = #{contype,jdbcType=VARCHAR},
+        contype = #{contype,jdbcType=INTEGER},
       </if>
       <if test="active != null">
-        active = #{active,jdbcType=VARCHAR},
+        active = #{active,jdbcType=INTEGER},
       </if>
       <if test="email != null">
         email = #{email,jdbcType=VARCHAR},
@@ -233,8 +233,8 @@
   <update id="updateByPrimaryKey" parameterType="com.ntech.model.Customer">
     update customer
     set password = #{password,jdbcType=VARCHAR},
-      contype = #{contype,jdbcType=VARCHAR},
-      active = #{active,jdbcType=VARCHAR},
+      contype = #{contype,jdbcType=INTEGER},
+      active = #{active,jdbcType=INTEGER},
       email = #{email,jdbcType=VARCHAR},
       token = #{token,jdbcType=VARCHAR},
       regtime = #{regtime,jdbcType=TIMESTAMP}

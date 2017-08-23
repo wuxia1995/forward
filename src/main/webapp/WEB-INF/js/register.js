@@ -139,6 +139,26 @@ $(function() {
     // 提交，最终验证。
     $('#send').click(function() {
 
+        if($('#authCode').val()==''){
+            $('#codeMsg').text("验证码不能为空");
+            return false;
+        }
+        $.ajax({
+            url : 'checkCode',
+            type : 'POST',
+            data : {authCode:$('#authCode').val()},
+            async: true,
+            dataType : 'json',
+            success : function(data) {
+                if(!data){
+                    $('#codeMsg').text("验证码错误");
+                    return false;
+                }else{
+                    $('#codeMsg').text("");
+                }
+            }
+        });
+
         $("form :input.required").trigger('blur');
         var numError = $('.onError').length;
         if (numError) {
@@ -148,3 +168,6 @@ $(function() {
 
 
 })
+function chageCode(){
+    $('#codeImage').attr('src','verifyCode?timestamp=' + (new Date()).valueOf());//链接后添加Math.random，确保每次产生新的验证码，避免缓存问题。
+}
