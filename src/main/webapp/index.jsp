@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>恩钛智能</title>
     <!-- Stylesheets -->
+    <link rel="icon" href="http://192.168.10.212:8080/img/favicon.ico">
     <link type="text/css" href="css/bootstrap.css" rel="stylesheet">
     <link href='css/fonts.css'rel='stylesheet' type='text/css'>
     <link type="text/css" href="css/font-awesome.css" rel="stylesheet">
