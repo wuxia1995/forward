@@ -25,8 +25,8 @@ public class ForwardRequestWrapper extends HttpServletRequestWrapper {
 		logger.info("InputToken :"+inputToken);
 		boolean isToken = new CheckAPI().checkToken(inputToken);
 		//Retrieve token from database
-		if(!isToken||inputToken==null||inputToken.equals(""))
-				throw new ErrorTokenException("Bad Token");
+//		if(!isToken||inputToken==null||inputToken.equals(""))
+//				throw new ErrorTokenException("Bad Token");
 				
 		//Retrieve userName from database
 		String username = "user";

@@ -51,6 +51,11 @@ public class ForwardController {
         return "register";
     }
 
+    //人脸探测和对比体验
+    @RequestMapping(value = {"detect"})
+    public String detectFace(){
+        return "show-detect";
+    }
 
 
     @RequestMapping("/n-tech/**")

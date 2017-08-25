@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>人脸检查</title>
+
+    <style>
+        .border {
+            border: 1px red solid;
+
+        }
+        .imgbox{
+            zoom: 1;
+            padding: 0px;
+            margin: 0px;
+            width: 400px;
+            height: 400px;
+            background-color: #e4e4e4;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+    <link rel="stylesheet" href="../css/swiper.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <script src="../js/lib/jquery-1.10.2.min.js"></script>
+    <script src="../js/lib/bootstrap.min.js"></script>
+    <!--<script src="../js/swiper-3.4.2.min.js"></script>-->
+</head>
+<body>
+<div class="container">
+    <div class="row-fluid">
+        <div class="col-xs-5 border">
+            <form id="picForm">
+                <!--<input id="picShow" type="image" src="../images/pic.jpg">-->
+                <div id="picShow" class="imgbox">
+                    <!--<input type="image" src="https://bj-mc-prod-asset.oss-cn-beijing.aliyuncs.com/mc-official/images/demo/demo-pic1.jpg">-->
+                    <img id="imgShow" width="400px" height="400px"  src="http://192.168.10.212:8080/images/timg.jpg">
+                </div>
+            </form>
+            <div class="row">
+                <div class="col-sm-6 col-md-3">
+                    <a href="#" id="img1" class="thumbnail">
+                        <img src="http://192.168.10.212:8080/images/1.jpg"
+                             alt="demo" onclick="detectReq(this)">
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <a href="#" id="img2" class="thumbnail">
+                        <img src="http://192.168.10.212:8080/images/2.jpg"
+                             alt="demo" onclick="detectReq(this)">
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <a href="#" class="thumbnail">
+                        <img src="http://192.168.10.212:8080/images/3.jpg"
+                             alt="demo" onclick="detectReq(this)">
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <a href="#" class="thumbnail">
+                        <img src="http://192.168.10.212:8080/images/4.jpg"
+                             alt="demo" onclick="detectReq(this)">
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <a href="#" class="thumbnail">
+                        <img src="http://192.168.10.212:8080/images/timg1.jpg"
+                             alt="demo" onclick="detectReq(this)">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-1 border"></div>
+        <div class="col-xs-5 border">
+            <!--<form id="picForms">-->
+                <!--&lt;!&ndash;<input id="picShow" type="image" src="../images/pic.jpg">&ndash;&gt;-->
+                <!--<div></div>-->
+                <!--<input type="image" src="../images/pic.jpg">-->
+
+            <!--</form>-->
+        </div>
+    </div>
+    <script>
+        var address;
+        $(document).ready(function () {
+
+
+
+//            $("#img").click(function () {
+//                $('#imgShow').src=$('#img'+i).attr("src")
+//                console.log()
+////            var formData = new FormData();
+////            formData.append("file",document.getElementById("picForm"))
+//
+//
+//            });
+        }); //ready
+        var num=0;
+        function detectReq(img) {
+            for (var i = 0; i < num; i++) {
+                if ($('#' + i).length > 0) {
+                    $('#' + i).remove();
+                }
+            }
+            console.log("width:"+img.naturalWidth)
+            console.log("height:"+img.naturalHeight)
+            if(img.naturalWidth>400){
+                var widthRate=400/img.naturalWidth
+            }
+            if(img.naturalHeight>400){
+                var heightRate=400/img.naturalHeight
+            }
+            $('#imgShow').attr("src",img.src);
+            $.ajax({
+                url: '../n-tech/v0/detect',
+                type: 'POST',
+//                    data: {photo: address},
+                data: {photo: img.src},
+                async: true,
+//                dataType : 'json',
+                success: function (data) {
+                    console.log(data);
+                    var dataObj = eval("(" + data + ")");
+                    var rect;
+                    var results = [];
+                    if (dataObj.hasOwnProperty("faces")) {
+                        rect = dataObj['faces'];
+                        for (var i = 0; i < rect.length; i++) {
+                            if(widthRate){
+                                rect[i].x1=rect[i].x1 *widthRate
+                                rect[i].x2=rect[i].x2 *widthRate
+                            }
+                            if(heightRate){
+                                rect[i].y1=rect[i].y1 *heightRate
+                                rect[i].y2=rect[i].y2 *heightRate
+                            }
+                            width = rect[i].x2 - rect[i].x1 - 8
+                            height = rect[i].y2 - rect[i].y1 - 6
+                            left = rect[i].x1 + 18
+                            divtop = rect[i].y1 + 6
+                            var result= new Result(width,height,left,divtop);
+                            results[i] = result;
+                            console.log(results);
+                        }
+                    }
+                    if (results) {
+
+                        for (var i = 0; i < num; i++) {
+                            if ($('#' + i).length > 0) {
+                                $('#' + i).remove();
+                            }
+                        }
+                        num=results.length;
+                        for (var i = 0; i < results.length; i++) {
+                            $('#picShow').prepend("<div id="+i+"></div>");
+                            $('#' + i).css({
+                                "position": "absolute",
+                                "outline": "rgb(70, 171, 232) solid 2px",
+                                "width": results[i].width,
+                                "height": results[i].height,
+                                "left": results[i].left,
+                                "top": results[i].top
+                            })
+                        }
+
+                    }
+
+                }
+            });
+        }
+
+        function Result(width,height,left,top) {
+            this.width=width;
+            this.height=height;
+            this.left=left;
+            this.top=top;
+        }
+//
+//        $("#img1").click(function () {
+//            // alert($("#img1").attr("src"));
+//            address="";
+//            //更换图片的url，得以切换图片
+//            $("#image").attr("src",$("#img1").attr("src"));
+//            address=$("#img1").attr("src");
+//        });
+//        $("#img2").click(function () {
+//            address="";
+//            $("#image").attr("src",$("#img2").attr("src"));
+//            address=$("#img2").attr("src");
+//        });
+//        $("#img3").click(function () {
+//            address="";
+//            $("#image").attr("src",$("#img3").attr("src"));
+//            address=$("#img3").attr("src");
+//        });
+//        $("#img4").click(function () {
+//
+//            $("#image").attr("src",$("#img4").attr("src"));
+//            address=$("#img4").attr("src");
+//        });
+//        $("#check").click(function () {
+//            address="";
+//            var imgUrl=$("#imageUrl").val();
+//
+//            $("#image").attr("src",imgUrl);
+//            address=imgUrl;
+//        });
+    </script>
+</div>
+<script>
+
+</script>
+</body>
+
+</html>

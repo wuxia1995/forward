@@ -46,6 +46,9 @@ public class MailUtil {
     }
 
     public static void main(String[] args) throws MessagingException {
-        MailUtil.send_mail("787038741@qq.com","hello customer");
+//        MailUtil.send_mail("787038741@qq.com","hello customer");
+
+        System.out.println("/n-tech/test".split("n-tech|show")[1]);
+
     }
 }
