@@ -2,7 +2,7 @@ package com.ntech.model;
 
 import java.util.Date;
 
-public class PayTimes {
+public class SetMeal {
     private Integer id;
 
     private String userName;
@@ -11,9 +11,13 @@ public class PayTimes {
 
     private Date beginTime;
 
+    private Date endTime;
+
     private Integer totalTimes;
 
     private Integer leftTimes;
+
+    private Integer enable;
 
     public Integer getId() {
         return id;
@@ -47,6 +51,14 @@ public class PayTimes {
         this.beginTime = beginTime;
     }
 
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
     public Integer getTotalTimes() {
         return totalTimes;
     }
@@ -61,5 +73,13 @@ public class PayTimes {
 
     public void setLeftTimes(Integer leftTimes) {
         this.leftTimes = leftTimes;
+    }
+
+    public Integer getEnable() {
+        return enable;
+    }
+
+    public void setEnable(Integer enable) {
+        this.enable = enable;
     }
 }

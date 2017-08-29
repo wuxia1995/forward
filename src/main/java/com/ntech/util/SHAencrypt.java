@@ -97,7 +97,7 @@ public class SHAencrypt {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println(SHAencrypt.encryptSHA("hello123"));
+        System.out.println(SHAencrypt.encryptSHA("admin"));
 //        System.out.println(SHAencrypt.);
 
     }

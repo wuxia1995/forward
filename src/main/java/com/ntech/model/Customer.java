@@ -7,7 +7,7 @@ public class Customer {
 
     private String password;
 
-    private Integer contype;
+    private String contype;
 
     private Integer active;
 
@@ -33,12 +33,12 @@ public class Customer {
         this.password = password == null ? null : password.trim();
     }
 
-    public Integer getContype() {
+    public String getContype() {
         return contype;
     }
 
-    public void setContype(Integer contype) {
-        this.contype = contype;
+    public void setContype(String contype) {
+        this.contype = contype == null ? null : contype.trim();
     }
 
     public Integer getActive() {

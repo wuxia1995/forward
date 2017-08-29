@@ -1,6 +1,8 @@
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Properties;
 
 /**
@@ -48,7 +50,13 @@ public class MailUtil {
     public static void main(String[] args) throws MessagingException {
 //        MailUtil.send_mail("787038741@qq.com","hello customer");
 
-        System.out.println("/n-tech/test".split("n-tech|show")[1]);
+//        System.out.println("/n-tech/test".split("n-tech|show")[1]);
+
+        GregorianCalendar gc=new GregorianCalendar();
+        gc.setTime(new Date());
+        gc.add(2,2);
+        System.out.println(gc.getTime());
+        System.out.println(new Date());
 
     }
 }

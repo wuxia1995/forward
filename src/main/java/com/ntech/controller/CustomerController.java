@@ -1,7 +1,9 @@
 package com.ntech.controller;
 
 import com.ntech.model.Customer;
+import com.ntech.model.SetMeal;
 import com.ntech.service.inf.ICustomerService;
+import com.ntech.service.inf.ISetMealService;
 import com.ntech.util.SHAencrypt;
 import com.ntech.util.VerifyCode;
 import org.apache.log4j.Logger;
@@ -19,6 +21,8 @@ import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Random;
 
 
@@ -33,6 +37,9 @@ public class CustomerController {
 
     @Autowired
     ICustomerService customerService;
+
+    @Autowired
+    ISetMealService setMealService;
 
     @RequestMapping("/register")
     public String jumpToRegister() {
@@ -77,27 +84,18 @@ public class CustomerController {
     //登录
     @RequestMapping("loginCheck")
     @ResponseBody
-    public boolean login(String name, String password) {
-        logger.info("login check");
-        return customerService.loginCheck(name, password);
-    }
-
-    @RequestMapping("login")
-    public String jumpLogin() {
-        return "login";
-    }
-
-    //登录成功后进入主页面
-    @RequestMapping("personInfo")
-    public ModelAndView customerInfo(String name, String password) {
-        ModelAndView mav = new ModelAndView();
-        if (customerService.loginCheck(name, password)) {
-            mav.setViewName("info");
-            return mav;
+    public boolean login(String name, String password,HttpSession session) {
+        logger.info("login check user:"+name);
+        boolean result=false;
+        result= customerService.loginCheck(name, password);
+        if(result){
+         session.setAttribute("name",name);
         }
-        mav.setViewName("error");
-        return mav;
+        return result;
     }
+
+
+
 
     @RequestMapping("active")
     public ModelAndView activeEmail(String name, String validateCode, String email) {
@@ -186,7 +184,109 @@ public class CustomerController {
     }
 
 
+    /**
+     * 页面跳转控制
+     * 1.个人中心
+     * 2.套餐购买
+     * 3.人脸探测
+     * 4.人脸对比
+     * 5.图库管理
+     * 6.使用记录
+     * 8.登录跳转
+     *
+     */
+    //登录成功后进入主页面
+    @RequestMapping("personInfo")
+    public ModelAndView customerInfo(HttpSession session) {
+        ModelAndView mav = new ModelAndView();
+        String name= (String) session.getAttribute("name");
+        if (name==null||name.equals("")||!customerService.checkUserName(name)) {
+            mav.setViewName("error");
+            return mav;
+        }
+        mav.setViewName("info");
 
+        return mav;
+    }
+
+    @RequestMapping("setMeal")
+    public String setMealJump(){
+        return "set-meal";
+    }
+
+    @RequestMapping("detect")
+    public String faceDetectJump(){
+        return "show-detect";
+    }
+    @RequestMapping("verify")
+    public String faceVerifyJump(){
+        return "show-verify";
+    }
+    @RequestMapping("gallery")
+    public String galleryManageJump(HttpServletRequest request,HttpServletResponse response,HttpSession session){
+        String name= (String) session.getAttribute("name");
+
+        return "show-gallery";
+    }
+    @RequestMapping("record")
+    public String recordLogJump(){
+        return "record-log";
+    }
+    @RequestMapping("login")
+    public String loginJump() {
+        return "login";
+    }
+
+
+
+
+
+    @RequestMapping("setMealBuy")
+    @ResponseBody
+    public boolean setMeal(@RequestParam("name")String name,@RequestParam("type")String type,@RequestParam("value")String value){
+        if(null==name||"".equals(name)||null==type||"".equals(type)||null==value||"".equals(value)){
+            return false;
+        }
+        if(!(type.equals("date")||type.equals("times"))){
+            return false;
+        }
+        if(customerService.checkUserName(name)){
+            logger.error("username is not exist");
+            return false;
+        }
+        int intValue= Integer.parseInt(value);
+        SetMeal setMeal= new SetMeal();
+        setMeal.setUserName(name);
+        setMeal.setContype(type);
+        setMeal.setBeginTime(new Date());
+        if(type.equals("date")){
+            if(intValue==1||intValue==3||intValue==6||intValue==12){
+                setMeal.setEndTime(count(intValue));
+            }else {
+                return false;
+            }
+        }else{
+            if(intValue==100||intValue==300||intValue==500||intValue==1000){
+                setMeal.setTotalTimes(intValue);
+                setMeal.setLeftTimes(intValue);
+            }else{
+                return false;
+            }
+        }
+        if(setMealService.add(setMeal)){
+            return true;
+        }
+        return false;
+    }
+
+
+
+    private Date count(int value){
+        GregorianCalendar gc=new GregorianCalendar();
+        gc.setTime(new Date());
+        gc.add(2,value);
+        return gc.getTime();
+    }
     //创建颜色
     Color getRandColor(int fc, int bc) {
         Random random = new Random();

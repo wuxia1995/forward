@@ -30,33 +30,36 @@ public class ForwardController {
 //    public String indexControl(){
 //        return "index.html";
 //    }
-    @RequestMapping("face")
-    @ResponseBody
-    public Map testRequest(){
-        logger.info("start testRequest method");
-        logger.info(request.toString());
-        logger.info(request.getRequestURI());
-        logger.info(request.getServletPath());
-        logger.info("end testRequest method");
-        HashMap test = new HashMap();
-        test.put("aa","bb");
-        test.put("bb","bb");
-        test.put("cc","bb");
-        test.put("ccc","bb");
-        return test;
-    }
-    @RequestMapping("/user/register")
-    public String register(){
-        logger.info("register");
-        return "register";
-    }
+//    @RequestMapping("face")
+//    @ResponseBody
+//    public Map testRequest(){
+//        logger.info("start testRequest method");
+//        logger.info(request.toString());
+//        logger.info(request.getRequestURI());
+//        logger.info(request.getServletPath());
+//        logger.info("end testRequest method");
+//        HashMap test = new HashMap();
+//        test.put("aa","bb");
+//        test.put("bb","bb");
+//        test.put("cc","bb");
+//        test.put("ccc","bb");
+//        return test;
+//    }
+//    @RequestMapping("/user/register")
+//    public String register(){
+//        logger.info("register");
+//        return "register";
+//    }
 
-    //人脸探测和对比体验
-    @RequestMapping(value = {"detect"})
-    public String detectFace(){
-        return "show-detect";
-    }
-
+//    //人脸探测和对比体验
+//    @RequestMapping(value = {"detect"})
+//    public String detectFace(){
+//        return "show-detect";
+//    }
+//    @RequestMapping(value = {"verify"})
+//    public String verifyFace(){
+//        return "show-verify";
+//    }
 
     @RequestMapping("/n-tech/**")
     @ResponseBody

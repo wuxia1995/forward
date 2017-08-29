@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>html1</title>
+    <!--为了确保适当的绘制和触屏缩放，需要在 <head> 之中添加 viewport 元数据标签-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script scr="common.css"></script>
+    <link href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="../js/show-verify.js"></script>
+    <script src="../js/lib/jquery.form.js"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+    <h1></h1>
+</div>
+<hr style="height:3px;border:none;border-top:3px groove deepskyblue;"/>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-3 col-sm-3 col-md-2">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="personInfo">个人信息</a></li>
+                <li><a href="setMeal">套餐购买</a></li>
+                <li><a href="detect">人脸探测</a></li>
+                <li class="active"><a href="verify">人脸比对</a></li>
+                <li><a href="gallery">图库管理</a></li>
+                <li><a href="record">使用记录</a></li>
+            </ul>
+        </div>
+        <div class="col-xs-4">
+            <div>
+                <img id="imgShow1" width="400px" height="400px" src="http://192.168.10.122:8080/images/1.jpg">
+                <div class="search-box">
+                    <form id="jvForm1" method="post" enctype="multipart/form-data">
+                        <lable for="file-uploader" class="upload-img1"><span>本地上传</span>
+                            <input type="file" accept="image/png,image/jpeg" name="photo1" onchange="uploadPic(this,1)"
+                                   id="file-uploader1">
+                        </lable>
+                    </form>
+                    <button class="search-btn" id="check-btn1" onclick="verifyUrl(1)">检测</button>
+                    <input placeholder="图片URL" id="inputUrl1" class="search-input">
+                    <hr>
+                    <img src="http://192.168.10.122:8080/images/1.jpg"
+                         alt="demo" onclick="verifyReq(this,1)" height="100" width="100">
+                    <img src="http://192.168.10.122:8080/images/2.jpg"
+                         alt="demo" onclick="verifyReq(this,1)" height="100" width="100">
+                    <img src="http://192.168.10.122:8080/images/3.jpg" height="100" width="100"
+                         alt="demo" onclick="verifyReq(this,1)">
+                    <img src="http://192.168.10.122:8080/images/4.jpg" height="100" width="100"
+                         alt="demo" onclick="verifyReq(this,1)">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <img id="imgShow2" width="400px" height="400px" src="http://192.168.10.122:8080/images/1.jpg">
+            <div class="search-box">
+                <form id="jvForm2" method="post" enctype="multipart/form-data">
+                    <lable for="file-uploader" class="upload-img1"><span>本地上传</span>
+                        <input type="file" accept="image/png,image/jpeg" name="photo1" onchange="uploadPic(this,2)"
+                               id="file-uploader2">
+                    </lable>
+                </form>
+                <button class="search-btn" id="check-btn2" onclick="verifyUrl(2)">检测</button>
+                <input placeholder="图片URL" id="inputUrl2" class="search-input">
+                <hr>
+                <img src="http://192.168.10.122:8080/images/1.jpg" height="100" width="100"
+                     alt="demo" onclick="verifyReq(this,2)">
+                <img src="http://192.168.10.122:8080/images/2.jpg" height="100" width="100"
+                     alt="demo" onclick="verifyReq(this,2)">
+                <img src="http://192.168.10.122:8080/images/3.jpg" height="100" width="100"
+                     alt="demo" onclick="verifyReq(this,2)">
+                <img src="http://192.168.10.122:8080/images/4.jpg" height="100" width="100"
+                     alt="demo" onclick="verifyReq(this,2)">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-offset-3">
+        对比结果：
+        <hr>
+        <input type="text" width="400" height="50" readonly id="result">
+        </div>
+    </div>
+
+</div>
+</div>
+
+<div class="container-fluid">
+
+    <!--<form id="testForm" method="post" enctype="multipart/form-data">-->
+        <!--<lable for="file-uploader" class="upload-img1"><span>本地上传</span>-->
+            <!--<input type="file" accept="image/png,image/jpeg" name="photo1"-->
+                   <!--id="file">-->
+        <!--</lable>-->
+    <!--</form>-->
+    <!--<button onclick="testForm()">test</button>-->
+
+    <!--<hr>-->
+    <!--<input type="file" id="file_input">-->
+    <!--<img src="" class="img" />-->
+
+
+    <!--<div class="File">添加附件</div><input id="upfile" name="upfile" type="file" multiple="multiple" />-->
+    <!--<div class="FileArea"></div>-->
+    <!--sss-->
+
+</div>
+<!--<script>-->
+
+    <!--var str = "";-->
+    <!--$("#upfile").click();-->
+    <!--$("#upfile").on("change", function () {-->
+        <!--var obj = document.getElementById("upfile");-->
+        <!--var f = document.getElementById("f");-->
+        <!--f.files=obj.files;-->
+        <!--var length = obj.files.length;-->
+        <!--for (var i = 0; i < length; i++) {-->
+            <!--$(".FileArea").html("");;-->
+            <!--var temp = obj.files[i].name;-->
+            <!--console.log(obj.files)-->
+            <!--str += "<div>" + temp + "</div>";-->
+        <!--}-->
+        <!--$(".FileArea").append(str);-->
+    <!--});-->
+
+    <!--$("input[type='file']").change(function(){-->
+        <!--var file = this.files[0];-->
+        <!--console.log(file)-->
+        <!--if (window.FileReader) {-->
+            <!--var reader = new FileReader();-->
+            <!--reader.readAsDataURL(file);-->
+            <!--//监听文件读取结束后事件-->
+            <!--reader.onloadend = function (e) {-->
+                <!--$(".img").attr("src",e.target.result);    //e.target.result就是最后的路径地址-->
+            <!--};-->
+        <!--}-->
+    <!--});-->
+<!--</script>-->
+</body>
+</html>

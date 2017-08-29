@@ -255,52 +255,62 @@ public class CustomerExample {
             return (Criteria) this;
         }
 
-        public Criteria andContypeEqualTo(Integer value) {
+        public Criteria andContypeEqualTo(String value) {
             addCriterion("contype =", value, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeNotEqualTo(Integer value) {
+        public Criteria andContypeNotEqualTo(String value) {
             addCriterion("contype <>", value, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeGreaterThan(Integer value) {
+        public Criteria andContypeGreaterThan(String value) {
             addCriterion("contype >", value, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeGreaterThanOrEqualTo(Integer value) {
+        public Criteria andContypeGreaterThanOrEqualTo(String value) {
             addCriterion("contype >=", value, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeLessThan(Integer value) {
+        public Criteria andContypeLessThan(String value) {
             addCriterion("contype <", value, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeLessThanOrEqualTo(Integer value) {
+        public Criteria andContypeLessThanOrEqualTo(String value) {
             addCriterion("contype <=", value, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeIn(List<Integer> values) {
+        public Criteria andContypeLike(String value) {
+            addCriterion("contype like", value, "contype");
+            return (Criteria) this;
+        }
+
+        public Criteria andContypeNotLike(String value) {
+            addCriterion("contype not like", value, "contype");
+            return (Criteria) this;
+        }
+
+        public Criteria andContypeIn(List<String> values) {
             addCriterion("contype in", values, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeNotIn(List<Integer> values) {
+        public Criteria andContypeNotIn(List<String> values) {
             addCriterion("contype not in", values, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeBetween(Integer value1, Integer value2) {
+        public Criteria andContypeBetween(String value1, String value2) {
             addCriterion("contype between", value1, value2, "contype");
             return (Criteria) this;
         }
 
-        public Criteria andContypeNotBetween(Integer value1, Integer value2) {
+        public Criteria andContypeNotBetween(String value1, String value2) {
             addCriterion("contype not between", value1, value2, "contype");
             return (Criteria) this;
         }

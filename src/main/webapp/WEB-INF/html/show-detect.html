@@ -1,239 +1,91 @@
-<!DOCTYPE html><!--[if lt IE 9]>
-<html class='lt-ie9 no-js' lang='en'>
-<![endif]-->
-<!--[if gte IE 9]><!-->
-
-
-<html class="no-js" lang="en">
-<!--<![endif]-->
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>人脸检测</title>
-    <meta name="keywords">
-    <meta name="description" content="检测并定位图片中的人脸，返回高精度的人脸框坐标。人脸检测是对人脸进行分析和处理的第一步。恩钛还支持存储检测到的人脸元数据，以便日后使用，减少不必要的重复检测操作，为您进一步节省花费。">
-    <link rel="icon" href="https://192.168.10.212:8080/img/favicon.ico">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" href="../css/main.e22bbae4.css">
-    <link type="text/css" href="../css/bootstrap.css" rel="stylesheet">
-    <link type="text/css" href="../css/style1.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/login.css" />
-    <script type="text/javascript" src="../js/lib/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="../js/lib/jquery.form.js"></script>
-    <script type="text/javascript" src="../js/lib/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../js/show-detect.js"></script>
-
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $(".up_img a").mousemove(function(){
-                $(this).css({"color":"#1ABB9C","text-decoration":"none","border":"1px solid #1ABB9C"});
-            })
-            $(".up_img a").mouseout(function(){
-                $(this).css({"color":"#4c4c4c","text-decoration":"none","border":"none"});
-            })
-            $(".slide-img-box img").click(function(){
-                $(".slide-img-box img").css({"opacity":"0.5","border":"none"});
-                $(this).css({"opacity":"1","border":"2px solid #59b1f5"});
-            })
-        });
-    </script>
+    <meta charset="UTF-8">
+    <title>html1</title>
+    <!--为了确保适当的绘制和触屏缩放，需要在 <head> 之中添加 viewport 元数据标签-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script scr="common.css"></script>
+    <link href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="../js/lib/jquery.form.js"></script>
+    <script src="../js/show-detect.js"></script>
 </head>
 <body>
-<header class="header" id="jump">
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-                    <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span><span
-                        class="icon-bar"></span><span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">
-                    <img src="../img/main/min-main/logo.png" alt="" /></a>
-            </div>
-            <div class="collapse navbar-collapse hidden-xs">
-                <ul class="nav navbar-nav1 navbar-right">
-                    <li><a href="index.html">关于我们</a></li>
-                    <li><a href="#">人脸识别</a></li>
-                    <li class="active"><a href="face-detect.html">人脸检测</a></li>
-                    <li><a href="#">人脸对比</a></li>
-                    <li><a href="#">人脸搜索</a></li>
-                    <li><a href="#">人脸属性</a></li>
-                    <li><a href="login.html">登录</a></li>
-                    <li><a href="registration.html">注册</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
-<div class="container detection-page">
-    <div class="banner-page">
-        <div class="banner detection">
-            <h1>人脸检测</h1>
-            <p>检测图片中的人脸并返回人脸框位置</p><a href="https://console.faceplusplus.com.cn/register" target="_blank" class="register-a">免费体验</a>
-        </div>
-    </div>
-    <div class="intro-module">
-        <div class="content">
-            <div class="img"><img src="../img/face-detect/detection.png" alt="能力介绍" class="ama">
-                <div class="detection-ama-box">
-                    <div class="detection-ama detection-ama-one">
-                        <div class="line top-left"></div>
-                        <div class="line top-right"></div>
-                        <div class="line bottom-left"></div>
-                        <div class="line bottom-right"></div>
-                    </div>
-                    <div class="detection-ama detection-ama-two">
-                        <div class="line top-left"></div>
-                        <div class="line top-right"></div>
-                        <div class="line bottom-left"></div>
-                        <div class="line bottom-right"></div>
-                    </div>
-                    <div class="detection-ama detection-ama-three">
-                        <div class="line top-left"></div>
-                        <div class="line top-right"></div>
-                        <div class="line bottom-left"></div>
-                        <div class="line bottom-right"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="detail detection-intro">
-                <h2>能力介绍</h2>
-                <p>检测并定位图片中的人脸，返回高精度的人脸框坐标。</p>
-                <p>人脸检测是对人脸进行分析和处理的第一步。恩钛还支持存储检测到的人脸元数据，以便日后使用，减少不必要的重复检测操作，为您进一步节省花费。</p>
-            </div>
-        </div>
-    </div>
-    <div class="benefit-module">
-        <h2>技术特色</h2>
-        <ul>
-            <li>
-                <div class="img"><img src="../img/face-detect/robust-icon.png" alt="适应性强" width="67">
-                </div>
-                <div class="content">
-                    <h3>适应性强</h3>
-                    <p>恩钛的人脸检测技术能够很好地适应各类常见影响，如脸部遮挡、光照情况不理想、头部朝向不正等。</p>
-                </div>
-            </li>
-            <li>
-                <div class="img"><img src="../img/face-detect/accurate-icon.png" alt="准确性高" width="67">
-                </div>
-                <div class="content">
-                    <h3>准确性高</h3>
-                    <p>基于恩钛强大的深度学习算法，人脸检测与识别算法在多项世界权威比赛中夺冠。</p>
-                </div>
-            </li>
-            <li>
-                <div class="img"><img src="../img/face-detect/fast-icon.png" alt="快速" width="67">
-                </div>
-                <div class="content">
-                    <h3>快速</h3>
-                    <p>在实际场景中不断优化算法，在任何设备上都拥有强劲性能表现。</p>
-                </div>
-            </li>
-            <li>
-                <div class="img"><img src="../img/face-detect/unlimited-icon.png" alt="不限人脸数量" width="67">
-                </div>
-                <div class="content">
-                    <h3>不限人脸数量</h3>
-                    <p>对于图片中可检测的人脸数量没有限制。轻松处理各类集体照片。</p>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <div id="demo" class="demo-container">
-        <h2>功能演示</h2>
-        <p>即刻体验恩钛的人脸检测能力。请上传一张本地图片或提供图片URL。<br>该功能演示是基于Detect API搭建的。如果您对技术能力有特别要求，请查看下方的产品目录或联系我们。</p>
-        <div class="handle-img" style="position: relative">
-            <!--<div class="img-box"><img id="face-img" alt=""></div>-->
-            <div id="picShow" class="imgbox" style="">
-                <!--<input type="image" src="https://bj-mc-prod-asset.oss-cn-beijing.aliyuncs.com/mc-official/images/demo/demo-pic1.jpg">-->
-                <img id="imgShow"  width="400px" height="400px"  src="http://192.168.10.212:8080/images/1.jpg">
-            </div>
-            <div class="search-box">
-                <form id="jvForm"  method="post" enctype="multipart/form-data">
-                <lable for="file-uploader" class="upload-img"><span>本地上传</span>
-                    <input type="file" accept="image/png,image/jpeg" name="photo" onchange="uploadPic(this)" id="file-uploader">
-                </lable>
-                </form>
-                <button class="search-btn" id="check-btn">检测</button>
-                <input placeholder="图片URL" id="inputUrl" class="search-input">
-            </div>
-            <div class="swiper-box">
-                <div class="swiper-container">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <div  class="slide-img-box img-active">
-                                <img src="http://192.168.10.212:8080/images/1.jpg"
-                                     alt="demo" onclick="detectReq(this)">
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div  class="slide-img-box">
-                                <img src="http://192.168.10.212:8080/images/2.jpg"
-                                     alt="demo" onclick="detectReq(this)">
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div  class="slide-img-box">
-                                <img src="http://192.168.10.212:8080/images/3.jpg"
-                                     alt="demo" onclick="detectReq(this)">
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="slide-img-box">
-                                <img src="http://192.168.10.212:8080/images/4.jpg"
-                                     alt="demo" onclick="detectReq(this)">
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div  class="slide-img-box">
-                                <img src="http://192.168.10.212:8080/images/5.jpg"
-                                     alt="demo" onclick="detectReq(this)">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="handle-result">
-            <div style="height:604px" class="resp-json">
-                <div class="title">
-                    <div class="arrow arrow-down"></div>
-                    <h3>Response JSON</h3>
-                </div>
-                <textarea readonly cols="30" rows="10" class="resp-json-container"></textarea>
-            </div>
-            <div style="height:45px" class="resp-landmark">
-                <div class="title">
-                    <div class="arrow arrow-right"></div>
-                    <h3>人脸关键点 &amp; 人脸属性</h3>
-                </div>
-                <div class="resp-container"></div>
-            </div>
-        </div>
-    </div>
-    <div class="cases-page">
-        <div class="usecase detection-case">
-            <h2>应用场景</h2>
-            <ul class="two">
-                <li>
-                    <div class="img"><img src="../img/face-detect/phone-case.jpg" alt="基于人脸的人流量统计" width="325"></div>
-                    <div class="content">
-                        <h3>基于人脸的人流量统计</h3>
-                        <p>利用恩钛的人脸检测技术，您的应用能够<br>轻松识别出图像或视频中所有人脸并计数，<br>从而在零售商业、机场或学校等场所进行基于<br>人脸的人流量或出勤率统计。</p>
-                    </div>
-                </li>
-                <li>
-                    <div class="img"><img src="../img/face-detect/group-case.jpg" alt="集体照标记" width="325"></div>
-                    <div class="content">
-                        <h3>集体照标记</h3>
-                        <p>在集体照中找到并标记出所有人脸。恩钛<br>的智能算法具备超高精度与适应度，让您的<br>应用在各种场合都能抓住每一个笑容，无论是<br>大学毕业典礼留影还是马拉松比赛抓拍。</p>
-                    </div>
-                </li>
+<div class="container-fluid">
+    <h1></h1>
+</div>
+<hr style="height:3px;border:none;border-top:3px groove deepskyblue;" />
+<div class="container-fluid">
+    <div class="row">
+        <div class="span2  col-xs-12 col-sm-3 col-md-2">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="personInfo">个人信息</a></li>
+                <li><a href="setMeal">套餐购买</a></li>
+                <li class="active"><a href="detect">人脸探测</a></li>
+                <li><a href="verify">人脸比对</a></li>
+                <li><a href="gallery">图库管理</a></li>
+                <li><a href="record">使用记录</a></li>
             </ul>
         </div>
+        <div claLss="col-xs-12 col-sm-9 col-md-10">
 
+            <div class="container">
+                <div class="row-fluid">
+                    <div class="col-xs-5 border">
+                        <div style="position: relative;">
+                            <form id="picForm">
+                                <!--<input id="picShow" type="image" src="../images/pic.jpg">-->
+                                <div id="picShow" style="position: relative;">
+                                    <!--<input type="image" src="https://bj-mc-prod-asset.oss-cn-beijing.aliyuncs.com/mc-official/images/demo/demo-pic1.jpg">-->
+                                    <img id="imgShow" width="400px" height="400px"
+                                         src="http://192.168.10.212:8080/images/1.jpg">
+                                </div>
+                            </form>
+                        </div>
+                        <form id="jvForm" method="post" enctype="multipart/form-data">
+                            <lable for="file-uploader" class="upload-img"><span>本地上传</span>
+                                <input type="file" accept="image/png,image/jpeg" name="photo" onchange="uploadPic(this)"
+                                       id="file-uploader">
+                            </lable>
+                        </form>
+                        <button class="search-btn" id="check-btn">检测</button>
+                        <!--<button class="search-btn" oncl>检测</button>-->
+
+                        <input placeholder="图片URL" id="inputUrl" class="search-input">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-3">
+                                <a href="#" id="img1" class="thumbnail">
+                                    <img src="http://192.168.10.212:8080/images/1.jpg"
+                                         alt="demo" onclick="detectReq(this)">
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <a href="#" id="img2" class="thumbnail">
+                                    <img src="http://192.168.10.212:8080/images/2.jpg"
+                                         alt="demo" onclick="detectReq(this)">
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <a href="#" class="thumbnail">
+                                    <img src="http://192.168.10.212:8080/images/3.jpg"
+                                         alt="demo" onclick="detectReq(this)">
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <a href="#" class="thumbnail">
+                                    <img src="http://192.168.10.212:8080/images/timg1.jpg"
+                                         alt="demo" onclick="detectReq(this)">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+
 </body>
 </html>

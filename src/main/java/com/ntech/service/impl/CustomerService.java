@@ -27,7 +27,6 @@ public class CustomerService implements ICustomerService {
     public int add(Customer customer) throws MessagingException {
         customer.setRegtime(new Date());
         customer.setActive(0);
-        customer.setContype(0);
         sendEmail(customer);
         return customerMapper.insert(customer);
     }
@@ -91,6 +90,16 @@ public class CustomerService implements ICustomerService {
         } else {
             return false;
         }
+    }
+
+    public boolean setContype(String name,String contype) {
+        logger.info("set contype for user:"+ name);
+        CustomerExample example = new CustomerExample();
+        example.createCriteria().andNameEqualTo(name);
+        Customer customer= customerMapper.selectByExample(example).get(0);
+//        customer.setContype(contype);
+        customerMapper.updateByExample(customer,example);
+        return false;
     }
 
     private void sendEmail(Customer customer) throws MessagingException {

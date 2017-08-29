@@ -40,7 +40,6 @@
 
         <!--对应数据库表名 -->
         <table tableName="customer"></table>
-        <table tableName="pay_times"></table>
-        <table tableName="pay_date"></table>
+        <table tableName="set_meal"></table>
     </context>
 </generatorConfiguration>

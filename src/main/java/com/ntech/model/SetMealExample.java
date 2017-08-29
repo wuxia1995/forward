@@ -5,14 +5,14 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-public class PayTimesExample {
+public class SetMealExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public PayTimesExample() {
+    public SetMealExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -392,6 +392,66 @@ public class PayTimesExample {
             return (Criteria) this;
         }
 
+        public Criteria andEndTimeIsNull() {
+            addCriterion("end_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeIsNotNull() {
+            addCriterion("end_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeEqualTo(Date value) {
+            addCriterionForJDBCDate("end_time =", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotEqualTo(Date value) {
+            addCriterionForJDBCDate("end_time <>", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeGreaterThan(Date value) {
+            addCriterionForJDBCDate("end_time >", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeGreaterThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("end_time >=", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeLessThan(Date value) {
+            addCriterionForJDBCDate("end_time <", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeLessThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("end_time <=", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeIn(List<Date> values) {
+            addCriterionForJDBCDate("end_time in", values, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotIn(List<Date> values) {
+            addCriterionForJDBCDate("end_time not in", values, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("end_time between", value1, value2, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("end_time not between", value1, value2, "endTime");
+            return (Criteria) this;
+        }
+
         public Criteria andTotalTimesIsNull() {
             addCriterion("total_times is null");
             return (Criteria) this;
@@ -509,6 +569,66 @@ public class PayTimesExample {
 
         public Criteria andLeftTimesNotBetween(Integer value1, Integer value2) {
             addCriterion("left_times not between", value1, value2, "leftTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableIsNull() {
+            addCriterion("enable is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableIsNotNull() {
+            addCriterion("enable is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableEqualTo(Integer value) {
+            addCriterion("enable =", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableNotEqualTo(Integer value) {
+            addCriterion("enable <>", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableGreaterThan(Integer value) {
+            addCriterion("enable >", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableGreaterThanOrEqualTo(Integer value) {
+            addCriterion("enable >=", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableLessThan(Integer value) {
+            addCriterion("enable <", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableLessThanOrEqualTo(Integer value) {
+            addCriterion("enable <=", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableIn(List<Integer> values) {
+            addCriterion("enable in", values, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableNotIn(List<Integer> values) {
+            addCriterion("enable not in", values, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableBetween(Integer value1, Integer value2) {
+            addCriterion("enable between", value1, value2, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableNotBetween(Integer value1, Integer value2) {
+            addCriterion("enable not between", value1, value2, "enable");
             return (Criteria) this;
         }
     }

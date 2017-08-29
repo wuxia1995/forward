@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8"  %>
 ﻿<!DOCTYPE html>
-﻿<!DOCTYPE html>
-<html lang="en">
+<html >
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -33,11 +32,11 @@
             <div class="collapse navbar-collapse hidden-xs">
                 <ul class="nav navbar-nav1 navbar-right">
                     <li class="active"><a href="index.html">关于我们</a></li>
-                    <li><a href="#">人脸识别</a></li>
+                    <%--<li><a href="#">人脸识别</a></li>--%>
                     <li><a href="/detect">人脸检测</a></li>
-                    <li><a href="#">人脸对比</a></li>
+                    <li><a href="/verify">人脸对比</a></li>
                     <li><a href="#">人脸搜索</a></li>
-                    <li><a href="#">人脸属性</a></li>
+                    <%--<li><a href="">人脸属性</a></li>--%>
                     <li><a href="/customer/login">登录</a></li>
                     <li><a href="/customer/register">注册</a></li>
                 </ul>

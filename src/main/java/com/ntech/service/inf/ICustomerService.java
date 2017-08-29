@@ -13,4 +13,5 @@ public interface ICustomerService {
     Customer findByName(String name);
     boolean checkUserName(String userName);
     boolean loginCheck(String name,String password);
+    boolean setContype(String name,String contype);
 }

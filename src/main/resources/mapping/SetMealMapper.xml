@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ntech.dao.PayDateMapper">
-  <resultMap id="BaseResultMap" type="com.ntech.model.PayDate">
+<mapper namespace="com.ntech.dao.SetMealMapper">
+  <resultMap id="BaseResultMap" type="com.ntech.model.SetMeal">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="contype" jdbcType="VARCHAR" property="contype" />
     <result column="begin_time" jdbcType="DATE" property="beginTime" />
     <result column="end_time" jdbcType="DATE" property="endTime" />
+    <result column="total_times" jdbcType="INTEGER" property="totalTimes" />
+    <result column="left_times" jdbcType="INTEGER" property="leftTimes" />
+    <result column="enable" jdbcType="INTEGER" property="enable" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,15 +70,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_name, contype, begin_time, end_time
+    id, user_name, contype, begin_time, end_time, total_times, left_times, enable
   </sql>
-  <select id="selectByExample" parameterType="com.ntech.model.PayDateExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ntech.model.SetMealExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from pay_date
+    from set_meal
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -86,27 +89,29 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from pay_date
+    from set_meal
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from pay_date
+    delete from set_meal
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ntech.model.PayDateExample">
-    delete from pay_date
+  <delete id="deleteByExample" parameterType="com.ntech.model.SetMealExample">
+    delete from set_meal
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ntech.model.PayDate">
-    insert into pay_date (id, user_name, contype, 
-      begin_time, end_time)
+  <insert id="insert" parameterType="com.ntech.model.SetMeal">
+    insert into set_meal (id, user_name, contype, 
+      begin_time, end_time, total_times, 
+      left_times, enable)
     values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{contype,jdbcType=VARCHAR}, 
-      #{beginTime,jdbcType=DATE}, #{endTime,jdbcType=DATE})
+      #{beginTime,jdbcType=DATE}, #{endTime,jdbcType=DATE}, #{totalTimes,jdbcType=INTEGER}, 
+      #{leftTimes,jdbcType=INTEGER}, #{enable,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.ntech.model.PayDate">
-    insert into pay_date
+  <insert id="insertSelective" parameterType="com.ntech.model.SetMeal">
+    insert into set_meal
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -122,6 +127,15 @@
       </if>
       <if test="endTime != null">
         end_time,
+      </if>
+      <if test="totalTimes != null">
+        total_times,
+      </if>
+      <if test="leftTimes != null">
+        left_times,
+      </if>
+      <if test="enable != null">
+        enable,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -140,16 +154,25 @@
       <if test="endTime != null">
         #{endTime,jdbcType=DATE},
       </if>
+      <if test="totalTimes != null">
+        #{totalTimes,jdbcType=INTEGER},
+      </if>
+      <if test="leftTimes != null">
+        #{leftTimes,jdbcType=INTEGER},
+      </if>
+      <if test="enable != null">
+        #{enable,jdbcType=INTEGER},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ntech.model.PayDateExample" resultType="java.lang.Long">
-    select count(*) from pay_date
+  <select id="countByExample" parameterType="com.ntech.model.SetMealExample" resultType="java.lang.Long">
+    select count(*) from set_meal
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update pay_date
+    update set_meal
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -166,24 +189,36 @@
       <if test="record.endTime != null">
         end_time = #{record.endTime,jdbcType=DATE},
       </if>
+      <if test="record.totalTimes != null">
+        total_times = #{record.totalTimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.leftTimes != null">
+        left_times = #{record.leftTimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.enable != null">
+        enable = #{record.enable,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update pay_date
+    update set_meal
     set id = #{record.id,jdbcType=INTEGER},
       user_name = #{record.userName,jdbcType=VARCHAR},
       contype = #{record.contype,jdbcType=VARCHAR},
       begin_time = #{record.beginTime,jdbcType=DATE},
-      end_time = #{record.endTime,jdbcType=DATE}
+      end_time = #{record.endTime,jdbcType=DATE},
+      total_times = #{record.totalTimes,jdbcType=INTEGER},
+      left_times = #{record.leftTimes,jdbcType=INTEGER},
+      enable = #{record.enable,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ntech.model.PayDate">
-    update pay_date
+  <update id="updateByPrimaryKeySelective" parameterType="com.ntech.model.SetMeal">
+    update set_meal
     <set>
       <if test="userName != null">
         user_name = #{userName,jdbcType=VARCHAR},
@@ -197,15 +232,27 @@
       <if test="endTime != null">
         end_time = #{endTime,jdbcType=DATE},
       </if>
+      <if test="totalTimes != null">
+        total_times = #{totalTimes,jdbcType=INTEGER},
+      </if>
+      <if test="leftTimes != null">
+        left_times = #{leftTimes,jdbcType=INTEGER},
+      </if>
+      <if test="enable != null">
+        enable = #{enable,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ntech.model.PayDate">
-    update pay_date
+  <update id="updateByPrimaryKey" parameterType="com.ntech.model.SetMeal">
+    update set_meal
     set user_name = #{userName,jdbcType=VARCHAR},
       contype = #{contype,jdbcType=VARCHAR},
       begin_time = #{beginTime,jdbcType=DATE},
-      end_time = #{endTime,jdbcType=DATE}
+      end_time = #{endTime,jdbcType=DATE},
+      total_times = #{totalTimes,jdbcType=INTEGER},
+      left_times = #{leftTimes,jdbcType=INTEGER},
+      enable = #{enable,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
