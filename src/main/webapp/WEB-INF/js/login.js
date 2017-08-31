@@ -1,5 +1,5 @@
 $(function() {
-    var result;
+    // var result;
     $('#submit').click(function () {
         if($("#name").val()==''){
             $('#msg').text("用户名不能为空");
@@ -19,14 +19,15 @@ $(function() {
                 if(msg){
                     $('#msg').text("");
                     // $('#login-form').submit();
-                    result=true;
+                    // result=true;
+                    window.location.href="personInfo"
                 }else{
                     $('#msg').text("用户未激活或者用户名或密码错误");
-                    result=false;
+                    // result=false;
                 }
             }
         });
-        return result;
+        // return result;
     });
 
     // $('#login-form').bind("submit", function(){
@@ -50,3 +51,6 @@ $(function() {
     //     $('#search_form').submit();
     // })
 })
+function login() {
+    
+}

@@ -14,4 +14,5 @@ public interface ICustomerService {
     boolean checkUserName(String userName);
     boolean loginCheck(String name,String password);
     boolean setContype(String name,String contype);
+    String getNameByToken(String name);
 }

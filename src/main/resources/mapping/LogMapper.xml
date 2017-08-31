@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ntech.dao.SetMealMapper">
-  <resultMap id="BaseResultMap" type="com.ntech.model.SetMeal">
+<mapper namespace="com.ntech.dao.LogMapper">
+  <resultMap id="BaseResultMap" type="com.ntech.model.Log">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="contype" jdbcType="VARCHAR" property="contype" />
-    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
-    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
-    <result column="total_times" jdbcType="INTEGER" property="totalTimes" />
-    <result column="left_times" jdbcType="INTEGER" property="leftTimes" />
-    <result column="enable" jdbcType="INTEGER" property="enable" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="result" jdbcType="INTEGER" property="result" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,15 +67,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_name, contype, begin_time, end_time, total_times, left_times, enable
+    id, user_name, content, result, time
   </sql>
-  <select id="selectByExample" parameterType="com.ntech.model.SetMealExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ntech.model.LogExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from set_meal
+    from log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -89,29 +86,27 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from set_meal
+    from log
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from set_meal
+    delete from log
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ntech.model.SetMealExample">
-    delete from set_meal
+  <delete id="deleteByExample" parameterType="com.ntech.model.LogExample">
+    delete from log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ntech.model.SetMeal">
-    insert into set_meal (id, user_name, contype, 
-      begin_time, end_time, total_times, 
-      left_times, enable)
-    values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{contype,jdbcType=VARCHAR}, 
-      #{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{totalTimes,jdbcType=INTEGER}, 
-      #{leftTimes,jdbcType=INTEGER}, #{enable,jdbcType=INTEGER})
+  <insert id="insert" parameterType="com.ntech.model.Log">
+    insert into log (id, user_name, content, 
+      result, time)
+    values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{result,jdbcType=INTEGER}, #{time,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.ntech.model.SetMeal">
-    insert into set_meal
+  <insert id="insertSelective" parameterType="com.ntech.model.Log">
+    insert into log
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -119,23 +114,14 @@
       <if test="userName != null">
         user_name,
       </if>
-      <if test="contype != null">
-        contype,
+      <if test="content != null">
+        content,
       </if>
-      <if test="beginTime != null">
-        begin_time,
+      <if test="result != null">
+        result,
       </if>
-      <if test="endTime != null">
-        end_time,
-      </if>
-      <if test="totalTimes != null">
-        total_times,
-      </if>
-      <if test="leftTimes != null">
-        left_times,
-      </if>
-      <if test="enable != null">
-        enable,
+      <if test="time != null">
+        time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -145,34 +131,25 @@
       <if test="userName != null">
         #{userName,jdbcType=VARCHAR},
       </if>
-      <if test="contype != null">
-        #{contype,jdbcType=VARCHAR},
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
       </if>
-      <if test="beginTime != null">
-        #{beginTime,jdbcType=TIMESTAMP},
+      <if test="result != null">
+        #{result,jdbcType=INTEGER},
       </if>
-      <if test="endTime != null">
-        #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="totalTimes != null">
-        #{totalTimes,jdbcType=INTEGER},
-      </if>
-      <if test="leftTimes != null">
-        #{leftTimes,jdbcType=INTEGER},
-      </if>
-      <if test="enable != null">
-        #{enable,jdbcType=INTEGER},
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ntech.model.SetMealExample" resultType="java.lang.Long">
-    select count(*) from set_meal
+  <select id="countByExample" parameterType="com.ntech.model.LogExample" resultType="java.lang.Long">
+    select count(*) from log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update set_meal
+    update log
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -180,23 +157,14 @@
       <if test="record.userName != null">
         user_name = #{record.userName,jdbcType=VARCHAR},
       </if>
-      <if test="record.contype != null">
-        contype = #{record.contype,jdbcType=VARCHAR},
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=VARCHAR},
       </if>
-      <if test="record.beginTime != null">
-        begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
+      <if test="record.result != null">
+        result = #{record.result,jdbcType=INTEGER},
       </if>
-      <if test="record.endTime != null">
-        end_time = #{record.endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.totalTimes != null">
-        total_times = #{record.totalTimes,jdbcType=INTEGER},
-      </if>
-      <if test="record.leftTimes != null">
-        left_times = #{record.leftTimes,jdbcType=INTEGER},
-      </if>
-      <if test="record.enable != null">
-        enable = #{record.enable,jdbcType=INTEGER},
+      <if test="record.time != null">
+        time = #{record.time,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -204,55 +172,40 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update set_meal
+    update log
     set id = #{record.id,jdbcType=INTEGER},
       user_name = #{record.userName,jdbcType=VARCHAR},
-      contype = #{record.contype,jdbcType=VARCHAR},
-      begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
-      end_time = #{record.endTime,jdbcType=TIMESTAMP},
-      total_times = #{record.totalTimes,jdbcType=INTEGER},
-      left_times = #{record.leftTimes,jdbcType=INTEGER},
-      enable = #{record.enable,jdbcType=INTEGER}
+      content = #{record.content,jdbcType=VARCHAR},
+      result = #{record.result,jdbcType=INTEGER},
+      time = #{record.time,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ntech.model.SetMeal">
-    update set_meal
+  <update id="updateByPrimaryKeySelective" parameterType="com.ntech.model.Log">
+    update log
     <set>
       <if test="userName != null">
         user_name = #{userName,jdbcType=VARCHAR},
       </if>
-      <if test="contype != null">
-        contype = #{contype,jdbcType=VARCHAR},
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
       </if>
-      <if test="beginTime != null">
-        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      <if test="result != null">
+        result = #{result,jdbcType=INTEGER},
       </if>
-      <if test="endTime != null">
-        end_time = #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="totalTimes != null">
-        total_times = #{totalTimes,jdbcType=INTEGER},
-      </if>
-      <if test="leftTimes != null">
-        left_times = #{leftTimes,jdbcType=INTEGER},
-      </if>
-      <if test="enable != null">
-        enable = #{enable,jdbcType=INTEGER},
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ntech.model.SetMeal">
-    update set_meal
+  <update id="updateByPrimaryKey" parameterType="com.ntech.model.Log">
+    update log
     set user_name = #{userName,jdbcType=VARCHAR},
-      contype = #{contype,jdbcType=VARCHAR},
-      begin_time = #{beginTime,jdbcType=TIMESTAMP},
-      end_time = #{endTime,jdbcType=TIMESTAMP},
-      total_times = #{totalTimes,jdbcType=INTEGER},
-      left_times = #{leftTimes,jdbcType=INTEGER},
-      enable = #{enable,jdbcType=INTEGER}
+      content = #{content,jdbcType=VARCHAR},
+      result = #{result,jdbcType=INTEGER},
+      time = #{time,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

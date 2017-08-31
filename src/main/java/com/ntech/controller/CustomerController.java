@@ -1,15 +1,15 @@
 package com.ntech.controller;
 
 import com.ntech.model.Customer;
+import com.ntech.model.LibraryKey;
 import com.ntech.model.SetMeal;
 import com.ntech.service.inf.ICustomerService;
+import com.ntech.service.inf.ILibraryService;
 import com.ntech.service.inf.ISetMealService;
 import com.ntech.util.SHAencrypt;
-import com.ntech.util.VerifyCode;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -23,6 +23,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Random;
 
 
@@ -41,12 +42,14 @@ public class CustomerController {
     @Autowired
     ISetMealService setMealService;
 
+    @Autowired
+    ILibraryService libraryService;
+
     @RequestMapping("/register")
     public String jumpToRegister() {
         logger.info("jump to register page");
         return "register";
     }
-
 
 
     @RequestMapping("/check")
@@ -84,17 +87,15 @@ public class CustomerController {
     //登录
     @RequestMapping("loginCheck")
     @ResponseBody
-    public boolean login(String name, String password,HttpSession session) {
-        logger.info("login check user:"+name);
-        boolean result=false;
-        result= customerService.loginCheck(name, password);
-        if(result){
-         session.setAttribute("name",name);
+    public boolean login(String name, String password, HttpSession session) {
+        logger.info("login check user:" + name);
+        boolean result = false;
+        result = customerService.loginCheck(name, password);
+        if (result) {
+            session.setAttribute("name", name);
         }
         return result;
     }
-
-
 
 
     @RequestMapping("active")
@@ -193,100 +194,163 @@ public class CustomerController {
      * 5.图库管理
      * 6.使用记录
      * 8.登录跳转
-     *
      */
     //登录成功后进入主页面
     @RequestMapping("personInfo")
     public ModelAndView customerInfo(HttpSession session) {
         ModelAndView mav = new ModelAndView();
-        String name= (String) session.getAttribute("name");
-        if (name==null||name.equals("")||!customerService.checkUserName(name)) {
+        String name = (String) session.getAttribute("name");
+        if (name == null || name.equals("") || !customerService.checkUserName(name)) {
+            mav.addObject("msg", "用户存在异常");
             mav.setViewName("error");
             return mav;
         }
         mav.setViewName("info");
-
         return mav;
     }
 
     @RequestMapping("setMeal")
-    public String setMealJump(){
+    public String setMealJump() {
         return "set-meal";
     }
 
     @RequestMapping("detect")
-    public String faceDetectJump(){
+    public String faceDetectJump() {
         return "show-detect";
     }
+
     @RequestMapping("verify")
-    public String faceVerifyJump(){
+    public String faceVerifyJump() {
         return "show-verify";
     }
-    @RequestMapping("gallery")
-    public String galleryManageJump(HttpServletRequest request,HttpServletResponse response,HttpSession session){
-        String name= (String) session.getAttribute("name");
 
-        return "show-gallery";
+    //个人相册,判断session中是否有用户名,根据session中的用户名来获取该用户的相册
+    @RequestMapping("gallery")
+    public ModelAndView galleryManageJump(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            String name = (String) session.getAttribute("name");
+            if (null != name) {
+                List<LibraryKey> galleries = libraryService.findLKByUserName(name);
+                modelAndView.setViewName("show-gallery");
+                logger.info(galleries);
+                modelAndView.addObject("galleries", galleries);
+                modelAndView.addObject("test1", "test1Content");
+                modelAndView.addObject("test2", "test2Content");
+            } else {
+//                logger.info("");
+                modelAndView.setViewName("msg");
+                modelAndView.addObject("msg", "用户会话过期,请重新登录 <a href='login'>点击登录</a>");
+
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            modelAndView.setViewName("msg");
+            modelAndView.addObject("msg", "操作异常");
+            return modelAndView;
+        }
+        return modelAndView;
     }
+
+    //添加图库
+    @RequestMapping("addGallery")
+    @ResponseBody
+    public boolean addGallery(String libraryName, HttpSession session) {
+        if (null == libraryName || "".equals(libraryName)) {
+            return false;
+        }
+        String name = (String) session.getAttribute("name");
+        if (null != name) {
+            if (!libraryService.checkLibrary(name, libraryName)) {
+                LibraryKey libraryKey = new LibraryKey();
+                libraryKey.setUserName(name);
+                libraryKey.setLibraryName(libraryName);
+                libraryService.insert(libraryKey);
+            }
+        }
+        return false;
+    }
+
+    //删除图库
+    @RequestMapping("deleteGallery")
+    @ResponseBody
+    public boolean deleteGallery(String libraryName) {
+
+        return false;
+    }
+
     @RequestMapping("record")
-    public String recordLogJump(){
+    public String recordLogJump() {
         return "record-log";
     }
+
     @RequestMapping("login")
     public String loginJump() {
         return "login";
     }
 
 
-
-
-
     @RequestMapping("setMealBuy")
     @ResponseBody
-    public boolean setMeal(@RequestParam("name")String name,@RequestParam("type")String type,@RequestParam("value")String value){
-        if(null==name||"".equals(name)||null==type||"".equals(type)||null==value||"".equals(value)){
-            return false;
-        }
-        if(!(type.equals("date")||type.equals("times"))){
-            return false;
-        }
-        if(customerService.checkUserName(name)){
-            logger.error("username is not exist");
-            return false;
-        }
-        int intValue= Integer.parseInt(value);
-        SetMeal setMeal= new SetMeal();
-        setMeal.setUserName(name);
-        setMeal.setContype(type);
-        setMeal.setBeginTime(new Date());
-        if(type.equals("date")){
-            if(intValue==1||intValue==3||intValue==6||intValue==12){
-                setMeal.setEndTime(count(intValue));
-            }else {
+    public boolean setMeal(HttpSession session, @RequestParam("type") String type, @RequestParam("value") String value) {
+        String name = (String) session.getAttribute("name");
+        if (null != name) {
+            if ("".equals(name) || null == type || "".equals(type) || null == value || "".equals(value)) {
                 return false;
             }
-        }else{
-            if(intValue==100||intValue==300||intValue==500||intValue==1000){
-                setMeal.setTotalTimes(intValue);
-                setMeal.setLeftTimes(intValue);
-            }else{
+            if (!(type.equals("date") || type.equals("times"))) {
                 return false;
             }
-        }
-        if(setMealService.add(setMeal)){
-            return true;
+            if (!customerService.checkUserName(name)) {
+                logger.error("username is not exist");
+                return false;
+            }
+
+            int intValue = Integer.parseInt(value);
+            SetMeal setMeal = new SetMeal();
+            setMeal.setUserName(name);
+            setMeal.setContype(type);
+
+            //找出数据库中的订单
+            SetMeal meal = setMealService.findByName(setMeal.getUserName());
+            if (meal != null) {
+                //判断订单类型  一个用户只能购买一种类型的订单
+                if (!meal.getContype().equals(setMeal.getContype()))logger.info("chose two diffence contype");
+                    return false;
+
+                }
+            }
+
+            if (type.equals("date")) {
+                if (intValue == 1 || intValue == 3 || intValue == 6 || intValue == 12) {
+                    setMeal.setBeginTime(new Date());
+                    setMeal.setEndTime(count(intValue));
+                } else {
+                    return false;
+                }
+            } else {
+                if (intValue == 100 || intValue == 300 || intValue == 500 || intValue == 1000) {
+                    setMeal.setTotalTimes(intValue);
+                    setMeal.setLeftTimes(intValue);
+                } else {
+                    return false;
+                }
+            }
+            if (setMealService.add(setMeal)) {
+                return true;
+            }
         }
         return false;
     }
 
 
-
-    private Date count(int value){
-        GregorianCalendar gc=new GregorianCalendar();
+    private Date count(int value) {
+        GregorianCalendar gc = new GregorianCalendar();
         gc.setTime(new Date());
-        gc.add(2,value);
+        gc.add(2, value);
         return gc.getTime();
     }
+
     //创建颜色
     Color getRandColor(int fc, int bc) {
         Random random = new Random();

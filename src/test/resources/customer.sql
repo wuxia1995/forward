@@ -7,7 +7,7 @@ create table customer
 (
   name varchar(32) not null,
   password varchar(64) not null,
-  contype varchar(2),
+  contype varchar(5),
   active int DEFAULT 0,
   email varchar(64),
   token varchar(32),
@@ -18,28 +18,35 @@ create table customer
 drop table if exists set_meal;
 create table set_meal
 (
-  id int not null,
+  id int auto_increment,
   user_name varchar(32) not null,
-  contype varchar(2),
-  begin_time DATE,
-  end_time DATE,
+  contype varchar(5),
+  begin_time datetime,
+  end_time datetime,
   total_times int,
   left_times int,
   enable int,
   primary key(id)
 )engine=innodb default charset=utf8 auto_increment=1;
 
-# drop table if exists pay_times;
-# create table pay_times
-# (
-#   id int not null,
-#   user_name varchar(32) not null,
-#   contype varchar(2),
-#   begin_time DATE,
-#   enable int,
-#   total_times int not null,
-#   left_times int not null,
-#   primary key(id)
-# )engine=innodb default charset=utf8 auto_increment=1;
+drop table if exists log;
+create table log
+(
+  id int AUTO_INCREMENT PRIMARY KEY ,
+  user_name varchar(32) not null,
+  content varchar(32) not null,
+  result int,
+  time DATETIME
+)engine=innodb default charset=utf8;
+
+
+drop table if exists library;
+create table library
+(
+  user_name varchar(32) not null,
+  library_name varchar(32) not null,
+  primary key(user_name,library_name)
+)engine=innodb default charset=utf8;
 
 insert into customer values('admin','d033e22ae348aeb5660fc2140aec35850c4da997','',1,'admin@admin.com','','2017-08-23 15:58:07');
+insert into customer values('test','7c4a8d09ca3762af61e59520943dc26494f8941b','',1,'admin@admin.com','','2017-08-23 15:58:07');

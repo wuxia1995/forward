@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ntech.dao.LibraryMapper">
+    <resultMap id="BaseResultMap" type="com.ntech.model.LibraryKey">
+        <id column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <id column="library_name" jdbcType="VARCHAR" property="libraryName"/>
+    </resultMap>
+    <select id="insert" parameterType="com.ntech.model.LibraryKey">
+        insert into customer (userName, libraryName)
+        values (#{userName,jdbcType=VARCHAR}, #{libraryName,jdbcType=VARCHAR})
+    </select>
+    <update id="update"
+</mapper>

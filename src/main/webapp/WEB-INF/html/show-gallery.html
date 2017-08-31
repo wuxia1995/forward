@@ -29,7 +29,19 @@
             </ul>
         </div>
         <div class="col-xs-12 col-sm-9 col-md-10">
-            图库管理界面
+            <!--test1:${test1}-->
+            <!--test2:${test2}-->
+            <hr>
+            我的相册:<br>
+            <#list galleries as gallery>
+                <ul class="list-group">
+                    <li class="list-group-item"><button class="btn btn-primary" onclick="getGalleries()">相册：${gallery.libraryName}</button> </li>
+                </ul>
+               <br>
+            </#list>
+
+            <!--<#assign userNames="张三"/>-->
+            <!--${userNames}-->
         </div>
     </div>
 </div>
@@ -37,4 +49,9 @@
 <div class="container-fluid"></div>
 
 </body>
+
+<script>
+
+
+</script>
 </html>

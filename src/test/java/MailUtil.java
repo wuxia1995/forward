@@ -1,3 +1,5 @@
+import com.ntech.util.SHAencrypt;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -51,12 +53,13 @@ public class MailUtil {
 //        MailUtil.send_mail("787038741@qq.com","hello customer");
 
 //        System.out.println("/n-tech/test".split("n-tech|show")[1]);
-
-        GregorianCalendar gc=new GregorianCalendar();
-        gc.setTime(new Date());
-        gc.add(2,2);
-        System.out.println(gc.getTime());
-        System.out.println(new Date());
+//
+//        GregorianCalendar gc=new GregorianCalendar();
+//        gc.setTime(new Date());
+//        gc.add(2,2);
+//        System.out.println(gc.getTime());
+//        System.out.println(new Date());
+        System.out.println(SHAencrypt.encryptSHA("123456"));
 
     }
 }

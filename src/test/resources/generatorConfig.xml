@@ -28,18 +28,20 @@
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <!--生成xml mapper文件 路径 -->
+        <!--&lt;!&ndash;生成xml mapper文件 路径 &ndash;&gt;-->
         <sqlMapGenerator targetPackage="${xml.mapper}" targetProject="${target.resources}">
             <property name="enableSubPackages" value="ture"/>
         </sqlMapGenerator>
 
-        <!-- 生成的Dao接口 的包路径 -->
+        <!--&lt;!&ndash; 生成的Dao接口 的包路径 &ndash;&gt;-->
         <javaClientGenerator type="XMLMAPPER" targetPackage="${dao.package}" targetProject="${target.project}">
             <property name="enableSubPackages" value="ture"/>
         </javaClientGenerator>
 
         <!--对应数据库表名 -->
-        <table tableName="customer"></table>
-        <table tableName="set_meal"></table>
+        <!--<table tableName="customer"></table>-->
+        <!--<table tableName="set_meal"></table>-->
+        <!--<table tableName="library"></table>-->
+        <table tableName="log"></table>
     </context>
 </generatorConfiguration>

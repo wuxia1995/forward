@@ -5,9 +5,12 @@ import com.ntech.model.SetMeal;
 import com.ntech.model.SetMealExample;
 import com.ntech.service.inf.ISetMealService;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Service
@@ -15,19 +18,60 @@ public class SetMealService implements ISetMealService {
 
     Logger logger = Logger.getLogger(SetMealService.class);
 
-    @Qualifier
+    @Autowired
     SetMealMapper setMealMapper;
 
 
     public boolean add(SetMeal setMeal) {
-        logger.info("add new set meal for user:"+setMeal.getUserName());
-        if(1==setMealMapper.insert(setMeal)){
-            logger.info("add success");
-            return true;
+        logger.info("add new set meal for user:" + setMeal.getUserName());
+        SetMeal meal = findByName(setMeal.getUserName());
+        //查不到结果 直接插入
+        if(meal==null){
+            setMeal.setEnable(1);
+            if (1 == setMealMapper.insertSelective(setMeal)) {
+                logger.info("add success");
+                return true;
+            }
         }
+        //查询出结果
+        else{
+            if (meal.getEnable() == 0) {
+                //如果enable=0，修改
+                setMeal.setEnable(1);
+                //更新套餐
+                return  modify(setMeal);
+            }else{
+                //如果是包天
+                if(setMeal.getContype().equals("date")){
+                    //获取套餐天数
+                    int leftDay=(int)((setMeal.getEndTime().getTime()
+                            - setMeal.getBeginTime().getTime())/(1000*3600*24));
+                    //获取用户原先剩余天数
+                    int userLeftDay=(int)((meal.getEndTime().getTime()
+                            - meal.getBeginTime().getTime())/(1000*3600*24));
+                    GregorianCalendar gc=new GregorianCalendar();
+                    gc.setTime(meal.getBeginTime());
+                    //得到结束时间
+                    gc.add(Calendar.DAY_OF_YEAR,leftDay+userLeftDay);
+                    meal.setEndTime(gc.getTime());
+                    //更新套餐
+                    return modify(meal);
+                }//包次数
+                else{
+                    //设置剩余次数
+                    meal.setLeftTimes(meal.getLeftTimes()+setMeal.getLeftTimes());
+                    //设置总次数
+                    meal.setTotalTimes(meal.getTotalTimes()+setMeal.getTotalTimes());
+                    return  modify(meal);
+                }
+            }
+
+        }
+
         logger.error("add set meal error");
         return false;
     }
+
 
     public boolean delete(String userName) {
         logger.info("delete set meal for user:"+userName);

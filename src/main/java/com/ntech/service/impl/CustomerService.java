@@ -8,6 +8,7 @@ import com.ntech.util.MailUtil;
 import com.ntech.util.SHAencrypt;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,6 +101,10 @@ public class CustomerService implements ICustomerService {
 //        customer.setContype(contype);
         customerMapper.updateByExample(customer,example);
         return false;
+    }
+
+    public String getNameByToken(String name) {
+        return null;
     }
 
     private void sendEmail(Customer customer) throws MessagingException {
