@@ -315,7 +315,7 @@ public class CustomerController {
             SetMeal meal = setMealService.findByName(setMeal.getUserName());
             if (meal != null) {
                 //判断订单类型  一个用户只能购买一种类型的订单
-                if (!meal.getContype().equals(setMeal.getContype()))logger.info("chose two diffence contype");
+                if (!meal.getContype().equals(setMeal.getContype())) { logger.info("chose two diffence contype");
                     return false;
 
                 }
