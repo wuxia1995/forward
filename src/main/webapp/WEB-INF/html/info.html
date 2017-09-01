@@ -30,7 +30,68 @@
         </div>
         <div class="col-xs-12 col-sm-9 col-md-10">
             个人信息页面
-            ${name}
+            <table align="" border="0px">
+                <tr>
+                    <td>姓名</td>
+                    <td align="center">${customer.name}</td>
+                </tr>
+                <tr>
+                    <td>邮箱</td>
+                    <td align="center">${customer.email}</td>
+                </tr>
+                <tr>
+                    <td>注册时间</td>
+                    <td align="center">${customer.regtime?string("yyyy-MM-dd")}</td>
+
+                </tr>
+                <tr>
+                    <td>状态</td>
+                    <td align="center"><#if customer.active gt 0 >已激活
+                    </#if>
+                        <#if customer.active == 0 >未激活
+                        </#if>
+                    </td>
+                </tr>
+                <tr>
+                    <td>token</td>
+                    <td align="center"><#if customer.token??>SSS</#if></td>
+                </tr>
+                <#if meal??>
+                    <#if meal.enable==1>
+                        <#if meal.contype=="date">
+                            <tr>
+                                <td>套餐类型</td>
+                                <td align="center">按天</td><tr>
+                        </tr>
+                            <tr>
+                                <td>购买时间</td>
+                                <td align="center">${meal.beginTime?string("yyyy-MM-dd")}</td>
+                            </tr>
+                            <tr>
+                                <td>到期时间</td>
+                                <td align="center">${meal.endTime?string("yyyy-MM-dd")}</td>
+                            </tr>
+                            <tr>
+                            <td>套餐剩余</td>
+                            <td align="center">${leftDay+"天"}</td>
+                            </tr>
+                        </#if>
+                        <#if meal.contype=="times">
+                            <tr>
+                                <td>套餐类型</td>
+                                <td align="center">按次</td></tr>
+                            <tr>
+                                <td>总次数</td>
+                                <td align="center">${meal.totalTimes+"次"}</td>
+                            </tr>
+                            <tr>
+                                <td>剩余次数</td>
+                                <td align="center">${meal.leftTimes+"次"}</td>
+                            </tr>
+                        </#if>
+                    </#if>
+                </#if>
+            </table>
         </div>
     </div>
 </div>

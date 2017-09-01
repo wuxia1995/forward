@@ -211,6 +211,20 @@ public class CustomerController {
             mav.setViewName("error");
             return mav;
         }
+        SetMeal meal = setMealService.findByName(name);
+        Customer customer = customerService.findByName(name);
+        if(meal!=null){
+
+            if(meal.getContype().equals("date")){
+                //计算剩余天数
+                int leftDay=(int)((meal.getEndTime().getTime()-
+                        meal.getBeginTime().getTime())/(1000*3600*24));
+                session.setAttribute("leftDay",leftDay);
+            }
+        }
+        session.setAttribute("meal",meal);
+        session.setAttribute("customer",customer);
+
         mav.setViewName("info");
         return mav;
     }
@@ -255,6 +269,27 @@ public class CustomerController {
             modelAndView.addObject("msg", "操作异常");
             return modelAndView;
         }
+        return modelAndView;
+    }
+
+    @RequestMapping("gallery-demo")
+    public ModelAndView getDemoGallery(HttpServletRequest request,HttpServletResponse response){
+
+        ModelAndView modelAndView = new ModelAndView("show-gallery-demo");
+        String result=null;
+        try {
+            logger.info(request.getRequestURI());
+            if(request.getRequestURI().equals("/customer/gallery-demo")){
+                request.setAttribute("localAPI","/v0/faces/gallery/demo_default");
+            }
+            result = MethodUtil.getInstance().requestForword(request, response);
+            logger.info(result);
+        }catch (Exception e){
+            logger.error("request error");
+            modelAndView.setViewName("msg");
+            modelAndView.addObject("msg","request error");
+        }
+        modelAndView.addObject("demoGallery",result);
         return modelAndView;
     }
 
