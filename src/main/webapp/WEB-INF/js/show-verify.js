@@ -192,6 +192,7 @@ function verifyReq(img, id) {
 
     $.ajax({
         url: '../n-tech/v0/verify',
+        // url: '../n-tech/v0/verify',
         type: 'POST',
         dataType: "json",
         data:formData,

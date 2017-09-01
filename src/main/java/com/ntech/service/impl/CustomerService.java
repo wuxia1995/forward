@@ -3,7 +3,10 @@ package com.ntech.service.impl;
 import com.ntech.dao.CustomerMapper;
 import com.ntech.model.Customer;
 import com.ntech.model.CustomerExample;
+import com.ntech.model.LibraryKey;
 import com.ntech.service.inf.ICustomerService;
+import com.ntech.service.inf.ILibraryService;
+import com.ntech.service.inf.IShowManage;
 import com.ntech.util.MailUtil;
 import com.ntech.util.SHAencrypt;
 import org.apache.log4j.Logger;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -24,12 +28,29 @@ public class CustomerService implements ICustomerService {
     @Autowired
     CustomerMapper customerMapper;
 
+    @Autowired
+    ILibraryService libraryService;
+//    @Autowired
+//    IShowManage showManage;
+
+
+
     @Transactional
     public int add(Customer customer) throws MessagingException {
         customer.setRegtime(new Date());
-        customer.setActive(0);
-        sendEmail(customer);
-        return customerMapper.insert(customer);
+        customer.setActive(1);
+        int result = customerMapper.insert(customer);
+        if(result==1){
+            LibraryKey libraryKey= new LibraryKey();
+            libraryKey.setLibraryName(customer.getName());
+            libraryKey.setUserName(customer.getName());
+            if(libraryService.insert(libraryKey)==1){
+//                sendEmail(customer);
+                return 1;
+            }
+        }
+        logger.error("add user fail "+ customer.getName());
+        return 0;
     }
 
     public int delete() {

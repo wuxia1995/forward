@@ -7,15 +7,19 @@ import com.ntech.model.CustomerExample;
 import com.ntech.model.LibraryExample;
 import com.ntech.model.LibraryKey;
 import com.ntech.service.inf.ILibraryService;
+import com.ntech.service.inf.IShowManage;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class LibraryService implements ILibraryService{
+
+    private static final Logger logger= Logger.getLogger(LibraryService.class);
 
     @Autowired
     LibraryMapper libraryMapper;
@@ -23,8 +27,24 @@ public class LibraryService implements ILibraryService{
     @Autowired
     CustomerMapper customerMapper;
 
+    @Autowired
+    IShowManage showManage;
+
     public int insert(LibraryKey libraryKey) {
-        return libraryMapper.insert(libraryKey);
+        int result=0;
+        try {
+            if(showManage.containsGallery(libraryKey.getLibraryName())){
+                showManage.deleteGallery(libraryKey.getLibraryName());
+                showManage.createGallery(libraryKey.getLibraryName());
+            }else{
+                showManage.createGallery(libraryKey.getLibraryName());
+            }
+            result=libraryMapper.insert(libraryKey);
+        } catch (IOException e) {
+            logger.error("add lib error:"+e.getMessage());
+            return result;
+        }
+        return result;
     }
 
     public int delete(LibraryKey libraryKey) {

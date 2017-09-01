@@ -9,7 +9,8 @@ function uploadPic(obj) {
     }
     reader.readAsDataURL(file)
     var options = {
-        url: "../n-tech/v0/detect",
+        url: "detect-face",
+        // url: "../n-tech/v0/detect",
         type: "post",
         dataType: "json",
 //                data: {photo: img.src},
@@ -76,7 +77,8 @@ function detectReq(img) {
     }
     // if
     $.ajax({
-        url: '../n-tech/v0/detect',
+        url: 'detect-face',
+        // url: '../n-tech/v0/detect',
         type: 'POST',
 //                    data: {photo: address},
         dataType: "json",

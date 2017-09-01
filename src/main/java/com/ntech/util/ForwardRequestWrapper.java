@@ -27,7 +27,7 @@ public class ForwardRequestWrapper extends HttpServletRequestWrapper {
 		//Retrieve token from database
 //		if(!isToken||inputToken==null||inputToken.equals(""))
 //				throw new ErrorTokenException("Bad Token");
-				
+
 		//Retrieve userName from database
 		String username = "user";
 		// TODO Auto-generated constructor stub

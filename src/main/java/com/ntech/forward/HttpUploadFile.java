@@ -2,6 +2,7 @@ package com.ntech.forward;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -13,48 +14,71 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
-import org.omg.IOP.Codec;
+
+import com.ntech.exception.BadInputException;
+import com.ntech.util.ErrorPrompt;
 
 /**
  * java通过模拟post方式提交表单实现图片上传功能
  */
 public class HttpUploadFile {
+	
+	private static HttpUploadFile instance;
 	private static final String POST_URL = Constant.SDK_IP;
 	private static Logger logger = Logger.getLogger(HttpUploadFile.class);
-
-    public static String forwardRequest( Map<String,String> header,Map<String, String> param,
-            Map<String, Object> file,String meta) {
+	private HttpURLConnection connection = null;
+    private BufferedWriter bufferedWriter = null;
+    private BufferedReader bufferedReader = null;
+    private URL url = null;
+    private OutputStream out = null;
+	
+	private HttpUploadFile() {}
+	  public static HttpUploadFile getInstance(){    //对获取实例的方法进行同步
+	         if (instance == null){
+	             synchronized(HttpUploadFile.class){
+	                if (instance == null)
+	                    instance = new HttpUploadFile(); 
+	             }
+	         }
+	       return instance;
+	       }
+	
+    public synchronized String httpURLConnectionSDK( Map<String,String> header,Map<String, String> param,
+            Map<String, Object> file,String meta) throws IOException {
     	//测试×××××××××××××××××××××××××××××××
     	logger.info("META: "+meta);
-		Iterator<Entry<String,String>>iterator1 = header.entrySet().iterator();
-		Iterator<Entry<String,String>>iterator2 = param.entrySet().iterator();
-		Iterator<Entry<String,Object>>iterator3 = file.entrySet().iterator();
-		while(iterator1.hasNext()) {
-			Entry<String, String> entry = iterator1.next();
-			logger.info(entry.getKey()+":"+entry.getValue());
-		}
-		while(iterator2.hasNext()) {
-			Entry<String, String> entry = iterator2.next();
-			logger.info(entry.getKey()+":"+entry.getValue());
-		}
-		while(iterator2.hasNext()) {
-			Entry<String, Object> entry = iterator3.next();
-			logger.info(entry.getKey()+":"+entry.getValue());
-		}
+    		Iterator<Entry<String,String>>iterator1 = header.entrySet().iterator();
+    		while(iterator1.hasNext()) {
+    			Entry<String, String> entry = iterator1.next();
+    			logger.info(entry.getKey()+":"+entry.getValue());
+    		}
+    	if(param!=null) {
+    		Iterator<Entry<String,String>>iterator2 = param.entrySet().iterator();
+    		while(iterator2.hasNext()) {
+    			Entry<String, String> entry = iterator2.next();
+    			logger.info(entry.getKey()+":"+entry.getValue());
+    		}
+    	}
+     	if(file!=null) {
+    		Iterator<Entry<String,Object>>iterator3 = file.entrySet().iterator();
+    		while(iterator3.hasNext()) {
+    			Entry<String, Object> entry = iterator3.next();
+    			logger.info(entry.getKey()+":"+entry.getValue());
+    		}
+    	}
 		//×××××××××××××××××××××××××××××××××××		
         String reply = "";
-        String BOUNDARY = "---------------------------"+System.currentTimeMillis(); 
-        HttpURLConnection connection = null;
-        BufferedWriter bufferedWriter = null;
-        BufferedReader bufferedReader = null;
-        try {
-            URL url = new URL(POST_URL+header.get("API"));
+        String BOUNDARY = "-------------------------"+System.currentTimeMillis(); 
+      
+            url = new URL(POST_URL+header.get("API"));
+            logger.info("URL :"+url);
             connection = (HttpURLConnection) url.openConnection();
             connection.setConnectTimeout(8000);
             connection.setReadTimeout(6000);
             connection.setDoOutput(true);
             connection.setDoInput(true);
             connection.setUseCaches(false);
+            connection.setRequestProperty("Connection","keep-alive");
             connection.setRequestMethod(header.get("Method"));
             connection.setRequestProperty("Authorization", "Token "+header.get("Authorization"));
             if(meta.equals("yes")) {
@@ -68,7 +92,7 @@ public class HttpUploadFile {
 	            connection.setRequestProperty("Connection", "Keep-Alive");
 	            connection.setRequestProperty("Content-Type",
 	                    "multipart/form-data; boundary=" + BOUNDARY);
-	            OutputStream out = new DataOutputStream(connection.getOutputStream());
+	            out = new DataOutputStream(connection.getOutputStream());
 	            // text
 	            if (param.size()!=0) {
 	            	logger.info("******** FILE-TEXT ********");
@@ -104,7 +128,6 @@ public class HttpUploadFile {
 	                    if (entry.getValue() == null) {
 	                        continue;
 	                    }
-	                    
 	                    //没有传入文件类型，同时根据文件获取不到类型，默认采用application/octet-stream
 	                    String contentType = (String) file.get("contentType");
 	                    logger.info(fileName+"--CONTENTTYPE:"+contentType);
@@ -132,8 +155,9 @@ public class HttpUploadFile {
             StringBuffer strBuf = new StringBuffer();
             int code = connection.getResponseCode();
             if(code!=200)
-            	strBuf.append("HTTP Code:"+code);
-            bufferedReader = new BufferedReader(new InputStreamReader(
+            	logger.error("ERROR_CODE: "+code);
+            logger.info("HTTP_CODE: "+code);
+            	bufferedReader = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {
@@ -141,13 +165,10 @@ public class HttpUploadFile {
             }
             reply = strBuf.toString();
             bufferedReader.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
             if (connection != null) {
                 connection.disconnect();
             }
-        }
+        
         return reply;
     }
 }

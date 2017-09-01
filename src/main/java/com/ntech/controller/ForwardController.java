@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,48 +27,24 @@ public class ForwardController {
 
     private final static Logger logger = Logger.getLogger(ForwardController.class);
 
-//    @RequestMapping("/index")
-//    public String indexControl(){
-//        return "index.html";
-//    }
-//    @RequestMapping("face")
-//    @ResponseBody
-//    public Map testRequest(){
-//        logger.info("start testRequest method");
-//        logger.info(request.toString());
-//        logger.info(request.getRequestURI());
-//        logger.info(request.getServletPath());
-//        logger.info("end testRequest method");
-//        HashMap test = new HashMap();
-//        test.put("aa","bb");
-//        test.put("bb","bb");
-//        test.put("cc","bb");
-//        test.put("ccc","bb");
-//        return test;
-//    }
-//    @RequestMapping("/user/register")
-//    public String register(){
-//        logger.info("register");
-//        return "register";
-//    }
-
-
     @RequestMapping("/n-tech/**")
     @ResponseBody
-    public String methodHandler(HttpServletRequest request, HttpServletResponse response)
+    public String methodHandler(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes)
             throws ServletException, IOException {
+//        HashMap map = (HashMap) redirectAttributes.getFlashAttributes();
+        if(redirectAttributes.containsAttribute("request")&&redirectAttributes.containsAttribute("response")){
+            request = (HttpServletRequest) redirectAttributes.getFlashAttributes().get("request");
+            response = (HttpServletResponse) redirectAttributes.getFlashAttributes().get("response");
+
+        }
+//        HttpServletRequest request1= redirectAttributes.getFlashAttribute("request");
         String reply="";
 //        PrintWriter out = response.getWriter();
         String method = request.getMethod();
         if(method.equals("PUT")||method.equals("DELETE")){
             reply = PutUtil.requestForword(request,response);
         }else{
-            try {
-                reply = MethodUtil.requestForword(request, response);
-            } catch (PermissionDeniedException e) {
-                e.printStackTrace();
-                logger.info("BAD_GALLERY");
-            }
+            reply = MethodUtil.getInstance().requestForword(request, response);
         }
         if(reply.equals(""))
             reply="BAD_INPUT";

@@ -1,5 +1,7 @@
 package com.ntech.controller;
 
+import com.ntech.exception.PermissionDeniedException;
+import com.ntech.forward.MethodUtil;
 import com.ntech.model.Customer;
 import com.ntech.model.LibraryKey;
 import com.ntech.model.SetMeal;
@@ -10,8 +12,12 @@ import com.ntech.util.SHAencrypt;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.imageio.ImageIO;
 import javax.mail.MessagingException;
@@ -271,13 +277,13 @@ public class CustomerController {
         return false;
     }
 
-    //删除图库
-    @RequestMapping("deleteGallery")
-    @ResponseBody
-    public boolean deleteGallery(String libraryName) {
-
-        return false;
-    }
+//    //删除图库
+//    @RequestMapping("deleteGallery")
+//    @ResponseBody
+//    public boolean deleteGallery(String libraryName) {
+//
+//        return false;
+//    }
 
     @RequestMapping("record")
     public String recordLogJump() {
@@ -342,6 +348,38 @@ public class CustomerController {
         }
         return false;
     }
+
+
+    //转发接口
+    @RequestMapping(value = {"detect-face","verify-face",})
+    @ResponseBody
+    public String forwardDetect(HttpServletRequest request, HttpServletResponse response){
+        String result=null;
+//        request.getRequestDispatcher("/n-tech/v0/detect").forward(request,response);
+        try {
+            logger.info(request.getRequestURI());
+            if(request.getRequestURI().equals("/customer/detect-face")){
+                request.setAttribute("localAPI","/v0/detect");
+            }
+            if(request.getRequestURI().equals("/customer/verify-face")){
+                request.setAttribute("localAPI","/v0/verify");
+            }
+            result = MethodUtil.getInstance().requestForword(request, response);
+        }catch (Exception e){
+            logger.error("request error");
+            return "request error";
+        }
+        return result;
+    }
+
+    @RequestMapping("")
+    @ResponseBody
+    public String forwardVerify(HttpServletRequest request, HttpServletResponse response){
+        String result=null;
+        return result;
+    }
+
+
 
 
     private Date count(int value) {

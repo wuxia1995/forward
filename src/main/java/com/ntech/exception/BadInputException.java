@@ -1,14 +1,12 @@
 package com.ntech.exception;
 
-public class ErrorTokenException extends Exception {
-	
+public class BadInputException extends Exception {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	
-	public ErrorTokenException(String message) {
+	public BadInputException(String message) {
 		super(message);
 	}
 }
