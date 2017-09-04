@@ -10,6 +10,10 @@ import com.ntech.service.inf.ILibraryService;
 import com.ntech.service.inf.ISetMealService;
 import com.ntech.util.SHAencrypt;
 import org.apache.log4j.Logger;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,10 +31,8 @@ import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 
 @Controller
@@ -284,14 +286,36 @@ public class CustomerController {
             }
             result = MethodUtil.getInstance().requestForword(request, response);
             logger.info(result);
+            JSONObject  jsonResult = (JSONObject) new JSONParser().parse(result);
+            JSONArray jsonArray = (JSONArray) jsonResult.get("results");
+            for(int i=0;i<jsonArray.size();i++){
+                JSONObject tmpJson= (JSONObject) jsonArray.get(i);
+                String tmpStrng= (String) tmpJson.get("photo");
+                tmpStrng="http://192.168.10.208"+"http://127.0.0.1:3333/uploads//20170904/15044886028807127.jpeg".substring(16);
+                ((JSONObject) jsonArray.get(i)).put("photo",tmpStrng);
+            }
+            modelAndView.addObject("demoGallery",jsonArray);
         }catch (Exception e){
             logger.error("request error");
             modelAndView.setViewName("msg");
             modelAndView.addObject("msg","request error");
         }
-        modelAndView.addObject("demoGallery",result);
+//        modelAndView.addObject("demoGallery",result);
         return modelAndView;
     }
+
+    @RequestMapping("getDemoFace")
+    @ResponseBody
+    public String getDemoSearchFace(HttpServletRequest request,HttpServletResponse response){
+        String result =null;
+        if(request.getRequestURI().equals("/customer/getDemoFace")){
+            request.setAttribute("localAPI","/v0/identify");
+        }
+        result = MethodUtil.getInstance().requestForword(request, response);
+        return result;
+    }
+
+
 
     //添加图库
     @RequestMapping("addGallery")

@@ -98,14 +98,6 @@ function drawDiv(image,result,parentDiv){
 }
 function readResData(data,id) {
     removeDiv()
-    //移除之前的画框
-    // if ($('#imgShow11')) {
-    //     $('#imgShow11').remove();
-    // }
-    // if ($('#imgShow21')) {
-    //     $('#imgShow21').remove();
-    // }
-
     // console.log({width: w, height: h});
 
     console.log(data);
