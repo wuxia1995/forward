@@ -7,7 +7,7 @@ import org.json.simple.JSONObject;
 
 public class ErrorPrompt {
 	
-	private static Map<String,String> map = new HashMap<String, String>();
+	private static Map<String,String> map = new HashMap<String,String>();
 	
 	public static void addInfo(String key,String value) {
 		map.put(key, value);

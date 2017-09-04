@@ -1,13 +1,13 @@
 package com.ntech.forward;
 
+import com.ntech.util.ConfigManager;
+
 public class Constant {
 	
-	public static final String TOKEN = "Hhhzp023j1nckca9OsauXr-T4Onmf7Bp";
-	/*protected static final String TOKEN = "iqwpYL6jTEnnebA2WIYeluFZCtBV4kx3";*/
-	/*protected static final String TOKEN = "kXa75ctpbTqoS6vo1QtYe-Gae9gNLnGR";*/
-	
-	public static final String SDK_IP = "http://192.168.10.208:8000";
-	/*protected static final String SDK_IP = "http://127.0.0.1:8000";*/
-	public static final String CONTEXT = "n-tech";
-
+	private static ConfigManager sdk = ConfigManager.getInstance();
+	public static final String TOKEN = sdk.getParameter("TOKEN");
+	public static final String SDK_IP = sdk.getParameter("SDK_IP");
+	public static final String PIC = sdk.getParameter("PIC");
+	public static final String DOC = sdk.getParameter("DOC");
+	public static final String PATH = sdk.getParameter("PATH");
 }

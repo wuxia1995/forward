@@ -9,12 +9,16 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.json.simple.parser.ParseException;
 
 import com.ntech.exception.ErrorTokenException;
-import com.ntech.exception.PermissionDeniedException;
+import com.ntech.exception.IllegalAPIException;
+import com.ntech.exception.IllegalIDException;
+import com.ntech.exception.IllegalGalleryException;
+import com.ntech.util.ErrorPrompt;
 import com.ntech.util.ForwardRequestWrapper;
 
 /**
@@ -48,30 +52,43 @@ public class APIFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 		
+		HttpSession session = request.getSession();
+		//registerUser
+		request.setAttribute("register",session.getAttribute("register"));
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
-		
-		ForwardRequestWrapper forwardRequestWrapper;
+		ErrorPrompt.clear();
 		try {
-			forwardRequestWrapper = new ForwardRequestWrapper(request);
-			chain.doFilter(forwardRequestWrapper.getRequest(), response);
+			ForwardRequestWrapper forwardRequestWrapper = new ForwardRequestWrapper(request);
+			req = forwardRequestWrapper.getRequest();
+			chain.doFilter(req, response);
 		} catch (ErrorTokenException e) {
 			// TODO Auto-generated catch block
-			logger.info("*****Bad_Token*****");
+			logger.error("*****Bad_Token*****@"+req.getAttribute("userName"));
+			ErrorPrompt.addInfo("error"+(ErrorPrompt.size()+1),"bad_token");
 			e.printStackTrace();
+			chain.doFilter(request, response);
 			
-		} catch (PermissionDeniedException e) {
+		} catch (IllegalIDException e) {
 			// TODO Auto-generated catch block
-			logger.info("*****BAD_ID*****");
+			logger.error("*****BAD_ID*****@"+req.getAttribute("userName"));
+			ErrorPrompt.addInfo("error"+(ErrorPrompt.size()+1),"bad_id");
 			e.printStackTrace();
-		} catch (ParseException e) {
+			chain.doFilter(request, response);
+		} catch (IllegalAPIException e) {
 			// TODO Auto-generated catch block
-			logger.info("ParseException-CHECK_ID");
+			logger.error("*****BAD_API*****@"+req.getAttribute("userName"));
+			ErrorPrompt.addInfo("error"+(ErrorPrompt.size()+1),e.getMessage());
 			e.printStackTrace();
+			chain.doFilter(request, response);
+		} catch (IllegalGalleryException e) {
+			// TODO Auto-generated catch block
+			logger.error("*****BAD_GALLERY*****@"+req.getAttribute("userName"));
+			ErrorPrompt.addInfo("error"+(ErrorPrompt.size()+1),"bad_gallery");
+			e.printStackTrace();
+			chain.doFilter(request, response);
 		}
 	
-		
-		
 	}
 
 	/**
