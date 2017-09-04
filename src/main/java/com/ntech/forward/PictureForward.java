@@ -22,8 +22,9 @@ import com.ntech.util.ErrorPrompt;
 public class PictureForward {
 	
 	private Logger logger = Logger.getLogger(PictureForward.class);
-	public static final String FORWARD_URL = Constant.PIC;
-	
+	private static final String FORWARD_URL = Constant.PIC;
+	private static List<Byte> pic = new ArrayList<Byte>();
+
 	private static PictureForward instance;
 	private PictureForward() {}
 	  public static PictureForward getInstance(){    //对获取实例的方法进行同步
@@ -39,7 +40,7 @@ public class PictureForward {
 		URL url;
 		InputStream inputStream = null;
 		DataInputStream dataInputStream = null;
-		List<Byte> pic = new ArrayList<Byte>();
+		pic.clear();
 		try {
 			String userName = (String) request.getAttribute("userName");
 			logger.info("USER: "+userName);
