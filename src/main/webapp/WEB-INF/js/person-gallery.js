@@ -8,7 +8,9 @@ $(document).ready(function () {
     //     detectReq(check)
     //
     // })
+
 }); //ready
+
 
 var preSize=0;
 function searchUrl(input) {

@@ -1,6 +1,5 @@
 package com.ntech.controller;
 
-import com.ntech.exception.PermissionDeniedException;
 import com.ntech.forward.MethodUtil;
 import com.ntech.model.Customer;
 import com.ntech.model.LibraryKey;
@@ -275,14 +274,19 @@ public class CustomerController {
     }
 
     @RequestMapping("gallery-demo")
-    public ModelAndView getDemoGallery(HttpServletRequest request,HttpServletResponse response){
-
+    public ModelAndView getDemoGallery(HttpServletRequest request,HttpServletResponse response,HttpSession session){
         ModelAndView modelAndView = new ModelAndView("show-gallery-demo");
+        String name= (String) session.getAttribute("name");
+
         String result=null;
         try {
             logger.info(request.getRequestURI());
             if(request.getRequestURI().equals("/customer/gallery-demo")){
                 request.setAttribute("localAPI","/v0/faces/gallery/demo_default");
+            }
+            if(null!=name&&!"".equals(name)){
+                modelAndView.setViewName("show-gallery");
+                request.setAttribute("localAPI","/v0/faces/gallery/"+name);
             }
             result = MethodUtil.getInstance().requestForword(request, response);
             logger.info(result);
@@ -291,7 +295,7 @@ public class CustomerController {
             for(int i=0;i<jsonArray.size();i++){
                 JSONObject tmpJson= (JSONObject) jsonArray.get(i);
                 String tmpStrng= (String) tmpJson.get("photo");
-                tmpStrng="http://192.168.10.208"+"http://127.0.0.1:3333/uploads//20170904/15044886028807127.jpeg".substring(16);
+                tmpStrng="http://192.168.10.208"+tmpStrng.substring(16);
                 ((JSONObject) jsonArray.get(i)).put("photo",tmpStrng);
             }
             modelAndView.addObject("demoGallery",jsonArray);
@@ -309,15 +313,77 @@ public class CustomerController {
     public String getDemoSearchFace(HttpServletRequest request,HttpServletResponse response){
         String result =null;
         if(request.getRequestURI().equals("/customer/getDemoFace")){
-            request.setAttribute("localAPI","/v0/identify");
+            request.setAttribute("localAPI","/v0/faces/demo_default/identify");
         }
         result = MethodUtil.getInstance().requestForword(request, response);
+        if(null!=result&&!"".equals(result)) {
+            return result.replaceAll("http://127.0.0.1:3333/uploads", "http://192.168.10.208:3333/uploads");
+        }
         return result;
+
+    }
+    @RequestMapping("getMyGallery")
+    @ResponseBody
+    public JSONArray getMyGallery(HttpSession session,HttpServletRequest request,HttpServletResponse response) throws ParseException {
+        String name = (String) session.getAttribute("name");
+        String result=null;
+        if (null != name && !"".equals(name)) {
+            if(request.getRequestURI().equals("/customer/getMyGallery")){
+                request.setAttribute("localAPI","/v0/faces/gallery/"+name);
+            }
+//            request.setAttribute("personFaceInsert",name);
+            result = MethodUtil.getInstance().requestForword(request, response);
+            logger.info(result);
+            JSONObject  jsonResult = (JSONObject) new JSONParser().parse(result);
+            JSONArray jsonArray = (JSONArray) jsonResult.get("results");
+            for(int i=0;i<jsonArray.size();i++){
+                JSONObject tmpJson= (JSONObject) jsonArray.get(i);
+                String tmpStrng= (String) tmpJson.get("photo");
+                tmpStrng="http://192.168.10.208"+tmpStrng.substring(16);
+                ((JSONObject) jsonArray.get(i)).put("photo",tmpStrng);
+            }
+            return jsonArray;
+        }
+        return null;
     }
 
 
 
-    //添加图库
+    //添加人脸到个人库
+
+    @RequestMapping("addToGallery")
+    @ResponseBody
+    public String addToGallery(HttpSession session,HttpServletRequest request,HttpServletResponse response) {
+        String name = (String) session.getAttribute("name");
+        String result=null;
+        if (null != name && !"".equals(name)) {
+            if(request.getRequestURI().equals("/customer/addToGallery")){
+                request.setAttribute("localAPI","/v0/face/");
+            }
+            request.setAttribute("personFaceInsert",name);
+            result = MethodUtil.getInstance().requestForword(request, response);
+            return result;
+        }
+        return "用户会话过期";
+    }
+
+
+    //删除人脸到个人库  暂未实现
+    @RequestMapping("deleteToGallery")
+    @ResponseBody
+    public String deleteToGallery(HttpSession session,HttpServletRequest request,HttpServletResponse response) {
+        String name = (String) session.getAttribute("name");
+        String result=null;
+        if (null != name && !"".equals(name)) {
+            if(request.getRequestURI().equals("/customer/deleteToGallery")){
+                request.setAttribute("localAPI","/v0/face");
+            }
+            result = MethodUtil.getInstance().requestForword(request, response);
+            return result;
+        }
+        return "用户会话过期";
+    }
+
     @RequestMapping("addGallery")
     @ResponseBody
     public boolean addGallery(String libraryName, HttpSession session) {

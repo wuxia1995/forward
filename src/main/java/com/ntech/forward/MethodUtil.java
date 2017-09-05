@@ -165,6 +165,12 @@ public class MethodUtil {
 		}else {
 			header.put("API",localAPI);
 		}
+		//判断
+		String galleries = (String) request.getAttribute("personFaceInsert");
+		if(galleries!=null&&!galleries.equals("")) {
+            param.put("galleries",galleries);
+		}
+
 		logger.info((String)request.getAttribute("API"));
 		logger.info("Token :"+request.getHeader("Token"));
 		try {
@@ -175,10 +181,12 @@ public class MethodUtil {
             e.printStackTrace();
             return null;
         }
-		String string = ConfigManager.getInstance().getParameter("PICTURE")+"/"+Encrypt.encryptUserName((String)request.getAttribute("userName"));
-		if(SDKreply!=null||!SDKreply.equals("")) {
-			return SDKreply.replaceAll("http://127.0.0.1:3333/uploads",string);
+		if(localAPI==null||localAPI.equals("")) {
+			String string = ConfigManager.getInstance().getParameter("PICTURE")+"/"+Encrypt.encryptUserName((String)request.getAttribute("userName"));
+			if(SDKreply!=null||!SDKreply.equals("")) {
+				return SDKreply.replaceAll("http://127.0.0.1:3333/uploads",string);
+			}
 		}
-		return null;
+		return SDKreply;
 	}
 }

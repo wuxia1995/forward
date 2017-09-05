@@ -48,7 +48,7 @@ function uploadPic(obj, id) {
     }
 
     $.ajax({
-        url: '../n-tech/v0/verify',
+        url: 'verify-face',
         type: 'POST',
         dataType: "json",
         data: formData,
@@ -183,7 +183,7 @@ function verifyReq(img, id) {
     }
 
     $.ajax({
-        url: '../n-tech/v0/verify',
+        url: 'verify-face',
         // url: '../n-tech/v0/verify',
         type: 'POST',
         dataType: "json",
