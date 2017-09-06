@@ -46,82 +46,82 @@
                     <div id="picDiv1" style="position: relative ">
                         <img id="imgShow" width="400px" height="400px" src="http://192.168.10.212:8080/images/1.jpg">
                     </div>
+
                     <div>
                         <!--<button class="btn" id="check-btn1" onclick="verifyUrl(1)">检测</button>-->
-                        <input id="left-file" type="file" onchange="uploadImg(this)" accept="image/png,image/jpeg"
+                        <input id="left-file" type="file" @change="myLibSearchUpload($event.target)" accept="image/png,image/jpeg"
                                name="photo1">
                         <div class="input-group">
                         <span class="input-group-btn">
-                            <button id="check-btn1" class="btn btn-default" onclick="searchUrl(this)"
+                            <button id="check-btn1" class="btn btn-default" @click="myLibSearchUrl"
                                     type="button">检测</button>
                         </span>
-                            <input type="text" id="inputUrl" class="form-control">
+                            <input type="text" id="myLibSearchInputUrl" class="form-control">
                         </div>
                         <hr>
 
                         <div class="col-sm-6 col-md-3">
                             <a href="#" class="thumbnail">
                                 <img src="http://192.168.10.212:8080/images/1.jpg"
-                                     alt="demo" onclick="searchReq(this)">
+                                     alt="demo" @click="myLibSearchReq($event.target)">
                             </a>
                         </div>
                         <div class="col-sm-6 col-md-3">
                             <a href="#" class="thumbnail">
                                 <img src="http://192.168.10.212:8080/images/2.jpg"
-                                     alt="demo" onclick="searchReq(this)">
+                                     alt="demo" @click="myLibSearchReq($event.target)">
                             </a>
                         </div>
                         <div class="col-sm-6 col-md-3">
                             <a href="#" class="thumbnail">
                                 <img src="http://192.168.10.212:8080/images/3.jpg"
-                                     alt="demo" onclick="searchReq(this)">
+                                     alt="demo" @click="myLibSearchReq($event.target)">
                             </a>
                         </div>
                         <div class="col-sm-6 col-md-3">
                             <a href="#" class="thumbnail">
                                 <img src="http://192.168.10.208:3333/uploads//20170904/15044886028807127.jpeg"
-                                     alt="demo" onclick="searchReq(this)">
+                                     alt="demo" @click="myLibSearchReq($event.target)">
                             </a>
                         </div>
-
                     </div>
                 </div>   <!--left div-->
 
                 <div class="col-xs-5">
                     <div id="response">
+                        <button @click="getMyGallery">显示我的图库</button>
                         <h3>demo picture</h3>
-                        <#if demoGallery??>
-                        <#list demoGallery as item>
-                        <div class="col-sm-6 col-md-3">
-                        <a href="#" class="thumbnail">
-                        <img height="300" width="300" src="${item.photo}"
-                        alt="${item.id}">
-                        </a>
-                        </div>
-                        </#list>
-                        <#else>no data
-                        </#if>
+                        <!--<#if demoGallery??>-->
+                        <!--<#list demoGallery as item>-->
+                        <!--<div class="col-sm-6 col-md-3" id="${item.id}par">-->
+                        <!--<a href="#" class="thumbnail">-->
+                        <!--<img height="300" width="300" src="${item.photo}"-->
+                        <!--id="${item.id}" v-on:click="deleteMyGallery($event.target)">-->
+                        <!--</a>-->
+                        <!--</div>-->
+                        <!--</#list>-->
+                        <!--<#else>no data-->
+                        <!--</#if>-->
                         <template v-for="todo in todos">
-                            <li>{{ todo.text }}</li>
-                            <li>--------------</li>
+                            <div class="col-sm-6 col-md-3" v-bind:id="todo.id">
+                                {{ todos.photo }}
+                                <a href="#" class="thumbnail">
+                                    <img height="300" width="300" v-bind:src="todo.photo"
+                                         v-bind:alt="todo.id" v-on:click="deleteMyGallery($event.target)">
+                                </a>
+                            </div>
                         </template>
-                        <div id="myLibrary" style="position: relative;height: 500px;width: 410px;border:1px red solid ">
-
-                            {{ myLib }}
-
-                            <!--<img id="imgShow" width="400px" height="400px" src="http://192.168.10.212:8080/images/1.jpg">-->
-                        </div>
                         <div>
                             <!--<button class="btn" id="check-btn1" onclick="verifyUrl(1)">检测</button>-->
-                            <input id="myLibUpload" type="file" @change="myLibUploadInput" accept="image/png,image/jpeg"
+                            <input id="myLibUpload" type="file" @change="myLibUploadInput($event.target)" accept="image/png,image/jpeg"
                                    name="photo">
 
 
                             <div class="input-group">
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" id="myLibUrlBtn">检测</button>
+                                    <button class="btn btn-default" @click="myLibUrlCheck">检测</button>
                                 </span>
-                                <input type="text" id="myLibUrlInput" class="form-control">
+                                <input type="text" id="myLibUrlInput" v-model="myLibUrl" class="form-control">
                             </div>
 
 
@@ -133,113 +133,43 @@
                         </div>
 
 
-                    </div> <!--right div-->
+                    </div>
+                </div> <!--right div-->
+            </div>  <!-- row -->
 
-                </div>  <!-- row -->
-                <div class="row" style="border-top: solid 1px #b9def0">
 
-                    <div class="col-xs-4">
-                        <div id="searchResult">
-                            <div>
-                                {{ message }}
-                            </div>
+            <div style="border-top: solid 1px #b9def0">
+
+                <div class="col-xs-4">
+                    <div id="searchResult">
+                        <div>
+                            {{ message }}
                         </div>
                     </div>
-                    <div class="col-xs-4 ">
+                </div>
+                <div class="col-xs-4 ">
                     <pre id="reponse">
 
                     </pre>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="container-fluid" id="testf">
-        <div id="app-3">
-            <p v-if="seen">现在你看到我了</p>
-        </div>
-        <ol>
-            <li v-for="todo in todos">
-                {{ todo.text }}
-            </li>
-        </ol>
-        <button id="test">test</button>
-        {{ message }}
-        <img v-bind:src="testModel">
-        <button v-on:click="getMyGallery">逆转消息</button>
+
+        <button v-on:click="getMyGallery">testBtn</button>
+        <a href="/customer/exit" >退出登录</a>
     </div>
+
 </div>
+
+</div>
+
+
 </body>
 
 <script>
-    var app = new Vue({
-        el: '#person-gallery',
-        data: {
-            myPhotos:'',
-            message: "abcdef",
-            myLib:"",
-            testModel:"",
-            seen: true,
-            todos: [
-                {text: '学习 JavaScript'},
-                {text: '学习 Vue'}
-            ]
-        },
-        methods: {
-            myLibUploadInput: function () {
-                var fileContent = document.getElementById('myLibUpload')
-                console.log(fileContent.files[0])
-                var file = fileContent.files[0];
-                if(!file){
-                    return false;
-                }
-                var formData = new FormData();
-                formData.append("photo", file)
-                $.ajax({
-                    url: 'addToGallery',
-                    type: 'POST',
-                    dataType: "json",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    async: true,
-                    success: function (data) {
-                        console.log(data)
-                        dataObj = eval(data.results);
-                        app.myLib= dataObj;
 
-                    },
-                    error: function (data) {
-                        alert("no face")
-                        return false
-                    }
-                });
-            },
-
-
-
-            getMyGallery: function () {
-                $.ajax({
-                    url: 'getMyGallery',
-                    type: 'POST',
-                    dataType: "json",
-                    processData: false,
-                    contentType: false,
-                    async: true,
-                    success: function (data) {
-                        console.log(data)
-
-                    },
-                    error: function (data) {
-                        alert("no face")
-                        return false
-                    }
-                });
-            }
-
-
-        }
-    })
 </script>
 </html>

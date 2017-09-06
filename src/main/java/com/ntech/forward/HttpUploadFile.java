@@ -68,8 +68,8 @@ public class HttpUploadFile {
     	}
 		//×××××××××××××××××××××××××××××××××××		
         String reply = "";
-        String BOUNDARY = "-------------------------"+System.currentTimeMillis(); 
-      
+        String BOUNDARY = "-------------------------"+System.currentTimeMillis();
+			logger.info(POST_URL+header.get("API"));
             url = new URL(POST_URL+header.get("API"));
             logger.info("URL :"+url);
             connection = (HttpURLConnection) url.openConnection();
@@ -94,7 +94,7 @@ public class HttpUploadFile {
 	                    "multipart/form-data; boundary=" + BOUNDARY);
 	            out = new DataOutputStream(connection.getOutputStream());
 	            // text
-	            if (param.size()!=0) {
+	            if (null!=param&&param.size()!=0) {
 	            	logger.info("******** FILE-TEXT ********");
 	                StringBuffer stringBuffer = new StringBuffer();
 	                Iterator<Entry<String, String>> iterator = param.entrySet().iterator();
@@ -115,7 +115,7 @@ public class HttpUploadFile {
 	                out.write(stringBuffer.toString().getBytes());
 	            }
 	            // file
-	            if (file.size()!=0) {
+	            if (null!=file&&file.size()!=0) {
 	            	logger.info("******** FILE-PICTURE *******");
 	                Iterator<Entry<String,Object>> iter = file.entrySet().iterator();
 	                while (iter.hasNext()) {

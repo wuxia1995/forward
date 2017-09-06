@@ -68,8 +68,8 @@ public class PutUtil {
 						logger.info(key+":"+value);
 					}
 				}else {
-					key = putString.split("=")[0];
-					value = putString.split("=")[1];
+					key = putString.split("=|:")[0];
+					value = putString.split("=|:")[1];
 					if(key!=""&&key!=null&&value!=""&&value!=null)
 					body.put(key, value);
 					logger.info(key+":"+value);
@@ -98,13 +98,21 @@ public class PutUtil {
 			param.put("Authorization",Constant.TOKEN);
 			param.put("Content-Type", "application/json");
 			param.put("API",(String) request.getAttribute("API"));
-			
+			String localAPI = (String) request.getAttribute("localAPI");
+
+			if(localAPI==null||localAPI.equals("")||!request.getMethod().equalsIgnoreCase("DELETE")) {
+				param.put("API",(String) request.getAttribute("API"));
+			}else {
+				String picId= (String) body.get("id");
+				param.put("API",localAPI+picId);
+				body.clear();
+			}
 			String SDKreply =  ConnectionSDK.getInstance().httpURLConnectionSDK(param, body,meta);
 			if(SDKreply==null) {
 				return null;
 			}
-			String string = ConfigManager.getInstance().getParameter("PICTURE")+"/"+Encrypt.encryptUserName((String)request.getAttribute("userName"));
-			if(SDKreply!=null||!SDKreply.equals("")) {
+			if(SDKreply!=null&&!SDKreply.equals("")) {
+			    String string = ConfigManager.getInstance().getParameter("PICTURE")+"/"+Encrypt.encryptUserName((String)request.getAttribute("userName"));
 				return SDKreply.replaceAll("http://127.0.0.1:3333/uploads",string);
 			}
 			return null;

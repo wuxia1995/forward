@@ -1,53 +1,213 @@
 $(document).ready(function () {
-    $("#mamageMyGallery").click(function () {
-        $("#loginTip").removeClass("hidden")
-    })
-    // $('#check-btn').click(function () {
-    //     var check = document.getElementById("inputUrl");
-    //     console.log(check.tagName)
-    //     detectReq(check)
-    //
-    // })
+
+
+    // var mylib;
+
+    var app = new Vue({
+        el: '#person-gallery',
+        data: {
+            message: "abcdef",
+            myLibUrl: "",
+            testModel: "",
+            seen: true,
+            todos: []
+        },
+        mounted: function () {
+            // getMyGallery()
+        },
+        methods: {
+            initDemo: function () {
+
+            },
+            myLibUploadInput: function () {
+                var fileContent = document.getElementById('myLibUpload')
+                console.log(fileContent.files[0])
+                var file = fileContent.files[0];
+                if (!file) {
+                    return false;
+                }
+                var formData = new FormData();
+                formData.append("photo", file)
+                $.ajax({
+                    url: 'addToGallery',
+                    type: 'POST',
+                    dataType: "json",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    success: function (data) {
+                        console.log(data)
+//                        dataObj = eval(data.results);
+                        app.todos = data;
+
+                    },
+                    error: function (data) {
+                        alert("no face")
+                        return false
+                    }
+                });
+            },
+
+
+            getMyGallery: function () {
+                $.ajax({
+                    url: 'getMyGallery',
+                    type: 'GET',
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data)
+                        app.todos = data;
+                    },
+                    error: function (data) {
+                        alert("no face")
+                        app.todos = data;
+
+                    }
+                });
+            },
+
+            deleteMyGallery: function (dom) {
+                console.log(dom);
+                $.ajax({
+                    url: 'deleteToGallery',
+                    type: 'DELETE',
+                    dataType: "json",
+                    data: "id:" + dom.alt,
+                    success: function (data) {
+                        console.log(data)
+                        app.todos = data;
+//                        $('#' + dom.alt ).remove();
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        app.todos = data;
+//                        alert("no face")
+//                        $('#' + dom.alt ).remove();
+                    }
+                });
+            },
+
+            myLibUrlCheck:function () {
+                if(app.myLibUrl==""){
+                    return false
+                }else{
+                    var formData = new FormData();
+                    formData.append("photo", app.myLibUrl)
+                    $.ajax({
+                        url: 'addToGallery',
+                        type: 'POST',
+                        dataType: "json",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        async: true,
+                        success: function (data) {
+                            console.log(data)
+//                        dataObj = eval(data.results);
+                            app.todos = data;
+
+                        },
+                        error: function (data) {
+                            alert("no face")
+                            return false
+                        }
+                    });
+                }
+            },
+
+            myLibSearchUrl:function () {
+                var img = new Image();
+                img.src = $("#myLibSearchInputUrl").val();
+                app.myLibSearchReq(img);
+            },
+            myLibSearchReq:function (img) {
+
+                var formData = new FormData();
+                // formData.append("n",4);
+                formData.append("photo",img.src)
+                $.ajax({
+                    url: 'getDemoFace',
+                    type: 'POST',
+                    dataType: "json",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    success: function (data) {
+                        $('#imgShow').attr("src",img.src);
+                        console.log("success")
+                        console.log(data)
+                        dataObj=eval(data.results);
+                        showResult(dataObj)
+                        $('#reponse').html(syntaxHighlight(data))
+
+                    },
+                    error: function (data) {
+                        // img.src = ""
+                        alert("no face")
+                        return false
+                    }
+                });
+            },
+            myLibSearchUpload(img){
+                var imgShow = document.getElementById("imgShow")
+                var file = img.files[0];
+                if (!file) {
+                    return false;
+                }
+                var reader = new FileReader();
+                reader.onloadend = function (e) {
+                    console.log("成功读取....");
+                    imgShow.src = e.target.result;
+                }
+                reader.readAsDataURL(file)
+                //上传文件时当前的图片内容是文件,对比的对象可能时文件或者url
+                var formData = new FormData();
+                // formData.append("n",4);
+                formData.append("photo",file)
+                $.ajax({
+                    url: 'getDemoFace',
+                    type: 'POST',
+                    dataType: "json",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    success: function (data) {
+                        dataObj=eval(data.results);
+                        showResult(dataObj)
+                        $('#reponse').html(syntaxHighlight(data))
+                    },
+                    error: function (data) {
+                        alert("no face")
+                        return false
+                    }
+                });
+            }
+        }
+    });
 
 }); //ready
 
-
 var preSize=0;
-function searchUrl(input) {
-    var img = new Image();
-    img.src = $("#inputUrl").val();
-    searchReq(img);
-}
 
-function searchReq(img) {
-
-    var formData = new FormData();
-    formData.append("n",4);
-    formData.append("photo",img.src)
-    $.ajax({
-        url: 'getDemoFace',
-        type: 'POST',
-        dataType: "json",
-        data: formData,
-        processData: false,
-        contentType: false,
-        async: true,
-        success: function (data) {
-            $('#imgShow').attr("src",img.src);
-            console.log("success")
-            console.log(data)
-            dataObj=eval(data.results);
-            showResult(dataObj)
-            $('#reponse').html(syntaxHighlight(data))
-
-        },
-        error: function (data) {
-            // img.src = ""
-            alert("no face")
-            return false
-        }
-    });
-}
+// function getMyGallery(){
+//     $.ajax({
+//         url: 'getMyGallery',
+//         type: 'GET',
+//         dataType: "json",
+//         success: function (data) {
+//             console.log(data)
+//             return data;
+//         },
+//         error: function (data) {
+//             alert("no face")
+//            return data;
+//
+//         }
+//     });
+// }
 
 function removeBefore(size) {
     for(var i=1;i<=size;i++){
@@ -58,43 +218,6 @@ function removeBefore(size) {
             $("#divResult"+i).remove();
         }
     }
-}
-function uploadImg(img) {
-
-    var imgShow = document.getElementById("imgShow")
-    var file = img.files[0];
-    if (!file) {
-        return false;
-    }
-    var reader = new FileReader();
-    reader.onloadend = function (e) {
-        console.log("成功读取....");
-        imgShow.src = e.target.result;
-    }
-    reader.readAsDataURL(file)
-    //上传文件时当前的图片内容是文件,对比的对象可能时文件或者url
-    var formData = new FormData();
-    formData.append("n",4);
-    formData.append("photo",file)
-    $.ajax({
-        url: 'getDemoFace',
-        type: 'POST',
-        dataType: "json",
-        data: formData,
-        processData: false,
-        contentType: false,
-        async: true,
-        success: function (data) {
-            dataObj=eval(data.results);
-            showResult(dataObj)
-            $('#reponse').html(syntaxHighlight(data))
-        },
-        error: function (data) {
-            alert("no face")
-            return false
-        }
-    });
-
 }
 function showResult(dataObj) {
 
