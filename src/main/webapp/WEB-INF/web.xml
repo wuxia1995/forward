@@ -78,6 +78,11 @@
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
 
+  <icon>
+    <small-icon>images/favicon.ico</small-icon>
+    <large-icon>images/favicon.ico</large-icon>
+  </icon>
+
   <!-- session配置 -->
   <session-config>
     <session-timeout>15</session-timeout>
