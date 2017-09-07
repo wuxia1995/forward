@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+
+<div class="section">
+    <div class="container-fluid fluid_two" id="fluid_two">
+        <!--右侧倒三角背景以及文字-->
+        <div class="title_bg2">
+            <img class="img-responsive center-block" src="img/index/two/title_img1.png" />
+            <div class="title_text2">人脸检测</div>
+            <div class="introduce_text2">检测并定位图片中的人脸，返回<br/>高精度的人脸<br/>框坐标。</div>
+        </div>
+        <div class="formal_box2">
+            <div class="left_formal2">
+                <!--左侧代码框-->
+                <div class="code_box2">
+                    <div class="code_title2">
+                        <span><img class="code_img2" src="img/index/two/icon-bottom.png"></span>&nbsp;&nbsp;Response JSON
+                    </div>
+                    <div class="code_text2">
+                        <%--<textarea disabled="disabled">--%>
+                                       <pre class="hidden"  id="responseDetect">
+
+                                       </pre>
+									<%--</textarea>--%>
+                    </div>
+                </div>
+                <%--<!--左侧人脸属性框-->--%>
+                <%--<div class="attribute_box2">--%>
+                <%--<div class="attribute_title2">--%>
+                    <%--<span><img class="attribute_img2" src="img/index/two/icon-right.png"></span>&nbsp;&nbsp;人脸属性--%>
+                    <%--</div>--%>
+                <%--<div class="attribute_text2"></div>--%>
+                <%--</div>--%>
+            </div>
+            <div class="middle_formal2">
+                <div class="detect_box2" reveal_sign="width">
+                    <div id="imgShowDetect" class="detect_img2">
+                        <img id="imgShowDetectCont" src="http://192.168.10.212:8080/img/index/two/max_img1.png">
+                    </div>
+                </div>
+            </div>
+            <div class="right_formal2">
+                <div class="bottom_left_f2">
+                    <div class="upload2-1">
+                        <div class="upload_btn2">
+                            本地上传
+                            <form id="jvForm" method="post" enctype="multipart/form-data">
+                                <input accept="image/png,image/jpeg" name="photo" onchange="uploadPicDetect(this)" class="upload_file5" type="file" value="本地上传">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="upload2-2">
+                        <div class="upload_text5">
+                            <input id="inputUrlDetect"  class="upload_mintext5" type="text" placeholder="请输入图片URL"/>
+                            <div onclick="detectUrl()" id="checkInputUrlDetect" class="detect_btn5">检测</div>
+                        </div>
+                    </div>
+                    <div class="upload2-3">
+                        <div class="upload5-3img">
+                            <div class="detect_fiveimg5" reveal_sign="width"><img onclick="detectReq(this)" src="http://192.168.10.212:8080/img/index/two/max_img1.png"></div>
+                            <div class="detect_fiveimg5" reveal_sign="width"><img onclick="detectReq(this)" src="http://192.168.10.212:8080/img/index/two/max_img2.png"></div>
+                            <div class="detect_fiveimg5" reveal_sign="width"><img onclick="detectReq(this)" src="http://192.168.10.212:8080/img/index/two/max_img3.png"></div>
+                            <div class="detect_fiveimg5" reveal_sign="width"><img onclick="detectReq(this)" src="http://192.168.10.212:8080/img/index/two/max_img4.png"></div>
+                            <div class="detect_fiveimg5" reveal_sign="width"><img onclick="detectReq(this)" src="http://192.168.10.212:8080/img/index/two/max_img5.png"></div>
+                            <br style="clear:both;"/><!--清除浮动-->
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="detect_dome2">
+                    <div class="upload2">
+                        <div class="upload_btn2">
+                            本地上传
+                            <input class="upload_file2" type="file" value="本地上传">
+                        </div>
+                        <div class="upload_text2">
+                            <input class="upload_mintext2" type="text" placeholder="请输入图片URL"/>
+                            <div class="detect_btn2">检测</div>
+                        </div>
+                        <div class="detect_minimg2">
+                            <div class="detect_fiveimg2" reveal_sign="width"><img class="img_active" src="img/index/two/max_img1.png"></div>
+                            <div class="detect_fiveimg2" reveal_sign="width"><img src="img/index/two/max_img2.png"></div>
+                            <div class="detect_fiveimg2" reveal_sign="width"><img src="img/index/two/max_img3.png"></div>
+                            <div class="detect_fiveimg2" reveal_sign="width"><img src="img/index/two/max_img4.png"></div>
+                            <div class="detect_fiveimg2" reveal_sign="width"><img src="img/index/two/max_img5.png"></div>
+                        </div>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+
+        <!--右下方功能演示-->
+
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,132 +1,116 @@
-function uploadPic(obj) {
-    var img = document.getElementById("imgShow");
+
+//上传图片探测
+function uploadPicDetect(obj) {
+    // var img = document.getElementById("imgShowDetectDiv");
     var file = obj.files[0];
     var reader = new FileReader();
     reader.onload = function (e) {
-        console.log("成功读取....");
-        img.src = e.target.result;
-        //或者 img.src = this.result;  //e.target == this
+        // img.src = e.target.result;
+        $("#imgShowDetect").attr("src",e.target.result)
     }
     reader.readAsDataURL(file)
-    var options = {
-        url: "detect-face",
-        // url: "../n-tech/v0/detect",
-        type: "post",
+
+    var detectForm = new FormData();
+    detectForm.append("photo",file);
+    $.ajax({
+        url: 'customer/detect-face',
+        type: 'POST',
         dataType: "json",
-//                data: {photo: img.src},
+        data: detectForm,
+        processData: false,
+        contentType: false,
+        async: true,
         success: function (data) {
-            console.log(data + "fasdfasdfasdfasdfsadf")
-            handleData(img, data)
+            handleData($('#imgShowDetect').attr("src"),data)
         },
         error: function (data) {
-            alert(data + "出现错误")
+            alert("no face")
+            return false
         }
-    };
-    //jquery.form使用方式
-    $("#jvForm").ajaxSubmit(options);
-
-
+    });
+    //
+    // var options = {
+    //     url: "customer/detect-face",
+    //     type: "post",
+    //     dataType: "json",
+    //     success: function (data) {
+    //         handleData(img, data)
+    //     },
+    //     error: function (data) {
+    //         alert(data + "出现错误")
+    //     }
+    // };
+    // $("#jvForm").ajaxSubmit(options);
 }
 
 $(document).ready(function () {
 
-    $('#check-btn').click(function () {
-        var check = document.getElementById("inputUrl");
-        // $('#imgShow').src = ""
-
-        console.log(check.tagName)
-        detectReq(check)
-
-    })
-
-//            $("#img").click(function () {
-//                $('#imgShow').src=$('#img'+i).attr("src")
-//                console.log()
-////            var formData = new FormData();
-////            formData.append("file",document.getElementById("picForm"))
-//
-//
-//            });
 }); //ready
+
+
+//定义全局变量num记录图片中人脸的个数
 var num = 0;
-
+function detectUrl() {
+    // var check = document.getElementById("inputUrlDetect");
+    // console.log(check.tagName)
+    detectReq($("#inputUrlDetect").val())
+}
+//url图片探测,并画人脸div
 function detectReq(img) {
-//            for (var i = 0; i < num; i++) {
-//                if ($('#' + i).length > 0) {
-//                    $('#' + i).remove();
-//                }
-//            }
-//            console.log("width:"+img.naturalWidth)
-//            console.log("height:"+img.naturalHeight)
-//            if(img.naturalWidth>400){
-//                var widthRate=400/img.naturalWidth
-//            }
-//            if(img.naturalHeight>400){
-//                var heightRate=400/img.naturalHeight
-//            }
-//            $('#imgShow').attr("src",img.src);
-    var reqData;
-    if (img.tagName == 'INPUT') {
-        reqData = img.value;
-    } else if (img.tagName == 'IMG') {
-        reqData = img.src;
-    } else {
-        console.log(img.tagName + ":error tag");
-
-        return false
-    }
-    // if
+    // var reqData;
+    // if (img.tagName == 'INPUT') {
+    //     reqData = img.value;
+    // } else if (img.tagName == 'IMG') {
+    //     reqData = img.src;
+    // } else {
+    //     console.log(img.tagName + ":error tag");
+    //     return false
+    // }
     $.ajax({
-        url: 'detect-face',
-        // url: '../n-tech/v0/detect',
+        url: 'customer/detect-face',
         type: 'POST',
-//                    data: {photo: address},
         dataType: "json",
-        data: {photo: reqData},
+        data: {photo: img},
         async: true,
-//                dataType : 'json',
         success: function (data) {
-            // var img = document.getElementById("imgShow");
             handleData(img, data)
-
         }
     });
 }
-
-function handleData(eleType, data) {
-    $('#response').html(syntaxHighlight(data))
-    var reqData;
-    if (eleType.tagName == 'INPUT') {
-        reqData = eleType.value;
-    } else if (eleType.tagName == 'IMG') {
-        reqData = eleType.src;
-    } else {
-        console.log(eleType.tagName + ":error tag");
-        return false
-    }
-
-    // $('#imgShow').attr("src",reqData);
-    img = document.getElementById("imgShow");
-    img.src = reqData
-    var imgSrc = $('#imgShow').attr("src");
+//画人脸div
+function handleData(imgContent,data) {
+    $('#responseDetect').removeClass("hidden")
+    $('#responseDetect').html(syntaxHighlight(data))
+    // var reqData;
+    // if (eleType.tagName == 'INPUT') {
+    //     reqData = eleType.value;
+    // } else if (eleType.tagName == 'IMG') {
+    //     reqData = eleType.src;
+    // } else {
+    //     console.log(eleType.tagName + ":error tag");
+    //     return false
+    // }
+    //
+    img = document.getElementById("imgShowDetect");
+    imgDiv = document.getElementById("imgShowDetectDiv");
+    img.src = imgContent
+    // $('#imgShowDetect').attr("src",reqData);
+    var imgSrc = $('#imgShowDetect').attr("src");
     getImageWidth(imgSrc, function (w, h) {
         console.log({width: w, height: h});
 
 
         for (var i = 0; i < num; i++) {
-            if ($('#' + i).length > 0) {
-                $('#' + i).remove();
+            if ($('#detect' + i).length > 0) {
+                $('#detect' + i).remove();
             }
         }
-        console.log("width:" + img.width)
-        console.log("height:" + img.height)
-        // if(img.naturalWidth>400){
-        var widthRate = 400 / img.naturalWidth
-        // }
-        // if(img.naturalHeight>400){
-        var heightRate = 400 / img.naturalHeight
-        // }
 
+
+        // console.log("width:" + img.width)
+        // console.log("height:" + img.height)
+        var widthRate = imgDiv.offsetWidth / img.naturalWidth
+        var heightRate = imgDiv.offsetHeight / img.naturalHeight
 
         var dataObj = eval(data)
 
@@ -135,14 +119,10 @@ function handleData(eleType, data) {
         if (dataObj.hasOwnProperty("faces")) {
             rect = dataObj['faces'];
             for (var i = 0; i < rect.length; i++) {
-                // if(widthRate){
                 rect[i].x1 = rect[i].x1 * widthRate - 4
                 rect[i].x2 = rect[i].x2 * widthRate - 4
-                // }
-                // if(heightRate){
                 rect[i].y1 = rect[i].y1 * heightRate
                 rect[i].y2 = rect[i].y2 * heightRate
-                // }
                 width = (rect[i].x2 - rect[i].x1) * 0.8
                 height = (rect[i].y2 - rect[i].y1) * 0.9
                 left = rect[i].x1 + width * 0.15
@@ -153,16 +133,15 @@ function handleData(eleType, data) {
             }
         }
         if (results) {
-
             for (var i = 0; i < num; i++) {
-                if ($('#' + i).length > 0) {
-                    $('#' + i).remove();
+                if ($('#detect' + i).length > 0) {
+                    $('#detect' + i).remove();
                 }
             }
             num = results.length;
             for (var i = 0; i < results.length; i++) {
-                $('#picShow').prepend("<div id=" + i + "></div>");
-                $('#' + i).css({
+                $('#imgShowDetectDiv').prepend("<div id='detect"+i+"'></div>");
+                $('#detect' + i).css({
                     "position": "absolute",
                     "outline": "rgb(70, 171, 232) solid 2px",
                     "width": results[i].width,
@@ -219,6 +198,6 @@ function syntaxHighlight(json) {
         } else if (/null/.test(match)) {
             cls = 'null';
         }
-        return '<span class="' + cls + '">' + match + '</span>';
+        return match;
     });
 }

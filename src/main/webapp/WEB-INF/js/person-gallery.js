@@ -13,7 +13,7 @@ $(document).ready(function () {
             todos: []
         },
         mounted: function () {
-            // getMyGallery()
+            getMyGallery()
         },
         methods: {
             initDemo: function () {
@@ -192,22 +192,24 @@ $(document).ready(function () {
 
 var preSize=0;
 
-// function getMyGallery(){
-//     $.ajax({
-//         url: 'getMyGallery',
-//         type: 'GET',
-//         dataType: "json",
-//         success: function (data) {
-//             console.log(data)
-//             return data;
-//         },
-//         error: function (data) {
-//             alert("no face")
-//            return data;
-//
-//         }
-//     });
-// }
+function getMyGallery(){
+    $.ajax({
+        url: 'getMyGallery',
+        type: 'GET',
+        dataType: "json",
+        success: function (data) {
+            console.log(data)
+            app.todos=data
+            return data;
+        },
+        error: function (data) {
+            alert("no face")
+            app.todos=data
+           return data;
+
+        }
+    });
+}
 
 function removeBefore(size) {
     for(var i=1;i<=size;i++){
