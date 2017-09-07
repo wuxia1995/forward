@@ -3,7 +3,6 @@ package com.ntech.controller;
 import com.ntech.forward.Constant;
 import com.ntech.forward.HttpUploadFile;
 import com.ntech.forward.MethodUtil;
-import com.ntech.forward.PutUtil;
 import com.ntech.model.Customer;
 import com.ntech.model.LibraryKey;
 import com.ntech.model.SetMeal;
@@ -375,7 +374,7 @@ public class CustomerController {
             if (request.getRequestURI().equals("/customer/deleteToGallery")) {
                 request.setAttribute("localAPI", "/v0/face/id/");
             }
-            result=PutUtil.getInstance().requestForword(request, response);
+            result=MethodUtil.getInstance().requestForword(request, response);
             result=getMyGalleryLocal(name);
 
             return wrapResponse(result);
@@ -508,7 +507,7 @@ public class CustomerController {
     //获取用户图库信息
     private String getMyGalleryLocal(String name){
         String result = null;
-        HashMap<String ,String> header =new HashMap<>();
+        HashMap<String ,String> header =new HashMap<String,String>();
         header.put("Method","GET");
         header.put("Authorization", Constant.TOKEN);
         header.put("API", "/v0/faces/gallery/" + name);

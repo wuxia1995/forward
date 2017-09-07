@@ -2,23 +2,16 @@ package com.ntech.forward;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
-
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
-
-import com.ntech.util.ErrorPrompt;
 
 public class ConnectionSDK {
 	
-	private static Logger logger = Logger.getLogger(ConnectionSDK.class);
+	private final Logger logger = Logger.getLogger(ConnectionSDK.class);
 	public static final String FORWARD_URL = Constant.SDK_IP;
 	
 	private static ConnectionSDK instance;
@@ -32,60 +25,35 @@ public class ConnectionSDK {
 	     }
 	   return instance;
 	 }
-	public synchronized String httpURLConnectionSDK (Map<String,String> param,Map<String,Object> body
-			,String meta) {
-		URL url;
-		StringBuffer stringBuffer= null;
+	public synchronized String httpURLConnectionSDK (Map<String,String> param) {
 		BufferedReader bufferedReader = null;
 		BufferedWriter bufferedWriter = null;
-		String reply="";
+		StringBuilder stringBuilder = null;
 		try {
-			url = new URL(FORWARD_URL+param.get("API"));
+			URL url = new URL(FORWARD_URL+param.get("API"));
+			logger.info("URL: "+url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-	           connection.setDoOutput(true);  
-	           connection.setDoInput(true); 
-	           connection.setConnectTimeout(8000);
-	           connection.setReadTimeout(6000);
-	           connection.setRequestMethod(param.get("Method"));
-	           connection.setRequestProperty("Connection","keep-alive");
-	           connection.setRequestProperty("Content-Type", param.get("Content-Type"));
-	           connection.setRequestProperty("Authorization","Token "+param.get("Authorization"));
-	           if(meta.equals("yes")) {
-	        	   bufferedWriter = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
-		           JSONObject.writeJSONString(body, bufferedWriter);
-		           bufferedWriter.close();
-	           }
-        	   connection.connect();
-        	   int code = connection.getResponseCode();
-               if(code!=200&&code!=204)
-               	logger.error("ERROR_CODE: "+code);
-               logger.info("HTTP_CODE: "+code);
-	           if(code==200) {
-	        	   InputStreamReader inputStream =new InputStreamReader(connection.getInputStream());
-	               bufferedReader = new BufferedReader(inputStream);                
-	               String lines;                
-	               stringBuffer= new StringBuffer("");              
-	               while ((lines = bufferedReader.readLine()) != null) { 
-	            	   lines = new String(lines.getBytes(),"utf-8");
-	            	   stringBuffer.append(lines);   
-	               }
-	           }
-	           if(code==204) {
-	        	   ErrorPrompt.addInfo("excute","successful");
-	           }else if(code==404){
-	        	   throw new FileNotFoundException();
-	           }else {
-	        	   reply = stringBuffer.toString();
-	           }   
-	           connection.disconnect();
-		} catch (MalformedURLException e) {
-			logger.error(e.getMessage());
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}catch (FileNotFoundException e) {
-			ErrorPrompt.addInfo("error"+(ErrorPrompt.size()+1), "404");
-			return null;
+			connection.setDoOutput(true);  
+			connection.setDoInput(true); 
+			connection.setConnectTimeout(10000);
+			connection.setReadTimeout(50000);
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("Connection","keep-alive");
+			connection.setRequestProperty("Content-Type","application/json");
+			connection.setRequestProperty("Authorization","Token "+Constant.TOKEN);
+			connection.connect();
+			
+			if(200==connection.getResponseCode()) {
+				InputStreamReader inputStream =new InputStreamReader(connection.getInputStream());
+				bufferedReader = new BufferedReader(inputStream);                
+				String lines;                
+				stringBuilder = new StringBuilder();  
+				while ((lines = bufferedReader.readLine()) != null) { 
+					lines = new String(lines.getBytes(),"utf-8");
+					stringBuilder.append(lines);   
+				}
+			}
+			connection.disconnect();
 		}catch (IOException e) {
 			logger.error(e.getMessage());
 			// TODO Auto-generated catch block
@@ -95,6 +63,12 @@ public class ConnectionSDK {
 			try {
 				if(bufferedReader!=null)
 					bufferedReader.close();
+			} catch (IOException e) {
+				logger.error(e.getMessage());
+				e.printStackTrace();
+				return null;
+			}
+			try {
 				if(bufferedWriter!=null)
 					bufferedWriter.close();	
 			} catch (IOException e) {
@@ -104,6 +78,10 @@ public class ConnectionSDK {
 				return null;
 			}
 		}
-		return reply;
+		if(stringBuilder!=null)
+			return stringBuilder.toString();
+		logger.info("ERROR: noReply");
+		return null;
+		
 	}
 }

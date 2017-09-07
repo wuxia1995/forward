@@ -3,7 +3,6 @@ package com.ntech.controller;
 import com.ntech.exception.ErrorTokenException;
 import com.ntech.forward.MethodUtil;
 import com.ntech.forward.PictureForward;
-import com.ntech.forward.PutUtil;
 import com.ntech.util.ErrorPrompt;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,7 @@ public class ForwardController {
 //        PrintWriter out = response.getWriter();
         String method = request.getMethod();
         if (method.equals("PUT") || method.equals("DELETE")) {
-            reply = PutUtil.getInstance().requestForword(request, response);
+            reply = MethodUtil.getInstance().requestForword(request, response);
             if (ErrorPrompt.size() != 0)
                 reply = ErrorPrompt.getJSONInfo();
         } else {
@@ -73,13 +72,12 @@ public class ForwardController {
             e.printStackTrace();
         }
         if(reply==null||ErrorPrompt.size()!=0) {
-            response.setContentType("text/html");
+            response.setContentType("application/json");
             outputStream.write(ErrorPrompt.getJSONInfo().getBytes());
             return;
         }
         response.setContentType("image");
         response.setHeader("Accept-Ranges", "bytes");
-        response.setHeader("Connection", "keep-alive");
         for(int b:reply)
             dataOutputStream.write(b);
         dataOutputStream.close();

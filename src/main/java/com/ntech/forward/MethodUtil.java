@@ -16,21 +16,24 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
-import org.json.simple.parser.ParseException;
+import org.json.simple.JSONArray;
 
 import com.ntech.exception.IllegalGalleryException;
+import com.ntech.util.Check;
 import com.ntech.util.ConfigManager;
 import com.ntech.util.Encrypt;
 import com.ntech.util.ErrorPrompt;
 
 public class MethodUtil {
 	private static MethodUtil instance;
-	private static Logger logger = Logger.getLogger(MethodUtil.class);
+	private final Logger logger = Logger.getLogger(MethodUtil.class);
+	private static final String BOUNDARY = "---------------------------"+System.currentTimeMillis();
+	
 	private static FileItemFactory factory = new DiskFileItemFactory();
-	private static String BOUNDARY = "---------------------------"+System.currentTimeMillis();
-	private Map<String ,String> header = new HashMap<String,String>();
-	private Map<String,String> param = new HashMap<String,String>();
-	private Map<String,Object> file = new HashMap<String,Object>();
+	private static Map<String ,String> header = new HashMap<String,String>();
+	private static Map<String,String> param = new HashMap<String,String>();
+	private static Map<String,Object> file = new HashMap<String,Object>(2);
+	
 	private List<String> galleries = null;
 	private MethodUtil() {
 	}
@@ -44,6 +47,7 @@ public class MethodUtil {
      return instance;
 	}
 	 
+	@SuppressWarnings("unchecked")
 	public String requestForword(HttpServletRequest request,
 			HttpServletResponse response)  {
 		logger.info("*************START***********");
@@ -59,6 +63,9 @@ public class MethodUtil {
 			String inputGalleries = request.getParameter("galleries");
 			if(galleries.size()!=0&&(inputGalleries==null||inputGalleries.equals("")))
 				param.put("galleries",(String) request.getAttribute("userName"));
+		}
+		if("allGalleries".equals(API)) {
+			return JSONArray.toJSONString((List<String>)request.getAttribute("allGalleries"));
 		}
 		//判断是否有文件输入
 		boolean isMultiPart = ServletFileUpload.isMultipartContent(request);
@@ -78,10 +85,6 @@ public class MethodUtil {
 						String value = new String(item.getString().getBytes("iso-8859-1"));
 						if(filedName.equals("galleries")||filedName.equals("gallery")) {
 							logger.info("inputGaleries :"+value);
-							if(value.indexOf((String)request.getAttribute("userName"))==-1) {
-								value = value.concat(","+request.getAttribute("userName"));
-							}
-							logger.info("inputGaleries :"+value);
 							filedName = "galleries";
 							boolean existGallery = false;
 							if(galleries!=null&&galleries.size()!=0) {
@@ -93,18 +96,19 @@ public class MethodUtil {
 									for(int i=0;i<inputGalleries.length;i++) {
 										logger.info(inputGalleries[i]);
 										existGallery = galleries.contains(inputGalleries[i]);
-										if(!existGallery)
-											throw new IllegalGalleryException("BAD_GALLERIES");
 										logger.info("FACE_GALLERIES_CHECK_RESULT :"+existGallery);
 									}
 								}else {
 									logger.info("inputOneGallery");
 									existGallery = galleries.contains(value);
+									if(!value.equals(request.getAttribute("userName")))
+										value = new StringBuilder(value).append(","+(String)request.getAttribute("userName")).toString();
 									logger.info("FACE_GALLERIES_CHECK_RESULT :"+existGallery);
 								}
 							}
-							if(existGallery)
-								param.put("galleries",value);
+							if(!existGallery)
+								throw new IllegalGalleryException("BAD_GALLERIES");
+							param.put("galleries",value);
 						}
 						param.put(filedName, value);
 						logger.info("文本域："+filedName+"——"+value);
@@ -120,7 +124,7 @@ public class MethodUtil {
 						byte[] pic = item.get();
 						logger.info("PICTURE.LENGTH:"+pic.length);
 						
-						file.put(filedName+":"+fileName, pic);
+						file.put(filedName, pic);
 					}	
 				}
 			} catch (FileUploadException e) {
@@ -142,7 +146,6 @@ public class MethodUtil {
 			header.put("Content-Type", "application/json");
 		}
 		//获取表单文本数据
-		@SuppressWarnings("unchecked")
 		Enumeration<String> enumeration = request.getParameterNames();
 		while(enumeration.hasMoreElements()) {
 			logger.info("*********HAS INPUT*********");
@@ -176,14 +179,15 @@ public class MethodUtil {
 		try {
 			SDKreply = HttpUploadFile.getInstance().httpURLConnectionSDK(header, param, file, meta);
 		} catch (IOException e) {
-			ErrorPrompt.addInfo("error"+(ErrorPrompt.size()+1),"bad_input");
+			ErrorPrompt.addInfo("response","bad_input");
         	logger.error(e.getMessage()+"@"+request.getAttribute("userName"));
             e.printStackTrace();
             return null;
-        }
+        } 
 		if(localAPI==null||localAPI.equals("")) {
 			String string = ConfigManager.getInstance().getParameter("PICTURE")+"/"+Encrypt.encryptUserName((String)request.getAttribute("userName"));
-			if(SDKreply!=null||!SDKreply.equals("")) {
+			if(SDKreply!=null&&!"".equals(SDKreply)) {
+				Check.timesCount((String)request.getAttribute("userName"));
 				return SDKreply.replaceAll("http://127.0.0.1:3333/uploads",string);
 			}
 		}

@@ -9,10 +9,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.json.simple.parser.ParseException;
 
 import com.ntech.exception.ErrorTokenException;
 import com.ntech.exception.IllegalAPIException;
@@ -26,7 +24,7 @@ import com.ntech.util.ForwardRequestWrapper;
  */
 public class APIFilter implements Filter {
 	
-	private Logger logger = Logger.getLogger(APIFilter.class);
+	private final Logger logger = Logger.getLogger(APIFilter.class);
     /**
      * Default constructor. 
      */
@@ -52,16 +50,12 @@ public class APIFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 		
-		HttpSession session = request.getSession();
-		//registerUser
-		request.setAttribute("register",session.getAttribute("register"));
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 		ErrorPrompt.clear();
 		try {
 			ForwardRequestWrapper forwardRequestWrapper = new ForwardRequestWrapper(request);
-			req = forwardRequestWrapper.getRequest();
-			chain.doFilter(req, response);
+			chain.doFilter(forwardRequestWrapper, response);
 		} catch (ErrorTokenException e) {
 			// TODO Auto-generated catch block
 			logger.error("*****Bad_Token*****@"+req.getAttribute("userName"));

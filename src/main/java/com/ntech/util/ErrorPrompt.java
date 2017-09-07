@@ -7,18 +7,18 @@ import org.json.simple.JSONObject;
 
 public class ErrorPrompt {
 	
-	private static Map<String,String> map = new HashMap<String,String>();
+	private static final Map<String,String> map = new HashMap<String,String>();
 	
-	public static void addInfo(String key,String value) {
+	public static final void addInfo(String key,String value) {
 		map.put(key, value);
 	}
-	public static void clear() {
+	public static final void clear() {
 		map.clear();
 	}
-	public static String getJSONInfo() {
+	public static final String getJSONInfo() {
 		return JSONObject.toJSONString(map);
 	}
-	public static int size() {
+	public static final int size() {
 		return map.size();
 	}
 }

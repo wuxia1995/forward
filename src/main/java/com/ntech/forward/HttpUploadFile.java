@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 
-import com.ntech.exception.BadInputException;
+import com.ntech.exception.IllegalAPIException;
 import com.ntech.util.ErrorPrompt;
 
 /**
@@ -23,13 +23,12 @@ import com.ntech.util.ErrorPrompt;
  */
 public class HttpUploadFile {
 	
-	private static HttpUploadFile instance;
+	private final Logger logger = Logger.getLogger(HttpUploadFile.class);
 	private static final String POST_URL = Constant.SDK_IP;
-	private static Logger logger = Logger.getLogger(HttpUploadFile.class);
-	private HttpURLConnection connection = null;
+	private static HttpUploadFile instance;
+	
     private BufferedWriter bufferedWriter = null;
     private BufferedReader bufferedReader = null;
-    private URL url = null;
     private OutputStream out = null;
 	
 	private HttpUploadFile() {}
@@ -68,17 +67,16 @@ public class HttpUploadFile {
     	}
 		//×××××××××××××××××××××××××××××××××××		
         String reply = "";
-        String BOUNDARY = "-------------------------"+System.currentTimeMillis();
-			logger.info(POST_URL+header.get("API"));
-            url = new URL(POST_URL+header.get("API"));
+        String BOUNDARY = "-------------------------"+System.currentTimeMillis(); 
+      
+            URL url = new URL(POST_URL+header.get("API"));
             logger.info("URL :"+url);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setConnectTimeout(8000);
-            connection.setReadTimeout(6000);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(50000);
             connection.setDoOutput(true);
             connection.setDoInput(true);
             connection.setUseCaches(false);
-            connection.setRequestProperty("Connection","keep-alive");
             connection.setRequestMethod(header.get("Method"));
             connection.setRequestProperty("Authorization", "Token "+header.get("Authorization"));
             if(meta.equals("yes")) {
@@ -89,9 +87,7 @@ public class HttpUploadFile {
 		        bufferedWriter.close();
 	        }else if(meta.equals("isFile")) {
 	        	logger.info("META=ISFILE");
-	            connection.setRequestProperty("Connection", "Keep-Alive");
-	            connection.setRequestProperty("Content-Type",
-	                    "multipart/form-data; boundary=" + BOUNDARY);
+	            connection.setRequestProperty("Content-Type","multipart/form-data; boundary=" + BOUNDARY);
 	            out = new DataOutputStream(connection.getOutputStream());
 	            // text
 	            if (null!=param&&param.size()!=0) {
@@ -123,14 +119,12 @@ public class HttpUploadFile {
 	                    String filed =  entry.getKey();
 	                    if(filed.equals("contentType"))
 	                    	   continue;
-	                    String filedName = filed.split(":")[0];
-	                    String fileName = filed.split(":")[1];
 	                    if (entry.getValue() == null) {
 	                        continue;
 	                    }
 	                    //没有传入文件类型，同时根据文件获取不到类型，默认采用application/octet-stream
 	                    String contentType = (String) file.get("contentType");
-	                    logger.info(fileName+"--CONTENTTYPE:"+contentType);
+	                    logger.info("FILE_CONTENTTYPE: "+contentType);
 	                    if (contentType == null || "".equals(contentType)) {
 	                        contentType = "application/octet-stream";
 	                    }
@@ -138,7 +132,7 @@ public class HttpUploadFile {
 	                    strBuf.append("\r\n").append("--").append(BOUNDARY)
 	                            .append("\r\n");
 	                    strBuf.append("Content-Disposition: form-data; name=\""
-	                            + filedName + "\"; filename=\"" + filedName
+	                            + filed + "\"; filename=\"" + filed
 	                            + "\"\r\n");
 	                    strBuf.append("Content-Type:" + contentType + "\r\n\r\n");
 	                    out.write(strBuf.toString().getBytes());
@@ -152,18 +146,30 @@ public class HttpUploadFile {
 	            out.close();
 	        } 
             // 读取返回数据
-            StringBuffer strBuf = new StringBuffer();
+            StringBuilder stringBuilder = new StringBuilder();
             int code = connection.getResponseCode();
-            if(code!=200)
-            	logger.error("ERROR_CODE: "+code);
+            if(200!=code&&204!=code) {
+				logger.error("ERROR_CODE: "+code);
+				try {
+					throw new IllegalAPIException("HTTP_CODE: "+code);
+				} catch (IllegalAPIException e) {
+		        	ErrorPrompt.addInfo("response",e.getMessage());
+					e.printStackTrace();
+					return null;
+				}
+			}
             logger.info("HTTP_CODE: "+code);
+            if(code==204) {
+				ErrorPrompt.addInfo("execute","successful");
+				return null;
+			}
             	bufferedReader = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {
-                strBuf.append(line).append("\n");
+                stringBuilder.append(line).append("\n");
             }
-            reply = strBuf.toString();
+            reply = stringBuilder.toString();
             bufferedReader.close();
             if (connection != null) {
                 connection.disconnect();

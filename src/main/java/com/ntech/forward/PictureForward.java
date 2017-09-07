@@ -16,7 +16,6 @@ import org.apache.log4j.Logger;
 
 import com.ntech.exception.ErrorTokenException;
 import com.ntech.util.Encrypt;
-import com.ntech.util.ErrorPrompt;
 
 
 public class PictureForward {
@@ -24,7 +23,7 @@ public class PictureForward {
 	private Logger logger = Logger.getLogger(PictureForward.class);
 	private static final String FORWARD_URL = Constant.PIC;
 	private static List<Byte> pic = new ArrayList<Byte>();
-
+	
 	private static PictureForward instance;
 	private PictureForward() {}
 	  public static PictureForward getInstance(){    //对获取实例的方法进行同步
@@ -54,8 +53,8 @@ public class PictureForward {
 			logger.info("URL: "+url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 	           connection.setDoInput(true); 
-	           connection.setConnectTimeout(8000);
-	           connection.setReadTimeout(6000);
+	           connection.setConnectTimeout(10000);
+	           connection.setReadTimeout(30000);
 	           connection.setRequestMethod("GET");
 	           connection.setRequestProperty("Connection","keep-alive");
 	           connection.connect();

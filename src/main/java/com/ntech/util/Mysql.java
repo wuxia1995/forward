@@ -58,4 +58,24 @@ public class Mysql {
 		logger.info("count(*): "+count);
 		return flag;
 	}
+	public boolean createGallery(String inputToken,String userName,String galleryName) throws SQLException {
+		
+		String sql = "insert into `user` (token,userName,gallery) values('"+inputToken+"','"+userName+"','"+galleryName+"')";
+		return statement.execute(sql);
+	}
+	public boolean deleteGallery(String galleryName) throws SQLException {
+		
+		String sql = "delete from user where gallery='"+galleryName+"'";
+		return statement.execute(sql);
+	}
+	public boolean timesCount(String userName) throws SQLException {
+		boolean flag = false;
+		String sql1 = "update user set times=times+1 where userName='"+userName+"'";
+		int affect1 =  statement.executeUpdate(sql1);
+		String sql2 = "update user set balance=balance-1 where userName='"+userName+"'";
+		int affect2 = statement.executeUpdate(sql2);
+		if(affect1!=0&&affect2!=0)
+			flag = true;
+		return flag;
+	}
 }

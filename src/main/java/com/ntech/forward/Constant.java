@@ -4,7 +4,7 @@ import com.ntech.util.ConfigManager;
 
 public class Constant {
 	
-	private static ConfigManager sdk = ConfigManager.getInstance();
+	private static final ConfigManager sdk = ConfigManager.getInstance();
 	public static final String TOKEN = sdk.getParameter("TOKEN");
 	public static final String SDK_IP = sdk.getParameter("SDK_IP");
 	public static final String PIC = sdk.getParameter("PIC");
