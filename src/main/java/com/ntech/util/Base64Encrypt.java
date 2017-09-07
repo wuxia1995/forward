@@ -2,7 +2,7 @@ package com.ntech.util;
 
 import java.util.Base64;
 
-public class Encrypt {
+public class Base64Encrypt {
 	
 	public static String  encryptUserName(String userName) {
 		byte[] b = userName.getBytes();
