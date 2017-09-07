@@ -28,19 +28,6 @@ function uploadPicDetect(obj) {
             return false
         }
     });
-    //
-    // var options = {
-    //     url: "customer/detect-face",
-    //     type: "post",
-    //     dataType: "json",
-    //     success: function (data) {
-    //         handleData(img, data)
-    //     },
-    //     error: function (data) {
-    //         alert(data + "出现错误")
-    //     }
-    // };
-    // $("#jvForm").ajaxSubmit(options);
 }
 
 $(document).ready(function () {
@@ -51,21 +38,11 @@ $(document).ready(function () {
 //定义全局变量num记录图片中人脸的个数
 var num = 0;
 function detectUrl() {
-    // var check = document.getElementById("inputUrlDetect");
-    // console.log(check.tagName)
     detectReq($("#inputUrlDetect").val())
 }
 //url图片探测,并画人脸div
 function detectReq(img) {
-    // var reqData;
-    // if (img.tagName == 'INPUT') {
-    //     reqData = img.value;
-    // } else if (img.tagName == 'IMG') {
-    //     reqData = img.src;
-    // } else {
-    //     console.log(img.tagName + ":error tag");
-    //     return false
-    // }
+
     $.ajax({
         url: 'customer/detect-face',
         type: 'POST',
@@ -81,16 +58,6 @@ function detectReq(img) {
 function handleData(imgContent,data) {
     $('#responseDetect').removeClass("hidden")
     $('#responseDetect').html(syntaxHighlight(data))
-    // var reqData;
-    // if (eleType.tagName == 'INPUT') {
-    //     reqData = eleType.value;
-    // } else if (eleType.tagName == 'IMG') {
-    //     reqData = eleType.src;
-    // } else {
-    //     console.log(eleType.tagName + ":error tag");
-    //     return false
-    // }
-    //
     img = document.getElementById("imgShowDetect");
     imgDiv = document.getElementById("imgShowDetectDiv");
     img.src = imgContent
@@ -105,10 +72,6 @@ function handleData(imgContent,data) {
                 $('#detect' + i).remove();
             }
         }
-
-
-        // console.log("width:" + img.width)
-        // console.log("height:" + img.height)
         var widthRate = imgDiv.offsetWidth / img.naturalWidth
         var heightRate = imgDiv.offsetHeight / img.naturalHeight
 

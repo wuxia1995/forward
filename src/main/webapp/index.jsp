@@ -148,6 +148,7 @@
         </div>
     </div>
     <!--第三屏(人脸对比)-->
+    <!--第三屏(人脸对比)-->
     <div class="section">
         <div class="container-fluid fluid_three">
             <!--左侧倒三角背景以及文字-->
@@ -156,102 +157,114 @@
                 <div class="title_text3">人脸对比</div>
                 <div class="introduce_text3">分析两张人脸属<br/>于同一个人的<br/>可能性大小</div>
             </div>
-            <!--左侧对比结果框-->
-            <div class="results_box3">
-                <div class="results_title3">
-                    <span><img class="results_img3" src="img/index/two/icon-bottom.png"></span>&nbsp;&nbsp;对比结果
-                </div>
-                <div class="results_text3">是否同一个人：可能性很高</div>
-            </div>
-            <!--左侧代码框-->
-            <div class="code_box3">
-                <div class="code_title3">
-                    <span><img class="code_img23" src="img/index/two/icon-right.png"></span>&nbsp;&nbsp;Response JSON
-                </div>
-                <div class="code_text3">
-							<textarea disabled="disabled">{
-  "faces1": [
-    {
-      "face_rectangle": {
-        "width": 264,
-        "top": 211,
-        "left": 125,
-        "height": 264
-      },
-      "face_token": "d61fb1d231d2d6c7fbfdeafc2a4fb31d"
-    }
-  ],
-  "faces2": [
-    {
-      "face_rectangle": {
-        "width": 260,
-        "top": 215,
-        "left": 133,
-        "height": 260
-      },
-      "face_token": "ebf0fc16a382f6052467b20c272d871f"
-    }
-  ],
-  "time_used": 537,
-  "thresholds": {
-    "1e-3": 62.327,
-    "1e-5": 73.975,
-    "1e-4": 69.101
-  },
-  "confidence": 88.488,
-  "image_id2": "SPedNTNWqgPmupahuTaSZQ==",
-  "image_id1": "uADw4RAdkIsQxhaDMwiqig==",
-  "request_id": "1504517581,585348db-0d80-442d-bbd3-6021a1c82006"
-}
-							</textarea>
-                </div>
-            </div>
-            <!--右侧人脸对比演示-->
-            <div class="contrast_box3">
-                <!--左侧图片上传区-->
-                <div class="results_leftimg3">
-                    <div class="results_maxbox3">
-                        <div class="results_maximg3" reveal_sign="width">
-                            <img class="showcasing_img3" src="img/index/two/max_img5.png" />
+            <div class="formal_box3">
+                <div class="left_formal3">
+                    <!--左侧代码框-->
+                    <div class="code_box3">
+                        <div class="code_title3">
+                            <span><img class="code_img3" src="img/index/two/icon-right.png"></span>&nbsp;&nbsp;Response JSON
+                        </div>
+                        <div class="code_text3">
+										<textarea disabled="disabled">{
+	  "image_id": "O2alrpeRIXFejHWe6WlRqw==",
+	  "request_id": "1504752872,78700459-3630-4cbb-9e2b-f23404a6df16",
+	  "time_used": 875,
+	  "faces": [
+	    {
+	      "landmark": {
+	        "mouth_upper_lip_left_contour2": {
+	          "y": 489,
+	          "x": 519
+	        },
+	        "mouth_upper_lip_top": {
+	          "y": 484,
+	          "x": 527
+	        },
+	        "mouth_upper_lip_left_contour1": {
+	          "y": 483,
+	          "x": 521
+	        },
+	        "left_eye_upper_left_quarter": {
+	          "y": 408,
+	          "x": 511
+	        },
+	        "left_eyebrow_lower_middle": {
+	          "y": 395,
+	          "x": 512
+	        },
+	        "mouth_upper_lip_left_contour3": {
+	          "y": 494,
+	          "x": 524
+	        },
+	        "left_eyebrow_lower_left_quarter": {
+	          "y": 394,
+	          "x": 505
+	        },</textarea>
                         </div>
                     </div>
-                    <div class="contrast_btn3">
-                        本地上传
-                        <input class="contrast_file3" type="file" value="本地上传">
-                    </div>
-                    <div class="upload_text3">
-                        <input class="upload_mintext3" type="text" placeholder="请输入图片URL"/>
-                        <div class="detect_btn3">检测</div>
-                    </div>
-                    <div class="detect_minimg3">
-                        <div class="detect_fiveimg3" reveal_sign="width"><img src="img/index/two/max_img1.png"></div>
-                        <div class="detect_fiveimg3" reveal_sign="width"><img src="img/index/two/max_img2.png"></div>
-                        <div class="detect_fiveimg3" reveal_sign="width"><img src="img/index/two/max_img3.png"></div>
-                        <div class="detect_fiveimg3" reveal_sign="width"><img src="img/index/two/max_img4.png"></div>
-                        <div class="detect_fiveimg3" reveal_sign="width"><img class="img_active" src="img/index/two/max_img5.png"></div>
-                    </div>
-                </div>
-                <!--右侧图片上传区-->
-                <div class="results_gightimg3">
-                    <div class="results_maxbox3">
-                        <div class="results_maximg3" reveal_sign="width">
-                            <img class="showcasing_img3" src="img/index/two/max_img5.png" />
+                    <!--左侧人脸属性框-->
+                    <div class="attribute_box3">
+                        <div class="attribute_title3">
+                            <span><img class="attribute_img3" src="img/index/two/icon-bottom.png"></span>&nbsp;&nbsp;比对结果
+                        </div>
+                        <div class="attribute_text3">
+                            是否同一个人：可能性很高
                         </div>
                     </div>
-                    <div class="contrast_btn3">
-                        本地上传
-                        <input class="contrast_file3" type="file" value="本地上传">
+                </div>
+                <!--右侧人脸对比演示-->
+                <div class="middle_formal3">
+                    <!--左侧图片上传区-->
+                    <div class="results_gightimg3">
+                        <div class="results_maxbox3" reveal_sign="width">
+                            <div class="results_maximg3" reveal_sign="width">
+                                <img class="showcasing_img3" src="img/index/two/max_img5.png" />
+                            </div>
+                        </div>
+                        <div class="upload_box3">
+                            <div class="contrast_btn3">
+                                本地上传
+                                <input class="contrast_file3" type="file" value="本地上传">
+                            </div>
+                            <div class="upload_text3">
+                                <input class="upload_mintext3" type="text" placeholder="请输入图片URL"/>
+                                <div class="detect_btn3">检测</div>
+                            </div>
+                            <div class="detect_minimg3">
+                                <div class="detect_fiveimg3" reveal_sign="width"><img src="http://192.168.10.212:8080/img/index/two/max_img1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img src="http://192.168.10.212:8080/img/index/two/max_img2.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img src="http://192.168.10.212:8080/img/index/two/max_img3.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img src="http://192.168.10.212:8080/img/index/two/max_img4.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img class="img_active"  src="http://192.168.10.212:8080/img/index/two/max_img5.png"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="upload_text3">
-                        <input class="upload_mintext3" type="text" placeholder="请输入图片URL"/>
-                        <div class="detect_btn3">检测</div>
-                    </div>
-                    <div class="detect_minimg3">
-                        <div class="detect_fiveimg3" reveal_sign="width"><img src="img/index/two/max_img1.png"></div>
-                        <div class="detect_fiveimg3" reveal_sign="width"><img src="img/index/two/max_img2.png"></div>
-                        <div class="detect_fiveimg3" reveal_sign="width"><img src="img/index/two/max_img3.png"></div>
-                        <div class="detect_fiveimg3" reveal_sign="width"><img src="img/index/two/max_img4.png"></div>
-                        <div class="detect_fiveimg3" reveal_sign="width"><img class="img_active" src="img/index/two/max_img5.png"></div>
+                </div>
+                <div class="right_formal3">
+                    <!--右侧图片上传区-->
+                    <div class="results_gightimg3">
+                        <div class="results_maxbox3" reveal_sign="width">
+                            <div class="results_maximg3" reveal_sign="width">
+                                <img class="showcasing_img3" src="img/index/two/max_img5.png" />
+                            </div>
+                        </div>
+                        <div class="upload_box3">
+                            <div class="contrast_btn3">
+                                本地上传
+                                <input class="contrast_file3" type="file" value="本地上传">
+                            </div>
+                            <div class="upload_text3">
+                                <input class="upload_mintext3" type="text" placeholder="请输入图片URL"/>
+                                <div class="detect_btn3">检测</div>
+                            </div>
+                            <div class="detect_minimg3">
+                                <div class="detect_fiveimg3" reveal_sign="width"><img src="img/index/two/max_img1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img src="img/index/two/max_img2.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img src="img/index/two/max_img3.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img src="img/index/two/max_img4.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img class="img_active" src="img/index/two/max_img5.png"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

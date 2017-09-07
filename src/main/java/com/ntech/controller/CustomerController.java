@@ -418,6 +418,12 @@ public class CustomerController {
         return "login";
     }
 
+    @RequestMapping("exit")
+    public String loginJump(HttpSession session) {
+        session.removeAttribute("name");
+        return "login";
+    }
+
 
     @RequestMapping("setMealBuy")
     @ResponseBody

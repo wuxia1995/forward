@@ -21,7 +21,7 @@ import org.json.simple.JSONArray;
 import com.ntech.exception.IllegalGalleryException;
 import com.ntech.util.Check;
 import com.ntech.util.ConfigManager;
-import com.ntech.util.Encrypt;
+import com.ntech.util.Base64Encrypt;
 import com.ntech.util.ErrorPrompt;
 
 public class MethodUtil {
@@ -185,7 +185,7 @@ public class MethodUtil {
             return null;
         } 
 		if(localAPI==null||localAPI.equals("")) {
-			String string = ConfigManager.getInstance().getParameter("PICTURE")+"/"+Encrypt.encryptUserName((String)request.getAttribute("userName"));
+			String string = ConfigManager.getInstance().getParameter("PICTURE")+"/"+Base64Encrypt.encryptUserName((String)request.getAttribute("userName"));
 			if(SDKreply!=null&&!"".equals(SDKreply)) {
 				Check.timesCount((String)request.getAttribute("userName"));
 				return SDKreply.replaceAll("http://127.0.0.1:3333/uploads",string);

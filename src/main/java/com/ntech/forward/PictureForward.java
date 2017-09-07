@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import com.ntech.exception.ErrorTokenException;
-import com.ntech.util.Encrypt;
+import com.ntech.util.Base64Encrypt;
 
 
 public class PictureForward {
@@ -45,7 +45,7 @@ public class PictureForward {
 			logger.info("USER: "+userName);
 			String pictureLocation = request.getRequestURI().split("uploads")[1];
 			String encrypt = pictureLocation.split("/")[1];
-			String picMaster = Encrypt.decryptUserName(encrypt);
+			String picMaster = Base64Encrypt.decryptUserName(encrypt);
 			logger.info("PIC_MASTER: "+picMaster);
 			if(userName==null||!userName.equals(picMaster))
 				throw new ErrorTokenException("getPictureError");
