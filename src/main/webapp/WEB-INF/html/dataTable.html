@@ -1,0 +1,511 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>jquery DataTables插件自定义分页ajax实现</title>
+    <!--<script src="../js/lib/jquery-1.10.2.min.js"></script>-->
+    <!--<script  src="../js/lib/bootstrap.min.js"></script>-->
+
+    <!--<link href="../css/bootstrap.css" rel="stylesheet">-->
+    <link href="../css/bootstrap-table.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../js/lib/bootstrap-table.js"></script>
+    <script src="../js/lib/bootstrap-table-zh-CN.js"></script>
+</head>
+<body>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default">
+        <div class="panel-heading">查询条件</div>
+        <div class="panel-body">
+            <form id="formSearch" class="form-horizontal">
+                <div class="form-group" style="margin-top:15px">
+                    <label class="control-label col-sm-1" for="userName">用户名</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="name">
+                    </div>
+                    <div class="col-sm-4" style="text-align:left;">
+                        <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-info">查询</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toolbar" class="btn-group">
+
+        <a href="javascript:void(0);" class="btn btn-info " id="addBtn">新增</a>
+        <a href="javascript:void(0);" class="btn btn-info " id="updateBtn">修改</a>
+        <a href="javascript:void(0);" class="btn btn-info " onclick="deleteItem();">删除</a>
+        </button>
+    </div>
+    <table id="tb_departments"></table>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form action="/admin/updateSetMeal" method="post">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">修改</h4>
+            </div>
+            <div class="modal-body" align="center">
+
+                <input type="hidden" id="id" name="id">
+                <div class="form-group">
+                    <label for="userName" class="text-info">用户名&nbsp;&nbsp;&nbsp;&nbsp;:
+                        <input type="text" id="userName" readonly name="userName"></label>
+                </div>
+
+                <div class="form-group">
+                    <label  class="text-info">类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                        <input type="radio"  name="contype" required  id="date" value="date">按天
+                        <input type="radio" name="contype" required id="times" value="times">按次
+                    </label>
+                </div>
+
+                <div class="form-group"  >
+                    <label for="beginTime" class="text-info">开始时间:
+                        <input type="date" id="beginTime" name="beginTime" required>
+
+                    </label>
+                </div>
+
+                <div class="form-group"  >
+                    <label for="endTime" class="text-info">结束时间:
+                        <input type="date" id="endTime" name="endTime" required>
+
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="totalTimes" class="text-info">总次数&nbsp;&nbsp;&nbsp;&nbsp;:
+                        <input type="text" id="totalTimes" name="totalTimes"required></label>
+                </div>
+
+                <div class="form-group">
+                    <label for="leftTimes" class="text-info">
+                        剩余次数:<input type="text" id="leftTimes" name="leftTimes" required></label>
+                </div>
+
+                <div class="form-group">
+                    <label  class="text-info">状态&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                        <input type="radio" name="enable" id="able" required value="able">已激活
+                        <input type="radio" name="enable" id="enable" required value="enable">未激活
+                    </label>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div align="center">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-info">提交</button>
+
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+    </form>
+</div>
+
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form  method="post" id="addForm" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="add">添加</h4>
+                </div>
+                <div class="modal-body" align="center">
+
+                    <div class="form-group">
+                        <label for="userName1" class="text-info">用户名&nbsp;&nbsp;&nbsp;&nbsp;:
+                            <input type="text" id="userName1"  name="userName"></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="text-info">类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                            <input type="radio"  name="contype" required  id="date1" value="date">按天
+                            <input type="radio" name="contype" required id="times1" value="times">按次
+                        </label>
+                    </div>
+
+                    <div class="form-group"  >
+                        <label for="beginTime1" class="text-info">开始时间:
+                            <input type="date" id="beginTime1" name="beginTime" required>
+
+                        </label>
+                    </div>
+
+                    <div class="form-group"  >
+                        <label for="endTime1" class="text-info">结束时间:
+                            <input type="date" id="endTime1" name="endTime" required>
+
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="totalTimes1" class="text-info">总次数&nbsp;&nbsp;&nbsp;&nbsp;:
+                            <input type="text" id="totalTimes1" name="totalTimes"required></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="leftTimes1" class="text-info">
+                            剩余次数:<input type="text" id="leftTimes1" name="leftTimes" required></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="text-info">状态&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                            <input type="radio" name="enable" id="able1" required value="able">已激活
+                            <input type="radio" name="enable" id="enable1" required value="enable">未激活
+                        </label>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div align="center">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">关闭</button>
+                        <input type="button" class="btn btn-info" id="submit" value="提交"/>
+                    </div>
+                   <div align="center"><span id="msg" class="text-danger"></span></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </form>
+</div>
+<script>
+
+    $(function () {
+
+        //1.初始化Table
+        var oTable = new TableInit();
+        oTable.Init();
+
+        //2.初始化Button的点击事件
+        var oButtonInit = new ButtonInit();
+        oButtonInit.Init();
+
+    });
+
+    var TableInit = function () {
+        var oTableInit = new Object();
+        //初始化Table
+        oTableInit.Init = function () {
+            $('#tb_departments').bootstrapTable({
+                url: '/admin/testSetMeals',         //请求后台的URL（*）
+                method: 'get',                      //请求方式（*）
+                toolbar: '#toolbar',                //工具按钮用哪个容器
+                striped: true,                      //是否显示行间隔色
+                cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                pagination: true,                   //是否显示分页（*）
+                sortable: false,                     //是否启用排序
+                // sortOrder: "asc",                   //排序方式
+                queryParams: oTableInit.queryParams,//传递参数（*）
+                sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
+                pageNumber: 1,                       //初始化加载第一页，默认第一页
+                pageSize: 5,                       //每页的记录行数（*）
+                pageList: [2, 3, 5, 10],           //可供选择的每页的行数（*）
+                search: true,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                //strictSearch: true,
+                //showColumns: true,                  //是否显示所有的列
+                // showRefresh: true,                  //是否显示刷新按钮
+                minimumCountColumns: 2,             //最少允许的列数
+                clickToSelect: true,                //是否启用点击选中行
+                height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+                //showToggle:true,                    //是否显示详细视图和列表视图的切换按钮
+                cardView: false,                    //是否显示详细视图
+                detailView: false,                   //是否显示父子表
+                columns: [{
+                    checkbox: true
+                }, {
+                    field: 'id',
+                    title: '编号'
+                }
+                    , {
+                        field: 'userName',
+                        title: '用户名'
+                    }, {
+                        field: 'contype',
+                        title: '类型',
+                        formatter: function (value, row, index) {
+                            if (value == "date") {
+                                return "按天计费";
+                            } else if (value = "times") {
+                                return "按次计费"
+                            }
+                        }
+                    }, {
+                        field: 'beginTime',
+                        title: '开始时间',
+                        formatter: function (value, row, index) {
+                            return changeDateFormat(value)
+                        }
+                    }, {
+                        field: 'endTime',
+                        title: '结束时间',
+                        formatter: function (value, row, index) {
+                            return changeDateFormat(value)
+                        }
+                    }, {
+                        field: 'totalTimes',
+                        title: '总次数'
+                    }, {
+                        field: 'leftTimes',
+                        title: '剩余次数'
+                    }, {
+                        field: 'enable',
+                        title: '状态',
+                        formatter: function (value, row, index) {
+                            if (value == "1") {
+                                return "已激活";
+                            } else if (value = "0") {
+                                return "未激活"
+                            }
+                        }
+                    }
+                ],
+            });
+        };
+        //得到查询的参数
+        oTableInit.queryParams = function (params) {
+            var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                limit: params.limit,   //页面大小
+                offset: params.offset,  //页码
+                name: $("#userName").val(),
+
+            };
+            return temp;
+        };
+        return oTableInit;
+    };
+
+
+    var ButtonInit = function () {
+        var oInit = new Object();
+
+
+        oInit.Init = function () {
+
+        };
+
+        return oInit;
+    };
+
+
+
+    function deleteItem() {
+        var selRow = $('#tb_departments').bootstrapTable('getSelections');
+        var selectedName = []
+        if (selRow == null) {
+            alert('请选取要删除的数据行！');
+            return false;
+        } else {
+
+            for (var i = 0; i < selRow.length; i++) {
+                selectedName[i] = selRow[i].userName;
+            }
+
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                cache: false,
+                async: true,
+                dataType: "json",
+                url: "/admin/deleteMealByName",
+                data: {"selectedName": selectedName},
+                success: function (data) {
+                    $('#tb_departments').bootstrapTable('refresh');
+
+                }
+            });
+
+        }
+    }
+
+    $("#updateBtn").click(function () {
+        var selRow = $('#tb_departments').bootstrapTable('getSelections');
+
+        if (selRow.length == 0) {
+            alert("请选择一行")
+            return false
+        } else if (selRow.length > 1) {
+            alert("你选择了多行，请只选择一行数据")
+            return false;
+        }
+        else {
+            var temp = selRow[0];
+            $("#id").attr('value', temp.id);
+            $("#userName").attr('value', temp.userName);
+            if (temp.contype == "date") {
+                $("#date").attr("checked", true);
+                $("#totalTimes").attr("readonly", "readonly");
+                $("#leftTimes").attr("readonly", 'readonly');
+                $("#beginTime").attr('value', changeDateFormat(temp.beginTime));
+                $("#endTime").attr('value', changeDateFormat(temp.endTime));
+
+            } else if (temp.contype == 'times') {
+                $("#times").attr("checked", true);
+                $("#beginTime").attr("readonly", 'readonly');
+                $("#endTime").attr("readonly", 'readonly');
+                $("#totalTimes").attr('value', temp.totalTimes);
+                $("#leftTimes").attr('value', temp.leftTimes);
+            }
+
+
+            if (temp.enable == "1") {
+                $("#able").attr("checked", true);
+            } else if (temp.enable == "0") {
+                $("#enable").attr("checked", true);
+            }
+
+
+            $("#myModal").modal("show");
+            $("input:radio[name='contype']").change(function () {
+                $("#totalTimes").removeAttr("readonly")
+                $("#leftTimes").removeAttr("readonly")
+                $("#beginTime").removeAttr("readonly")
+                $("#endTime").removeAttr("readonly")
+                var type = $("input:radio[name='contype']:checked").val();
+                if (type == "date") {
+                    $("#beginTime").attr('value', changeDateFormat(temp.beginTime));
+                    $("#endTime").attr('value', changeDateFormat(temp.endTime));
+                    $("#totalTimes").attr("readonly", "readonly");
+                    $("#leftTimes").attr("readonly", 'readonly');
+                    $("#totalTimes").attr('value', null);
+                    $("#leftTimes").attr('value', null);
+                } else if (type == "times") {
+                    $("#totalTimes").attr('value', temp.totalTimes);
+                    $("#leftTimes").attr('value', temp.leftTimes);
+                    $("#beginTime").attr("readonly", 'readonly');
+                    $("#endTime").attr("readonly", 'readonly');
+                    $("#beginTime").attr('value', null);
+                    $("#endTime").attr('value', null);
+
+                }
+            });
+        }
+    });
+     var flag=true;
+    $("#userName1").blur(function () {
+       $("#msg").text("");
+        $.ajax({
+            url:"/admin/checkNameAndMeal",
+            type:"post",
+            dataType:"json",
+            data:{
+                "name":$("#userName1").val()
+            },
+            success:function (data) {
+                if(data){
+                   flag=true;
+                }else{
+                    flag=false;
+                    $("#msg").text("该用户不存在或已存在订单，无法添加订单");
+                }
+            }
+        })
+    });
+    function check() {
+
+        return flag;
+    }
+    //按下按钮显示模态框
+    $("#addBtn").click(function () {
+        //显示模态框
+        $("#myModal1").modal("show");
+    });
+    $("input:radio[name='contype']").change(function () {
+        $("#totalTimes1").removeAttr("readonly")
+        $("#leftTimes1").removeAttr("readonly")
+        $("#beginTime1").removeAttr("readonly")
+        $("#endTime1").removeAttr("readonly")
+        var type = $("input:radio[name='contype']:checked").val();
+        $("#msg").text("");
+        if(type=="date"){
+            $("#totalTimes1").attr("readonly","readonly")
+            $("#leftTimes1").attr("readonly","readonly")
+            //console.log("xixixi")
+
+        }else if(type=="times"){
+            $("#beginTime1").attr("readonly","readonly")
+            $("#endTime1").attr("readonly","readonly")
+
+        }else{
+            flag=false;
+            $("#msg").text("未选中套餐类型");
+        }
+    });
+    $("#endTime1").change(function () {
+        $("#msg").text("");
+
+         console.log(parseInt( $("#beginTime1").val().replace("-","").replace("-","")))
+        if($("input:radio[name='contype']:checked").val()=="date"){
+            if($("#beginTime1").val()==null||$("#endTime1").val()==null){
+                $("#msg").text("开始时间或结束时间不能为空");
+                flag=false;
+            }else{
+                if(parseInt( $("#beginTime1").val().replace("-","").replace("-",""))
+                    >parseInt( $("#endTime1").val().replace("-","").replace("-",""))){
+                    $("#msg").text("开始时间大于结束时间");
+                    flag=false;
+                }
+            }
+        }
+
+    })
+    $("#leftTimes1").change(function () {
+        $("#msg").text();
+        console.log("changed");
+        if($("input:radio[name='contype']:checked").val()=="times"){
+            if($("#totalTimes1").val()==null||$("#leftTimes1").val()==null){
+                flag=false;
+                $("#msg").text("总次数或剩余次数为空");
+            }else{
+                if(parseInt($("#totalTimes1").val())<parseInt($("#leftTimes1").val())){
+                    flag=false;
+                    $("#msg").text("总次数小于剩余次数");
+                }
+            }
+
+        }
+    })
+
+    $("#submit").click(function () {
+        console.log($("#totalTimes1").val())
+        if(flag){
+        $.ajax({
+            url:"/admin/addMeal",
+            type:"post",
+            dataType:"json",
+            async:true,
+            data:{
+                "userName":$("#userName1").val(),
+                "contype":$("input:radio[name='contype']:checked").val(),
+                "beginTime":$("#beginTime1").val(),
+                "endTime":$("#endTime1").val(),
+                "totalTimes":$("#totalTimes1").val(),
+                "leftTimes":$("#leftTimes1").val(),
+                "enable":$("input:radio[name='enable']:checked").val()
+            },
+            success:function (data) {
+                $('#tb_departments').bootstrapTable('refresh');
+            }
+
+        });
+        }
+        $("#addForm")[0].reset();
+        $("#myModal1").modal("hide");
+    })
+
+        //处理时间戳
+        function changeDateFormat(val) {
+            if (val != null) {
+                var date = new Date(val);
+                var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+                var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+                return date.getFullYear() + "-" + month + "-" + currentDate;
+            }
+        }
+
+</script>
+</body>
+</html>

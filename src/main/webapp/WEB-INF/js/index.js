@@ -114,7 +114,14 @@ $(document).ready(function() {
 			}
 		})
 
-		
+		//人脸检测复选框判断
+		$(".attribute2").click(function(){
+			if($(this).is(':checked')){
+				$(this).siblings(".checkbox_box2").children().attr("src","img/index/two/yes.png");
+			}else{
+				$(this).siblings(".checkbox_box2").children().attr("src","img/index/two/no.png");
+			}
+		})
 
 		
 		/**
@@ -134,6 +141,8 @@ $(document).ready(function() {
 			});
 			var detect_white=$(".detect_box2").width();
 			$(".upload2").css('height',detect_white);
+			var img_bgbox2=$(".img_bgbox2").width();
+			$(".select_box2").css("bottom",img_bgbox2+25);
 		}
 		loadRevealImgDiv();
 		//設置各个div的宽高
@@ -154,6 +163,12 @@ $(document).ready(function() {
 		$(".contrast_btn3").mouseout(function(){
 			$(this).css({"background-color":""});
 		})
+		$(".contrast_btn4").mouseover(function(){
+			$(this).css({"background-color":"#79f0b4"});
+		})
+		$(".contrast_btn4").mouseout(function(){
+			$(this).css({"background-color":""});
+		})
 		//图片URL检测鼠标移入移出效果
 		$(".detect_btn2").mouseover(function(){
 			$(this).css({"background-color":"white","color":"#00c3bb"});
@@ -165,6 +180,12 @@ $(document).ready(function() {
 			$(this).css("background-color","#79f0b4");
 		})
 		$(".detect_btn3").mouseout(function(){
+			$(this).css("background-color","");
+		})
+		$(".detect_btn4").mouseover(function(){
+			$(this).css("background-color","#79f0b4");
+		})
+		$(".detect_btn4").mouseout(function(){
 			$(this).css("background-color","");
 		})
 		$(".detect_btn5").mouseover(function(){
@@ -238,19 +259,26 @@ $(document).ready(function() {
 				$(".attribute_box5").css('height','80%');
 		      }
 		})
-		//人脸对比小图片点击效果
+		//人脸检测小图片点击效果
 		$(".detect_fiveimg2").click(function(){
 			var minsrc=$(this).children().attr("src");
 			$(this).siblings().children().removeClass("img_active");
 			$(this).children().addClass("img_active");
 			$(this).parent().siblings(".results_maxbox").find(".showcasing_img").attr('src',minsrc);
 		})
-		//人脸搜索小图片点击效果
+		//人脸对比小图片点击效果
 		$(".detect_fiveimg3").click(function(){
 			 var minsrc=$(this).children().attr("src");
 			 $(this).siblings().children().removeClass("img_active");
 			 $(this).children().addClass("img_active");
 			 $(this).parents(".upload_box3").siblings(".results_maxbox3").find(".showcasing_img3").attr('src',minsrc);
+		})
+		//人脸搜索小图片点击效果
+		$(".detect_fiveimg4").click(function(){
+			 var minsrc=$(this).children().attr("src");
+			 $(this).siblings().children().removeClass("img_active");
+			 $(this).children().addClass("img_active");
+			 $(this).parent().siblings(".results_maxbox4").find(".showcasing_img4").attr('src',minsrc);
 		})
 		//人脸属性小图片点击效果
 		$(".detect_fiveimg5").click(function(){
@@ -265,37 +293,39 @@ $(document).ready(function() {
 			var src2="img/index/two/icon-right.png";
 			if($(".code_img4").attr('src')==src1){
 				$(".code_img4").attr('src',src2);
-				$(".code_text4").css('display','none');
-				$(".code_box4_2").css('height','55px')
+				$(".code_text4-2").css('display','none');
+				$(".code_box4_2").css({'height':'55px'});
 				$(".attribute_img4").attr('src',src1);
 				$(".attribute_text4").css('display','block');
-				$(".attribute_box4").css('height','85%')
-		      }else{
-		      	$(".code_img4").attr('src',src1);
-				$(".code_text4").css('display','block');
-				$(".code_box4_2").css('height','85%')
+				$(".attribute_box4").css('height','88%');
+			}else{
+				$(".code_img4").attr('src',src1);
+				$(".code_text4-2").css('display','block');
+				$(".code_box4_2").css({'height':'88%'});
 				$(".attribute_img4").attr('src',src2);
 				$(".attribute_text4").css('display','none');
-				$(".attribute_box4").css('height','55px')
-		      }
+				$(".attribute_box4").css('height','55px');
+			}
 		})
 		$(".attribute_title4").click(function(){
 			var src1="img/index/two/icon-bottom.png";
 			var src2="img/index/two/icon-right.png";
-			if($(".code_img4").attr('src')==src1){
-				$(".code_img4").attr('src',src2);
-				$(".code_text4").css('display','none');
-				$(".code_box4_2").css('height','55px')
-				$(".attribute_img4").attr('src',src1);
-				$(".attribute_text4").css('display','block');
-				$(".attribute_box4").css('height','85%')
-		      }else{
-		      	$(".code_img4").attr('src',src1);
-				$(".code_text4").css('display','block');
-				$(".code_box4_2").css('height','85%')
+			if($(".attribute_img4").attr('src')==src1){
+				$(".code_img4").attr('src',src1);
+				$(".code_text4-2").css('display','block');
+				$(".code_box4_2").css({'height':'88%'});
 				$(".attribute_img4").attr('src',src2);
 				$(".attribute_text4").css('display','none');
-				$(".attribute_box4").css('height','55px')
-		      }
+				$(".attribute_box4").css('height','55px');
+			}else{
+				$(".code_img4").attr('src',src2);
+				$(".code_text4-2").css('display','none');
+				$(".code_box4_2").css({'height':'55px'});
+				$(".attribute_img4").attr('src',src1);
+				$(".attribute_text4").css('display','block');
+				$(".attribute_box4").css('height','88%');
+			}
 		})
 	});
+
+	

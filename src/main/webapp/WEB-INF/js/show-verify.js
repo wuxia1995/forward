@@ -9,7 +9,7 @@ function verifyUrl(id) {
     verifyReq(img, id);
 }
 
-function uploadPic(obj, id) {
+function uploadPicVerify(obj, id) {
     removeDiv()
     var img = document.getElementById("imgShow" + id)
     var file = obj.files[0];
@@ -48,30 +48,36 @@ function uploadPic(obj, id) {
     }
 
     $.ajax({
-        url: 'verify-face',
+        url: 'customer/verify-face',
         type: 'POST',
-        dataType: "json",
+        // dataType: "json",
         data: formData,
         processData: false,
         contentType: false,
         async: true,
         success: function (data) {
-
-            console.log("success")
-            readResData(data,id)
+            if(data==""){
+                $("#resultVerify").html("有图片未检测到人脸");
+                $("#reponseVerify").html("有图片未检测到人脸");
+                return false;
+            }
+            readResData(eval('(' + data + ')'),id)
         },
         error:function (data) {
             removeDiv()
-            img.src=""
-            alert("no face")
-            return false
+            if(data==""){
+                $("#resultVerify").html("有图片未检测到人脸");
+                $("#reponseVerify").html("有图片未检测到人脸");
+            }
+            return false;
         }
     });
 
 }
-function drawDiv(image,result,parentDiv){
-    var widthRate = 400 / image.naturalWidth
-    var heightRate = 400 / image.naturalHeight
+function drawDiv(image,result,parentId){
+    var imgVerifyDiv = document.getElementById(parentId);
+    var widthRate = imgVerifyDiv.offsetWidth / image.naturalWidth
+    var heightRate = imgVerifyDiv.offsetHeight / image.naturalHeight
 
     result.x1 = result.x1 * widthRate - 4
     result.x2 = result.x2 * widthRate - 4
@@ -84,7 +90,7 @@ function drawDiv(image,result,parentDiv){
     divtop = result.y1 + 2
     // var result = new Result(width, height, left, divtop);
     picId=image.id+"1"
-    parentDiv.prepend("<div id="+picId + "></div>");
+    $('#'+parentId).prepend("<div id='"+picId + "'></div>");
     // $('#picShow2').prepend("<div id=" + id + "></div>");
     $('#' + picId).css({
         "position": "absolute",
@@ -99,12 +105,12 @@ function drawDiv(image,result,parentDiv){
 function readResData(data,id) {
     removeDiv()
     // console.log({width: w, height: h});
-
+    $("#reponseVerify").html(data);//设置返回的json数据
     console.log(data);
 
     //读取返回的json数据
     var dataObj = eval(data);
-    $('#reponse').html(syntaxHighlight(dataObj))
+    $('#reponseVerify').html(syntaxHighlight(data))
     var confidence = dataObj['results']['0']['confidence'];
     var val = dataObj['verified'];
     //第一个正方形框
@@ -117,21 +123,21 @@ function readResData(data,id) {
     console.log(rect2);
     removeDiv();
     if(id==1){
-        drawDiv(document.getElementById("imgShow1"),rect1,$('#picDiv1'))
-        drawDiv(document.getElementById("imgShow2"),rect2,$('#picDiv2'))
+        drawDiv(document.getElementById("imgShow1"),rect1,"picDiv1")
+        drawDiv(document.getElementById("imgShow2"),rect2,'picDiv2')
     }else{
-        drawDiv(document.getElementById("imgShow1"),rect2,$('#picDiv1'))
-        drawDiv(document.getElementById("imgShow2"),rect1,$('#picDiv2'))
+        drawDiv(document.getElementById("imgShow1"),rect2,'picDiv1')
+        drawDiv(document.getElementById("imgShow2"),rect1,'picDiv2')
     }
 
 
 
 
-    $("#result").val("");
+    $("#resultVerify").val("");
     if (val == true && confidence >= 0.78) {
-        $("#result").val("两张照片是同一张人脸");
+        $("#resultVerify").html("两张照片是同一张人脸");
     } else {
-        $("#result").val("两张照片不是同一张人脸");
+        $("#resultVerify").html("两张照片不是同一张人脸");
     }
 
 
@@ -168,7 +174,7 @@ function verifyReq(img, id) {
     var selfImg = document.getElementById("imgShow" + id)
     var anotherImg = document.getElementById("imgShow" + notId)
     var formData = new FormData();
-    if(anotherImg.src.indexOf("data:image")==0){
+    if(anotherImg.src.indexOf("data:image"||"data:;base64")==0){
         formData.append("photo1", selfImg.src)
         if(id==1) {
             formData.append("photo2", rightUploadFile)
@@ -182,31 +188,40 @@ function verifyReq(img, id) {
         formData.append("photo2", anotherImg.src)
     }
 
+
     $.ajax({
-        url: 'verify-face',
-        // url: '../n-tech/v0/verify',
+        url: 'customer/verify-face',
         type: 'POST',
-        dataType: "json",
+        // dataType: "json",
         data:formData,
         processData: false,
         contentType: false,
-        // data: {
-        //     "photo1": $("#imgShow"+id).attr("src"),
-        //     "photo2": $("#imgShow"+notId).attr("src")
-        // },
         async: true,
         success: function (data) {
-            readResData(data,id)
+            if(data==""){
+                $("#resultVerify").html("有图片未检测到人脸");
+                $("#reponseVerify").html("有图片未检测到人脸");
+                return false;
+            }
+            readResData(eval('(' + data + ')'),id)
+        },
+        error:function(data){
+            if(data==""){
+                $("#resultVerify").html("有图片未检测到人脸");
+                $("#reponseVerify").html("有图片未检测到人脸");
+                return false;
+            }
+            console.log(data)
         }
     });
 }
-
-function Result(width, height, left, top) {
-    this.width = width;
-    this.height = height;
-    this.left = left;
-    this.top = top;
-}
+//
+// function Result(width, height, left, top) {
+//     this.width = width;
+//     this.height = height;
+//     this.left = left;
+//     this.top = top;
+// }
 
 function getImageWidth(url, callback) {
     var img = new Image();
@@ -223,24 +238,24 @@ function getImageWidth(url, callback) {
     }
 
 }
-function syntaxHighlight(json) {
-    if (typeof json != 'string') {
-        json = JSON.stringify(json, undefined, 2);
-    }
-    json = json.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>');
-    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
-        var cls = 'number';
-        if (/^"/.test(match)) {
-            if (/:$/.test(match)) {
-                cls = 'key';
-            } else {
-                cls = 'string';
-            }
-        } else if (/true|false/.test(match)) {
-            cls = 'boolean';
-        } else if (/null/.test(match)) {
-            cls = 'null';
-        }
-        return '<span class="' + cls + '">' + match + '</span>';
-    });
-}
+// function syntaxHighlight(json) {
+//     if (typeof json != 'string') {
+//         json = JSON.stringify(json, undefined, 2);
+//     }
+//     json = json.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>');
+//     return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
+//         var cls = 'number';
+//         if (/^"/.test(match)) {
+//             if (/:$/.test(match)) {
+//                 cls = 'key';
+//             } else {
+//                 cls = 'string';
+//             }
+//         } else if (/true|false/.test(match)) {
+//             cls = 'boolean';
+//         } else if (/null/.test(match)) {
+//             cls = 'null';
+//         }
+//         return '<span class="' + cls + '">' + match + '</span>';
+//     });
+// }

@@ -2,7 +2,18 @@
 //上传图片探测
 function uploadPicDetect(obj) {
     // var img = document.getElementById("imgShowDetectDiv");
+    for (var i = 0; i < num; i++) {
+        if ($('#detect' + i).length > 0) {
+            $('#detect' + i).remove();
+        }
+    }
+    var attributeCheckedUpload =[];
+    $('input[name="attribute"]:checked').each(function(){
+        console.log($(this).val());
+        attributeCheckedUpload.push($(this).val());
+    });
     var file = obj.files[0];
+    // attributeChecked["photo"]=file
     var reader = new FileReader();
     reader.onload = function (e) {
         // img.src = e.target.result;
@@ -12,19 +23,27 @@ function uploadPicDetect(obj) {
 
     var detectForm = new FormData();
     detectForm.append("photo",file);
+    for(var inx in attributeCheckedUpload){
+        detectForm.append(attributeCheckedUpload[inx],"true");
+    }
     $.ajax({
         url: 'customer/detect-face',
         type: 'POST',
-        dataType: "json",
+        // dataType: "json",
         data: detectForm,
         processData: false,
         contentType: false,
         async: true,
         success: function (data) {
-            handleData($('#imgShowDetect').attr("src"),data)
+            if(data==""){
+                $('#responseDetect').html("no face detect")
+            }
+            handleData($('#imgShowDetect').attr("src"),eval('(' + data + ')'))
         },
         error: function (data) {
-            alert("no face")
+            if(data==""){
+                $('#responseDetect').html("no face detect")
+            }
             return false
         }
     });
@@ -42,21 +61,38 @@ function detectUrl() {
 }
 //url图片探测,并画人脸div
 function detectReq(img) {
-
+    for (var i = 0; i < num; i++) {
+        if ($('#detect' + i).length > 0) {
+            $('#detect' + i).remove();
+        }
+    }
+    var attributeChecked ={};
+    $('input[name="attribute"]:checked').each(function(){
+        console.log($(this).val());
+        attributeChecked[$(this).val()]="true";
+    });
+    attributeChecked["photo"]=img
     $.ajax({
         url: 'customer/detect-face',
         type: 'POST',
-        dataType: "json",
-        data: {photo: img},
+        // dataType: "json",
+        data: attributeChecked,
         async: true,
         success: function (data) {
-            handleData(img, data)
+            if(data==""){
+                $('#responseDetect').html("no face detected")
+            }
+            handleData(img, eval('(' + data + ')'))
+        },
+        error: function (data) {
+            $('#responseDetect').html("no face detected")
+            // handleData(img, data)
         }
     });
 }
 //画人脸div
 function handleData(imgContent,data) {
-    $('#responseDetect').removeClass("hidden")
+    // $('#responseDetect').removeClass("hidden")
     $('#responseDetect').html(syntaxHighlight(data))
     img = document.getElementById("imgShowDetect");
     imgDiv = document.getElementById("imgShowDetectDiv");
@@ -66,12 +102,6 @@ function handleData(imgContent,data) {
     getImageWidth(imgSrc, function (w, h) {
         console.log({width: w, height: h});
 
-
-        for (var i = 0; i < num; i++) {
-            if ($('#detect' + i).length > 0) {
-                $('#detect' + i).remove();
-            }
-        }
         var widthRate = imgDiv.offsetWidth / img.naturalWidth
         var heightRate = imgDiv.offsetHeight / img.naturalHeight
 
