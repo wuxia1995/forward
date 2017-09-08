@@ -63,10 +63,10 @@
                             <a class="click_css" href="#page6">联系我们</a>
                         </li>
                         <li>
-                            <a class="click_css" href="#">注册</a>
+                            <a class="click_css" href="/customer/register">注册</a>
                         </li>
                         <li>
-                            <a class="click_css" href="#">登录</a>
+                            <a class="click_css" href="/customer/login">登录</a>
                         </li>
                     </ul>
                 </div>
@@ -143,7 +143,7 @@
                 <div class="right_formal2">
                     <div class="bottom_left_f2">
                         <div class="upload2-1">
-                            <div><button id="testBtn" onclick="testBtnEvent()">testBtn</button></div>
+                            <%--<div><button id="testBtn" onclick="testBtnEvent()">testBtn</button></div>--%>
                             <div class="upload_btn2">
                                 本地上传
                                 <input accept="image/png,image/jpeg" onchange="uploadPicDetect(this)" class="upload_file2" type="file" value="本地上传">
@@ -157,7 +157,7 @@
                         </div>
                         <div class="upload2-3">
                             <div class="upload2-3img">
-                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" class="img_active" src="http://192.168.10.212:8080/images/1.jpg"></div>
+                                <div id="" class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" class="img_active" src="http://192.168.10.212:8080/images/1.jpg"></div>
                                 <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)"src="http://192.168.10.212:8080/img/index/two/max_img2.png"></div>
                                 <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" src="http://192.168.10.212:8080/img/index/two/max_img3.png"></div>
                                 <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" src="http://192.168.10.212:8080/img/index/two/max_img4.png"></div>
