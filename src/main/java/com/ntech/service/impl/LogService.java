@@ -26,4 +26,11 @@ public class LogService implements ILogService {
     public void add(Log log) {
         logMapper.insert(log);
     }
+
+    public List<Log> findAll() {
+        LogExample example=new LogExample();
+        example.createCriteria().andIdIsNotNull();
+        List<Log> logs=logMapper.selectByExample(example);
+        return logs;
+    }
 }

@@ -57,6 +57,17 @@ public class CustomerService implements ICustomerService {
         return 1;
     }
 
+    //根据用户名删除用户
+    public boolean deleteByName(String name) {
+        CustomerExample example=new CustomerExample();
+        example.createCriteria().andNameEqualTo(name);
+        if(customerMapper.deleteByExample(example)==1){
+            logger.info("delete customer succeess");
+            return true;
+        }
+        return false;
+    }
+
     public int modify(Customer customer) {
         logger.info("modify customer:" + customer.getName());
         CustomerExample example = new CustomerExample();

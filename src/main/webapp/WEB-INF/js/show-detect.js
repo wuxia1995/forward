@@ -2,7 +2,18 @@
 //上传图片探测
 function uploadPicDetect(obj) {
     // var img = document.getElementById("imgShowDetectDiv");
+    for (var i = 0; i < num; i++) {
+        if ($('#detect' + i).length > 0) {
+            $('#detect' + i).remove();
+        }
+    }
+    var attributeCheckedUpload =[];
+    $('input[name="attribute"]:checked').each(function(){
+        console.log($(this).val());
+        attributeCheckedUpload.push($(this).val());
+    });
     var file = obj.files[0];
+    // attributeChecked["photo"]=file
     var reader = new FileReader();
     reader.onload = function (e) {
         // img.src = e.target.result;
@@ -12,35 +23,30 @@ function uploadPicDetect(obj) {
 
     var detectForm = new FormData();
     detectForm.append("photo",file);
+    for(var inx in attributeCheckedUpload){
+        detectForm.append(attributeCheckedUpload[inx],"true");
+    }
     $.ajax({
         url: 'customer/detect-face',
         type: 'POST',
-        dataType: "json",
+        // dataType: "json",
         data: detectForm,
         processData: false,
         contentType: false,
         async: true,
         success: function (data) {
-            handleData($('#imgShowDetect').attr("src"),data)
+            if(data==""){
+                $('#responseDetect').html("no face detect")
+            }
+            handleData($('#imgShowDetect').attr("src"),eval('(' + data + ')'))
         },
         error: function (data) {
-            alert("no face")
+            if(data==""){
+                $('#responseDetect').html("no face detect")
+            }
             return false
         }
     });
-    //
-    // var options = {
-    //     url: "customer/detect-face",
-    //     type: "post",
-    //     dataType: "json",
-    //     success: function (data) {
-    //         handleData(img, data)
-    //     },
-    //     error: function (data) {
-    //         alert(data + "出现错误")
-    //     }
-    // };
-    // $("#jvForm").ajaxSubmit(options);
 }
 
 $(document).ready(function () {
@@ -51,46 +57,43 @@ $(document).ready(function () {
 //定义全局变量num记录图片中人脸的个数
 var num = 0;
 function detectUrl() {
-    // var check = document.getElementById("inputUrlDetect");
-    // console.log(check.tagName)
     detectReq($("#inputUrlDetect").val())
 }
 //url图片探测,并画人脸div
 function detectReq(img) {
-    // var reqData;
-    // if (img.tagName == 'INPUT') {
-    //     reqData = img.value;
-    // } else if (img.tagName == 'IMG') {
-    //     reqData = img.src;
-    // } else {
-    //     console.log(img.tagName + ":error tag");
-    //     return false
-    // }
+    for (var i = 0; i < num; i++) {
+        if ($('#detect' + i).length > 0) {
+            $('#detect' + i).remove();
+        }
+    }
+    var attributeChecked ={};
+    $('input[name="attribute"]:checked').each(function(){
+        console.log($(this).val());
+        attributeChecked[$(this).val()]="true";
+    });
+    attributeChecked["photo"]=img
     $.ajax({
         url: 'customer/detect-face',
         type: 'POST',
-        dataType: "json",
-        data: {photo: img},
+        // dataType: "json",
+        data: attributeChecked,
         async: true,
         success: function (data) {
-            handleData(img, data)
+            if(data==""){
+                $('#responseDetect').html("no face detected")
+            }
+            handleData(img, eval('(' + data + ')'))
+        },
+        error: function (data) {
+            $('#responseDetect').html("no face detected")
+            // handleData(img, data)
         }
     });
 }
 //画人脸div
 function handleData(imgContent,data) {
-    $('#responseDetect').removeClass("hidden")
+    // $('#responseDetect').removeClass("hidden")
     $('#responseDetect').html(syntaxHighlight(data))
-    // var reqData;
-    // if (eleType.tagName == 'INPUT') {
-    //     reqData = eleType.value;
-    // } else if (eleType.tagName == 'IMG') {
-    //     reqData = eleType.src;
-    // } else {
-    //     console.log(eleType.tagName + ":error tag");
-    //     return false
-    // }
-    //
     img = document.getElementById("imgShowDetect");
     imgDiv = document.getElementById("imgShowDetectDiv");
     img.src = imgContent
@@ -99,16 +102,6 @@ function handleData(imgContent,data) {
     getImageWidth(imgSrc, function (w, h) {
         console.log({width: w, height: h});
 
-
-        for (var i = 0; i < num; i++) {
-            if ($('#detect' + i).length > 0) {
-                $('#detect' + i).remove();
-            }
-        }
-
-
-        // console.log("width:" + img.width)
-        // console.log("height:" + img.height)
         var widthRate = imgDiv.offsetWidth / img.naturalWidth
         var heightRate = imgDiv.offsetHeight / img.naturalHeight
 

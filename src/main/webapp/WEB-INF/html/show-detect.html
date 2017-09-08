@@ -34,14 +34,12 @@
                 <div class="row-fluid">
                     <div class="col-xs-5 border">
                         <div style="position: relative;">
-                            <form id="picForm">
                                 <!--<input id="picShow" type="image" src="../images/pic.jpg">-->
-                                <div id="picShow" style="position: relative;">
+                                <div id="imgShowDetectDiv" style="position: relative;">
                                     <!--<input type="image" src="https://bj-mc-prod-asset.oss-cn-beijing.aliyuncs.com/mc-official/images/demo/demo-pic1.jpg">-->
                                     <img id="imgShowDetect" width="400px" height="400px"
                                          src="http://192.168.10.212:8080/img/index/two/max_img1.png">
                                 </div>
-                            </form>
                         </div>
                         <form id="jvForm" method="post" enctype="multipart/form-data">
                             <lable for="file-uploader" class="upload-img"><span>本地上传</span>
@@ -57,25 +55,25 @@
                             <div class="col-sm-6 col-md-3">
                                 <a href="#" id="img1" class="thumbnail">
                                     <img src="http://192.168.10.212:8080/img/index/two/max_img1.png"
-                                         alt="demo" onclick="detectReq(this)">
+                                         alt="demo" onclick="detectReq(this.src)">
                                 </a>
                             </div>
                             <div class="col-sm-6 col-md-3">
                                 <a href="#" id="img2" class="thumbnail">
                                     <img src="http://192.168.10.212:8080/img/index/two/max_img2.png"
-                                         alt="demo" onclick="detectReq(this)">
+                                         alt="demo" onclick="detectReq(this.src)">
                                 </a>
                             </div>
                             <div class="col-sm-6 col-md-3">
                                 <a href="#" class="thumbnail">
                                     <img src="http://192.168.10.212:8080/images/3.jpg"
-                                         alt="demo" onclick="detectReq(this)">
+                                         alt="demo" onclick="detectReq(this.src)">
                                 </a>
                             </div>
                             <div class="col-sm-6 col-md-3">
                                 <a href="#" class="thumbnail">
                                     <img src="http://192.168.10.212:8080/images/timg1.jpg"
-                                         alt="demo" onclick="detectReq(this)">
+                                         alt="demo" onclick="detectReq(this.src)">
                                 </a>
                             </div>
                         </div>

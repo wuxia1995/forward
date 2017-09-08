@@ -107,12 +107,19 @@ public class SetMealService implements ISetMealService {
 
     public boolean modify(SetMeal setMeal) {
         logger.info("modify set meal for user "+setMeal.getUserName());
-        SetMealExample example = new SetMealExample();
-        if(1==setMealMapper.updateByExampleSelective(setMeal,example)){
+
+
+        if(1==setMealMapper.updateByPrimaryKeySelective(setMeal)){
             logger.info("modify success");
             return true;
         }
         logger.error("modify fail");
         return false;
+    }
+
+    public int totalCount() {
+        SetMealExample example=new SetMealExample();
+        example.createCriteria().andIdIsNotNull();
+        return (int) setMealMapper.countByExample(example);
     }
 }

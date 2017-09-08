@@ -1,5 +1,6 @@
 package com.ntech.controller;
 
+import com.ntech.forward.ConnectionSDK;
 import com.ntech.forward.Constant;
 import com.ntech.forward.HttpUploadFile;
 import com.ntech.forward.MethodUtil;
@@ -418,6 +419,12 @@ public class CustomerController {
         return "login";
     }
 
+    @RequestMapping("exit")
+    public String loginJump(HttpSession session) {
+        session.removeAttribute("name");
+        return "login";
+    }
+
 
     @RequestMapping("setMealBuy")
     @ResponseBody
@@ -483,7 +490,7 @@ public class CustomerController {
         try {
             logger.info(request.getRequestURI());
             if (request.getRequestURI().equals("/customer/detect-face")) {
-                request.setAttribute("localAPI", "/v0/detect");
+                request.setAttribute("localAPI", "/v1/detect");
             }
             if (request.getRequestURI().equals("/customer/verify-face")) {
                 request.setAttribute("localAPI", "/v0/verify");
@@ -511,11 +518,9 @@ public class CustomerController {
         header.put("Method","GET");
         header.put("Authorization", Constant.TOKEN);
         header.put("API", "/v0/faces/gallery/" + name);
-        try {
-            result = HttpUploadFile.getInstance().httpURLConnectionSDK(header, null, null, "no");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        result = ConnectionSDK.getInstance().httpURLConnectionSDK(header);
+
         return result;
     }
     //包装返回的请求

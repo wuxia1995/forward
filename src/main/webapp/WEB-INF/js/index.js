@@ -74,6 +74,54 @@ $(document).ready(function() {
 				$(".attribute_box2").css('height','80%');
 		      }
 		})
+		//人脸对比中的左侧代码收缩、展开点击效果
+		$(".attribute_title3").click(function(){
+			var src1="img/index/two/icon-bottom.png";
+			var src2="img/index/two/icon-right.png";
+			if($(".attribute_img3").attr('src')==src1){
+				$(".attribute_img3").attr('src',src2);
+				$(".attribute_text3").css('display','none');
+				$(".attribute_box3").css({'height':'55px','bottom':'69%'});
+				$(".code_img3").attr('src',src1);
+				$(".code_text3").css('display','block');
+				$(".code_box3").css('height','67%');
+			}else{
+				$(".attribute_img3").attr('src',src1);
+				$(".attribute_text3").css('display','block');
+				$(".attribute_box3").css({'height':'67%','bottom':'70px'});
+				$(".code_img3").attr('src',src2);
+				$(".code_text3").css('display','none');
+				$(".code_box3").css('height','55px');
+			}
+		})
+		$(".code_title3").click(function(){
+			var src1="img/index/two/icon-bottom.png";
+			var src2="img/index/two/icon-right.png";
+			if($(".code_img3").attr('src')==src1){
+				$(".attribute_img3").attr('src',src1);
+				$(".attribute_text3").css('display','block');
+				$(".attribute_box3").css({'height':'67%','bottom':'70px'});
+				$(".code_img3").attr('src',src2);
+				$(".code_text3").css('display','none');
+				$(".code_box3").css('height','55px');
+			}else{
+				$(".attribute_img3").attr('src',src2);
+				$(".attribute_text3").css('display','none');
+				$(".attribute_box3").css({'height':'55px','bottom':'69%'});
+				$(".code_img3").attr('src',src1);
+				$(".code_text3").css('display','block');
+				$(".code_box3").css('height','67%');
+			}
+		})
+
+		//人脸检测复选框判断
+		$(".attribute2").click(function(){
+			if($(this).is(':checked')){
+				$(this).siblings(".checkbox_box2").children().attr("src","img/index/two/yes.png");
+			}else{
+				$(this).siblings(".checkbox_box2").children().attr("src","img/index/two/no.png");
+			}
+		})
 
 		
 		/**
@@ -93,6 +141,8 @@ $(document).ready(function() {
 			});
 			var detect_white=$(".detect_box2").width();
 			$(".upload2").css('height',detect_white);
+			var img_bgbox2=$(".img_bgbox2").width();
+			$(".select_box2").css("bottom",img_bgbox2+25);
 		}
 		loadRevealImgDiv();
 		//設置各个div的宽高
@@ -107,10 +157,16 @@ $(document).ready(function() {
 		$(".upload_btn2").mouseout(function(){
 			$(this).css({"background-color":"#00c3bb","color":"white"});
 		})
-		$(".upload_btn25").mouseover(function(){
-			$(this).css({"background-color":"#00c3bb"});
+		$(".contrast_btn3").mouseover(function(){
+			$(this).css({"background-color":"#79f0b4"});
 		})
-		$(".upload_btn25").mouseout(function(){
+		$(".contrast_btn3").mouseout(function(){
+			$(this).css({"background-color":""});
+		})
+		$(".contrast_btn4").mouseover(function(){
+			$(this).css({"background-color":"#79f0b4"});
+		})
+		$(".contrast_btn4").mouseout(function(){
 			$(this).css({"background-color":""});
 		})
 		//图片URL检测鼠标移入移出效果
@@ -119,6 +175,18 @@ $(document).ready(function() {
 		})
 		$(".detect_btn2").mouseout(function(){
 			$(this).css({"background-color":"#00c3bb","color":"white"});
+		})
+		$(".detect_btn3").mouseover(function(){
+			$(this).css("background-color","#79f0b4");
+		})
+		$(".detect_btn3").mouseout(function(){
+			$(this).css("background-color","");
+		})
+		$(".detect_btn4").mouseover(function(){
+			$(this).css("background-color","#79f0b4");
+		})
+		$(".detect_btn4").mouseout(function(){
+			$(this).css("background-color","");
 		})
 		$(".detect_btn5").mouseover(function(){
 			$(this).css({"background-color":"#00c3bb"});
@@ -132,26 +200,6 @@ $(document).ready(function() {
 			$(".detect_fiveimg2 img").removeClass("img_active");
 			$(this).addClass("img_active");
 			$(".detect_img2 img").attr("src",imgsrc);
-		})
-		//人脸对比中的左侧对比结果以及代码收缩、展开点击效果
-		$(".code_title3").click(function(){
-			var src1="img/index/two/icon-bottom.png";
-			var src2="img/index/two/icon-right.png";
-			if($(".code_img3").attr('src')==src1){
-				$(".code_img3").attr('src',src2);
-				$(".code_text3").css('display','none');
-				$(".code_box3").css('height','55px')
-				$(".results_img3").attr('src',src1);
-				$(".results_text3").css('display','block');
-				$(".results_box3").css('height','40%')
-		      }else{
-		      	$(".code_img3").attr('src',src1);
-				$(".code_text3").css('display','block');
-				$(".code_box3").css('height','40%')
-				$(".results_img3").attr('src',src2);
-				$(".results_text3").css('display','none');
-				$(".results_box3").css('height','55px')
-		      }
 		})
 		$(".results_title3").click(function(){
 			var src1="img/index/two/icon-bottom.png";
@@ -211,19 +259,26 @@ $(document).ready(function() {
 				$(".attribute_box5").css('height','80%');
 		      }
 		})
-		//人脸对比小图片点击效果
+		//人脸检测小图片点击效果
 		$(".detect_fiveimg2").click(function(){
 			var minsrc=$(this).children().attr("src");
 			$(this).siblings().children().removeClass("img_active");
 			$(this).children().addClass("img_active");
 			$(this).parent().siblings(".results_maxbox").find(".showcasing_img").attr('src',minsrc);
 		})
-		//人脸搜索小图片点击效果
+		//人脸对比小图片点击效果
 		$(".detect_fiveimg3").click(function(){
 			 var minsrc=$(this).children().attr("src");
 			 $(this).siblings().children().removeClass("img_active");
 			 $(this).children().addClass("img_active");
-			 $(this).parent().siblings(".results_maxbox4").find(".showcasing_img3").attr('src',minsrc);
+			 $(this).parents(".upload_box3").siblings(".results_maxbox3").find(".showcasing_img3").attr('src',minsrc);
+		})
+		//人脸搜索小图片点击效果
+		$(".detect_fiveimg4").click(function(){
+			 var minsrc=$(this).children().attr("src");
+			 $(this).siblings().children().removeClass("img_active");
+			 $(this).children().addClass("img_active");
+			 $(this).parent().siblings(".results_maxbox4").find(".showcasing_img4").attr('src',minsrc);
 		})
 		//人脸属性小图片点击效果
 		$(".detect_fiveimg5").click(function(){
@@ -238,37 +293,39 @@ $(document).ready(function() {
 			var src2="img/index/two/icon-right.png";
 			if($(".code_img4").attr('src')==src1){
 				$(".code_img4").attr('src',src2);
-				$(".code_text4").css('display','none');
-				$(".code_box4_2").css('height','55px')
+				$(".code_text4-2").css('display','none');
+				$(".code_box4_2").css({'height':'55px'});
 				$(".attribute_img4").attr('src',src1);
 				$(".attribute_text4").css('display','block');
-				$(".attribute_box4").css('height','85%')
-		      }else{
-		      	$(".code_img4").attr('src',src1);
-				$(".code_text4").css('display','block');
-				$(".code_box4_2").css('height','85%')
+				$(".attribute_box4").css('height','88%');
+			}else{
+				$(".code_img4").attr('src',src1);
+				$(".code_text4-2").css('display','block');
+				$(".code_box4_2").css({'height':'88%'});
 				$(".attribute_img4").attr('src',src2);
 				$(".attribute_text4").css('display','none');
-				$(".attribute_box4").css('height','55px')
-		      }
+				$(".attribute_box4").css('height','55px');
+			}
 		})
 		$(".attribute_title4").click(function(){
 			var src1="img/index/two/icon-bottom.png";
 			var src2="img/index/two/icon-right.png";
-			if($(".code_img4").attr('src')==src1){
-				$(".code_img4").attr('src',src2);
-				$(".code_text4").css('display','none');
-				$(".code_box4_2").css('height','55px')
-				$(".attribute_img4").attr('src',src1);
-				$(".attribute_text4").css('display','block');
-				$(".attribute_box4").css('height','85%')
-		      }else{
-		      	$(".code_img4").attr('src',src1);
-				$(".code_text4").css('display','block');
-				$(".code_box4_2").css('height','85%')
+			if($(".attribute_img4").attr('src')==src1){
+				$(".code_img4").attr('src',src1);
+				$(".code_text4-2").css('display','block');
+				$(".code_box4_2").css({'height':'88%'});
 				$(".attribute_img4").attr('src',src2);
 				$(".attribute_text4").css('display','none');
-				$(".attribute_box4").css('height','55px')
-		      }
+				$(".attribute_box4").css('height','55px');
+			}else{
+				$(".code_img4").attr('src',src2);
+				$(".code_text4-2").css('display','none');
+				$(".code_box4_2").css({'height':'55px'});
+				$(".attribute_img4").attr('src',src1);
+				$(".attribute_text4").css('display','block');
+				$(".attribute_box4").css('height','88%');
+			}
 		})
 	});
+
+	
