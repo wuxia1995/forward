@@ -62,24 +62,8 @@ public class ForwardController {
     @ResponseBody
     public void pictureHandler(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        OutputStream outputStream = response.getOutputStream();
-        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-        List<Byte> reply = null;
-        try {
-            reply = PictureForward.getInstance().requestForward(request, response);
-        } catch (ErrorTokenException e) {
-            ErrorPrompt.addInfo("error"+(ErrorPrompt.size()+1),"bad_master");
-            e.printStackTrace();
-        }
-        if(reply==null||ErrorPrompt.size()!=0) {
-            response.setContentType("application/json");
-            outputStream.write(ErrorPrompt.getJSONInfo().getBytes());
-            return;
-        }
-        response.setContentType("image");
-        response.setHeader("Accept-Ranges", "bytes");
-        for(int b:reply)
-            dataOutputStream.write(b);
-        dataOutputStream.close();
+
+        PictureForward.getInstance().requestForward(request,response);
+
     }
 }

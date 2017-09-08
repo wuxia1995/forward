@@ -15,13 +15,14 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 
-import com.ntech.exception.IllegalAPIException;
 import com.ntech.util.ErrorPrompt;
 
 /**
  * java通过模拟post方式提交表单实现图片上传功能
  */
 public class HttpUploadFile {
+	
+	public static int status = 0;
 	
 	private final Logger logger = Logger.getLogger(HttpUploadFile.class);
 	private static final String POST_URL = Constant.SDK_IP;
@@ -78,7 +79,7 @@ public class HttpUploadFile {
             connection.setDoInput(true);
             connection.setUseCaches(false);
             connection.setRequestMethod(header.get("Method"));
-            connection.setRequestProperty("Authorization", "Token "+header.get("Authorization"));
+            connection.setRequestProperty("Authorization", "Token "+Constant.TOKEN);
             if(meta.equals("yes")) {
             	logger.info("META=YES");
             	connection.setRequestProperty("Content-Type","application/json");
@@ -147,24 +148,20 @@ public class HttpUploadFile {
 	        } 
             // 读取返回数据
             StringBuilder stringBuilder = new StringBuilder();
-            int code = connection.getResponseCode();
-            if(200!=code&&204!=code) {
-				logger.error("ERROR_CODE: "+code);
-				try {
-					throw new IllegalAPIException("HTTP_CODE: "+code);
-				} catch (IllegalAPIException e) {
-		        	ErrorPrompt.addInfo("response",e.getMessage());
-					e.printStackTrace();
-					return null;
-				}
-			}
-            logger.info("HTTP_CODE: "+code);
-            if(code==204) {
+            status = connection.getResponseCode();
+            if(status==204) {
 				ErrorPrompt.addInfo("execute","successful");
 				return null;
 			}
-            	bufferedReader = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
+            if(200!=status&&204!=status) {
+				logger.error("ERROR_CODE: "+status);
+				bufferedReader = new BufferedReader(new InputStreamReader(
+	                    connection.getErrorStream()));
+			}else {
+				bufferedReader = new BufferedReader(new InputStreamReader(
+	                    connection.getInputStream()));
+			}
+            logger.info("HTTP_CODE: "+status);
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {
                 stringBuilder.append(line).append("\n");
@@ -174,7 +171,6 @@ public class HttpUploadFile {
             if (connection != null) {
                 connection.disconnect();
             }
-        
-        return reply;
+            return reply;
     }
 }

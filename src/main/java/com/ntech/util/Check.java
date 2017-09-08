@@ -48,7 +48,7 @@ public class Check {
 			}
 		}catch (IllegalIDException e) {
 			logger.error("BAD ID");
-			ErrorPrompt.addInfo("error"+(ErrorPrompt.size()+1),"bad_id");
+			ErrorPrompt.addInfo("error","bad_id");
 			e.printStackTrace();
 			return null;
 		} catch (ParseException e) {

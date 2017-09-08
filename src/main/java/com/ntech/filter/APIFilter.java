@@ -44,7 +44,6 @@ public class APIFilter implements Filter {
 	 */
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 		// TODO Auto-generated method stub
-		// place your code here
 		logger.info("------------FILTER-----------");
 		
 		HttpServletRequest request = (HttpServletRequest) req;
@@ -57,30 +56,31 @@ public class APIFilter implements Filter {
 			ForwardRequestWrapper forwardRequestWrapper = new ForwardRequestWrapper(request);
 			chain.doFilter(forwardRequestWrapper, response);
 		} catch (ErrorTokenException e) {
-			// TODO Auto-generated catch block
+			response.setStatus(401);
+			response.setContentType("application/json");
 			logger.error("*****Bad_Token*****@"+req.getAttribute("userName"));
-			ErrorPrompt.addInfo("error"+(ErrorPrompt.size()+1),"bad_token");
+			ErrorPrompt.addInfo("error","bad_token");
 			e.printStackTrace();
-			chain.doFilter(request, response);
+			response.getWriter().println(ErrorPrompt.getJSONInfo());
 			
 		} catch (IllegalIDException e) {
-			// TODO Auto-generated catch block
+			response.setStatus(403);
 			logger.error("*****BAD_ID*****@"+req.getAttribute("userName"));
-			ErrorPrompt.addInfo("error"+(ErrorPrompt.size()+1),"bad_id");
+			ErrorPrompt.addInfo("error","bad_id");
 			e.printStackTrace();
-			chain.doFilter(request, response);
+			response.getWriter().println(ErrorPrompt.getJSONInfo());
 		} catch (IllegalAPIException e) {
-			// TODO Auto-generated catch block
+			response.setStatus(400);
 			logger.error("*****BAD_API*****@"+req.getAttribute("userName"));
-			ErrorPrompt.addInfo("error"+(ErrorPrompt.size()+1),e.getMessage());
+			ErrorPrompt.addInfo("error",e.getMessage());
 			e.printStackTrace();
-			chain.doFilter(request, response);
+			response.getWriter().println(ErrorPrompt.getJSONInfo());
 		} catch (IllegalGalleryException e) {
-			// TODO Auto-generated catch block
+			response.setStatus(403);
 			logger.error("*****BAD_GALLERY*****@"+req.getAttribute("userName"));
-			ErrorPrompt.addInfo("error"+(ErrorPrompt.size()+1),"bad_gallery");
+			ErrorPrompt.addInfo("error","bad_gallery");
 			e.printStackTrace();
-			chain.doFilter(request, response);
+			response.getWriter().println(ErrorPrompt.getJSONInfo());
 		}
 	
 	}

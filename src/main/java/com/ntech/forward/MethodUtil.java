@@ -21,13 +21,12 @@ import org.json.simple.JSONArray;
 import com.ntech.exception.IllegalGalleryException;
 import com.ntech.util.Check;
 import com.ntech.util.ConfigManager;
-import com.ntech.util.Encrypt;
+import com.ntech.util.Base64Encrypt;
 import com.ntech.util.ErrorPrompt;
 
 public class MethodUtil {
 	private static MethodUtil instance;
 	private final Logger logger = Logger.getLogger(MethodUtil.class);
-	private static final String BOUNDARY = "---------------------------"+System.currentTimeMillis();
 	
 	private static FileItemFactory factory = new DiskFileItemFactory();
 	private static Map<String ,String> header = new HashMap<String,String>();
@@ -72,7 +71,6 @@ public class MethodUtil {
 		if(isMultiPart) {
 			logger.info("********* HAS FILE********");
 			meta = "isFile";
-			header.put("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
 		
 			ServletFileUpload upload = new ServletFileUpload(factory);
 			try {
@@ -128,6 +126,9 @@ public class MethodUtil {
 					}	
 				}
 			} catch (FileUploadException e) {
+				response.setStatus(500);
+				logger.error("*****FILE_UPLOAD_FAIL*****@"+request.getAttribute("userName"));
+				ErrorPrompt.addInfo("error", "file upload fail");
 				logger.error(e.getMessage());
 				e.printStackTrace();
 			
@@ -138,12 +139,10 @@ public class MethodUtil {
 				return null;
 			} catch (IllegalGalleryException e) {
 				logger.error("*****BAD_GALLERY*****@"+request.getAttribute("userName"));
-				ErrorPrompt.addInfo("error"+(ErrorPrompt.size()+1), "bad_gallery");
+				ErrorPrompt.addInfo("error", "bad_gallery");
 				e.printStackTrace();
 				return null;
 			} 
-		}else {
-			header.put("Content-Type", "application/json");
 		}
 		//获取表单文本数据
 		Enumeration<String> enumeration = request.getParameterNames();
@@ -160,7 +159,6 @@ public class MethodUtil {
 		}
 		//转发和设定报头信息
 		header.put("Method",request.getMethod());
-		header.put("Authorization",Constant.TOKEN);
 		
 		String localAPI = (String) request.getAttribute("localAPI");
 		if(localAPI==null||localAPI.equals("")) {
@@ -178,14 +176,16 @@ public class MethodUtil {
 		logger.info("Token :"+request.getHeader("Token"));
 		try {
 			SDKreply = HttpUploadFile.getInstance().httpURLConnectionSDK(header, param, file, meta);
+			response.setStatus(HttpUploadFile.status);
 		} catch (IOException e) {
-			ErrorPrompt.addInfo("response","bad_input");
+			ErrorPrompt.addInfo("code","BAD_INPUT");
+			response.setStatus(400);
         	logger.error(e.getMessage()+"@"+request.getAttribute("userName"));
             e.printStackTrace();
             return null;
         } 
 		if(localAPI==null||localAPI.equals("")) {
-			String string = ConfigManager.getInstance().getParameter("PICTURE")+"/"+Encrypt.encryptUserName((String)request.getAttribute("userName"));
+			String string = ConfigManager.getInstance().getParameter("PICTURE")+"/"+Base64Encrypt.encryptUserName((String)request.getAttribute("userName"));
 			if(SDKreply!=null&&!"".equals(SDKreply)) {
 				Check.timesCount((String)request.getAttribute("userName"));
 				return SDKreply.replaceAll("http://127.0.0.1:3333/uploads",string);
