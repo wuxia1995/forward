@@ -9,4 +9,5 @@ public interface ILogService {
     public List<Log> findByName(String name);
     //添加日志
     public void add(Log info);
+    List<Log> findAll();
 }
