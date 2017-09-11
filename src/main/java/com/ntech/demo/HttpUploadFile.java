@@ -1,4 +1,4 @@
-package com.ntech.forward;
+package com.ntech.demo;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.ntech.forward.Constant;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 
@@ -122,7 +123,7 @@ public class HttpUploadFile {
 	                    if(filed.equals("contentType"))
 	                    	   continue;
 	                    if (entry.getValue() == null) {
-	                        continue;
+	                        continue; 
 	                    }
 	                    //没有传入文件类型，同时根据文件获取不到类型，默认采用application/octet-stream
 	                    String contentType = (String) file.get("contentType");

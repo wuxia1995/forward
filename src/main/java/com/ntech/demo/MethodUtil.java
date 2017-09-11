@@ -1,15 +1,11 @@
-package com.ntech.forward;
+package com.ntech.demo;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.ntech.exception.IllegalGalleryException;
+import com.ntech.forward.HttpUploadFile;
+import com.ntech.util.Base64Encrypt;
+import com.ntech.util.Check;
+import com.ntech.util.ConfigManager;
+import com.ntech.util.ErrorPrompt;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
@@ -18,11 +14,11 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 
-import com.ntech.exception.IllegalGalleryException;
-import com.ntech.util.Check;
-import com.ntech.util.ConfigManager;
-import com.ntech.util.Base64Encrypt;
-import com.ntech.util.ErrorPrompt;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
 
 public class MethodUtil {
 	private static MethodUtil instance;
@@ -40,7 +36,7 @@ public class MethodUtil {
 	      if (instance == null){
 	          synchronized(MethodUtil.class){
 	             if (instance == null)
-	                 instance = new MethodUtil(); 
+	                 instance = new MethodUtil();
 	          }
 	      }
      return instance;

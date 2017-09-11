@@ -45,15 +45,9 @@ public class ForwardController {
         String reply = "";
 //        PrintWriter out = response.getWriter();
         String method = request.getMethod();
-        if (method.equals("PUT") || method.equals("DELETE")) {
-            reply = MethodUtil.getInstance().requestForword(request, response);
-            if (ErrorPrompt.size() != 0)
-                reply = ErrorPrompt.getJSONInfo();
-        } else {
-            reply = MethodUtil.getInstance().requestForword(request, response);
-            if (ErrorPrompt.size() != 0)
-                reply = ErrorPrompt.getJSONInfo();
-        }
+        reply = MethodUtil.getInstance().requestForword(request, response);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
 
         return reply;
     }

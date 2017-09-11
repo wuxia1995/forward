@@ -25,21 +25,18 @@ public class ConnectionSDK {
 	     }
 	   return instance;
 	 }
-	public synchronized String httpURLConnectionSDK (Map<String,String> param) {
+	public synchronized String httpURLConnectionSDK (Map<String,String> header) {
 		BufferedReader bufferedReader = null;
 		BufferedWriter bufferedWriter = null;
 		StringBuilder stringBuilder = null;
 		try {
-			URL url = new URL(FORWARD_URL+param.get("API"));
+			URL url = new URL(FORWARD_URL+header.get("API"));
 			logger.info("URL: "+url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setDoOutput(true);  
 			connection.setDoInput(true); 
 			connection.setConnectTimeout(10000);
 			connection.setReadTimeout(50000);
 			connection.setRequestMethod("GET");
-			connection.setRequestProperty("Connection","keep-alive");
-			connection.setRequestProperty("Content-Type","application/json");
 			connection.setRequestProperty("Authorization","Token "+Constant.TOKEN);
 			connection.connect();
 			

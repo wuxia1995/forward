@@ -193,13 +193,13 @@ public class ForwardRequestWrapper extends HttpServletRequestWrapper {
 				logger.info("CHECK_API :"+API);
 				break;
 			}
-			if("GET".equals(method)&&API.startsWith("/galleries")){
+			if("GET".equals(method)&&API.equals("/galleries")){
 				API = "allGalleries";
 				request.setAttribute("allGalleries",galleries);
 				logger.info("CHECK_API :"+API);
 				break;
 			}
-			if("POST".equals(method)&&API.startsWith("/galleries")){
+			if("POST".equals(method)&&API.startsWith("/galleries")&&API.length()>11){
 				if(galleries.size()>4)
 					throw new IllegalAPIException("too many galleries");
 				String createGallery = API.split("/")[2];
@@ -209,7 +209,7 @@ public class ForwardRequestWrapper extends HttpServletRequestWrapper {
 				API = "/v0/galleries/"+createGallery;
 				logger.info("CHECK_API :"+API);
 				break;
-			}if("DELETE".equals(method)&&API.startsWith("/galleries")){
+			}if("DELETE".equals(method)&&API.startsWith("/galleries")&&API.length()>11){
 				String deleteGallery = API.split("/")[2];
 				if(!galleries.contains(deleteGallery))
 					throw new IllegalGalleryException("bad_gallery");
