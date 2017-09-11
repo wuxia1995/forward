@@ -55,6 +55,10 @@ public class PictureForward {
 			String pictureLocation = request.getRequestURI().split("uploads")[1];
 			String encrypt = pictureLocation.substring(1,pictureLocation.indexOf("//"));
 			logger.info(encrypt);
+<<<<<<< HEAD
+=======
+
+>>>>>>> c66075be9ff7f51a1112762723d5489bc533da7d
 			String picMaster = Base64Encrypt.decryptUserName(encrypt);
 			logger.info("PIC_MASTER: "+picMaster);
 			if(userName==null||!userName.equals(picMaster))

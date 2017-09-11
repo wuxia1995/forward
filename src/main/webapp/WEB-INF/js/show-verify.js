@@ -22,10 +22,12 @@ function uploadPicVerify(obj, id) {
         img.src = e.target.result;
         if(id==1){
             leftUploadFile=file
+
         }
         if(id==2){
             rightUploadFile=file
         }
+        obj.value=""
         //或者 img.src = this.result;  //e.target == this
     }
     reader.readAsDataURL(file)
@@ -33,7 +35,7 @@ function uploadPicVerify(obj, id) {
     another=id==1?2:1
     var imgAno = document.getElementById("imgShow" + another)
     var formData = new FormData();
-    if(imgAno.src.indexOf("data:image")==0){
+    if(imgAno.src.indexOf("data:image")==0||imgAno.src.indexOf("data:;base64")==0){
         formData.append("photo1", file)
         if(id==1) {
             formData.append("photo2", rightUploadFile)
@@ -174,7 +176,7 @@ function verifyReq(img, id) {
     var selfImg = document.getElementById("imgShow" + id)
     var anotherImg = document.getElementById("imgShow" + notId)
     var formData = new FormData();
-    if(anotherImg.src.indexOf("data:image"||"data:;base64")==0){
+    if(anotherImg.src.indexOf("data:image")==0||anotherImg.src.indexOf("data:;base64")==0){
         formData.append("photo1", selfImg.src)
         if(id==1) {
             formData.append("photo2", rightUploadFile)
@@ -215,13 +217,6 @@ function verifyReq(img, id) {
         }
     });
 }
-//
-// function Result(width, height, left, top) {
-//     this.width = width;
-//     this.height = height;
-//     this.left = left;
-//     this.top = top;
-// }
 
 function getImageWidth(url, callback) {
     var img = new Image();

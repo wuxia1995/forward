@@ -83,6 +83,8 @@ function uploadImgSearcheDemo(img) {
     var formData = new FormData();
     // formData.append("n",4);
     formData.append("photo",file)
+    //清除input框的文件状态,解决两次同一张照片不触发事件的问题
+    img.value="";
     $.ajax({
         url: 'customer/getDemoFace',
         type: 'POST',

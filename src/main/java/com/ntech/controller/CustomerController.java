@@ -317,6 +317,9 @@ public class CustomerController {
         if (null != result && !"".equals(result)) {
             return result.replaceAll("http://127.0.0.1:3333/uploads", "http://192.168.10.208:3333/uploads");
         }
+
+
+
         return result;
 
     }

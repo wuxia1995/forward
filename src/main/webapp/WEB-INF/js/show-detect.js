@@ -23,6 +23,8 @@ function uploadPicDetect(obj) {
 
     var detectForm = new FormData();
     detectForm.append("photo",file);
+    //清楚input框的状态
+    obj.value="";
     for(var inx in attributeCheckedUpload){
         detectForm.append(attributeCheckedUpload[inx],"true");
     }

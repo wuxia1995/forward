@@ -230,11 +230,11 @@ function showResult(dataObj) {
         // console.log("jsonObj[" + prop + "]=" + dataObj[prop]);
         for (var v in dataObj[prop]){
             preSize++;
-            var imgEle="<div>第"+preSize+"张</div><img style='' height='200' width='200' src='"+dataObj[prop][v]['face']['photo']+"'>"
+            var imgEle="<div>第"+preSize+"张</div><img style='' height='200' width='200' src='"+dataObj[prop][v]['face']['thumbnail']+"'>"
             var confidence="第"+preSize+"张是同一个人的可信度是:"+dataObj[prop][v]['confidence']
             $("#searchResult").append("<div  id='divResult"+preSize+"'>"+ confidence +"</div>");
             $("#resultShow").append("<div class='imgboxShow' id='div"+preSize+"'>"+ imgEle +"</div>");
-            console.log(dataObj[prop][v]['face']['photo'])
+            console.log(dataObj[prop][v]['face']['thumbnail'])
         }
     }
 }
