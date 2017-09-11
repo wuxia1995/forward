@@ -106,7 +106,7 @@
                         <div class="attribute_title2">
                             <span><img class="attribute_img2" src="http://192.168.10.212:8080/img/index/two/icon-right.png"></span>&nbsp;&nbsp;人脸属性
                         </div>
-                        <div class="attribute_text2"></div>
+                        <div id="faceProperties" class="attribute_text2"></div>
                     </div>
                 </div>
                 <div class="middle_formal2">
@@ -187,7 +187,8 @@
                             <span><img class="code_img3" src="img/index/two/icon-right.png"></span>&nbsp;&nbsp;Response JSON
                         </div>
                         <div class="code_text3">
-										<textarea id="reponseVerify" disabled="disabled">{
+										<textarea id="reponseVerify" disabled="disabled">
+                                            {
 	  "image_id": "O2alrpeRIXFejHWe6WlRqw==",
 	  "request_id": "1504752872,78700459-3630-4cbb-9e2b-f23404a6df16",
 	  "time_used": 875,
@@ -221,7 +222,8 @@
 	        "left_eyebrow_lower_left_quarter": {
 	          "y": 394,
 	          "x": 505
-	        },</textarea>
+	        },
+                                        </textarea>
                         </div>
                     </div>
                     <!--左侧人脸属性框-->

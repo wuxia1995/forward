@@ -208,11 +208,11 @@ function verifyReq(img, id) {
             readResData(eval('(' + data + ')'),id)
         },
         error:function(data){
-            if(data==""){
+            // if(data==""){
                 $("#resultVerify").html("有图片未检测到人脸");
                 $("#reponseVerify").html("有图片未检测到人脸");
                 return false;
-            }
+            // }
             console.log(data)
         }
     });

@@ -259,8 +259,8 @@ public class CustomerController {
                 modelAndView.setViewName("show-gallery");
                 logger.info(galleries);
                 modelAndView.addObject("galleries", galleries);
-                modelAndView.addObject("test1", "test1Content");
-                modelAndView.addObject("test2", "test2Content");
+//                modelAndView.addObject("test1", "test1Content");
+//                modelAndView.addObject("test2", "test2Content");
             } else {
 //                logger.info("");
                 modelAndView.setViewName("msg");
@@ -303,45 +303,46 @@ public class CustomerController {
         return modelAndView;
     }
 
+
+    //在用户库中的人脸做搜索,如果session中的用户名不存在则则demo_defalut库中搜索
     @RequestMapping("getDemoFace")
     @ResponseBody
-    public String getDemoSearchFace(HttpServletRequest request, HttpServletResponse response,HttpSession session) {
+    public String getDemoSearchFace(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         String name = (String) session.getAttribute("name");
         String result = null;
         if (null != name && !"".equals(name)) {
-            request.setAttribute("localAPI", "/v0/faces/gallery/"+name+"/identify");
+            request.setAttribute("localAPI", "/v0/faces/gallery/" + name + "/identify");
         } else {
             request.setAttribute("localAPI", "/v0/faces/gallery/demo_default/identify");
         }
         result = MethodUtil.getInstance().requestForword(request, response);
         if (null != result && !"".equals(result)) {
+            //暂定方案是获取sdk服务器上的图片信息用于展示,后续再考虑优化方案.
             return result.replaceAll("http://127.0.0.1:3333/uploads", "http://192.168.10.208:3333/uploads");
         }
-
 
 
         return result;
 
     }
 
+
+    //通过用户名来获取图库信息,如果session中没有用户名则获取demo_default库中的用户名
     @RequestMapping("getMyGallery")
     @ResponseBody
     public JSONArray getMyGallery(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws ParseException {
         String name = (String) session.getAttribute("name");
         String result = null;
         if (null != name && !"".equals(name)) {
-            if (request.getRequestURI().equals("/customer/getMyGallery")) {
-                request.setAttribute("localAPI", "/v0/faces/gallery/" + name);
-            }
-//            request.setAttribute("personFaceInsert",name);
-
-            result = MethodUtil.getInstance().requestForword(request, response);
-
-            logger.info(result);
-
-            return wrapResponse(result);
+            request.setAttribute("localAPI", "/v0/faces/gallery/" + name);
+        } else {
+            request.setAttribute("localAPI", "/v0/faces/gallery/demo_default");
         }
-        return null;
+        result = MethodUtil.getInstance().requestForword(request, response);
+
+        logger.info(result);
+
+        return wrapResponse(result);
     }
 
 
@@ -360,9 +361,9 @@ public class CustomerController {
             result = MethodUtil.getInstance().requestForword(request, response);
             if (result != null) {
                 //添加后获取最新的图片列表
-             result = getMyGalleryLocal(name);
+                result = getMyGalleryLocal(name);
             }
-            return wrapResponse(result) ;
+            return wrapResponse(result);
         }
         return null;
     }
@@ -371,19 +372,28 @@ public class CustomerController {
     //通过id删除个人人脸库中的图片
     @RequestMapping("deleteToGallery")
     @ResponseBody
-    public JSONArray deleteToGallery(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+    public JSONArray deleteToGallery(String id ,HttpSession session, HttpServletRequest request, HttpServletResponse response) {
         String name = (String) session.getAttribute("name");
+        logger.info(id);
+        HashMap<String,String> header = new HashMap<>();
+        header.put("Method","DELETE");
+        header.put("API","/v0/face/id/"+id);
         String result = null;
         if (null != name && !"".equals(name)) {
-            if (request.getRequestURI().equals("/customer/deleteToGallery")) {
-                request.setAttribute("localAPI", "/v0/face/id/");
+            try {
+                HttpUploadFile.getInstance().httpURLConnectionSDK(header, null, null, "no");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            result=MethodUtil.getInstance().requestForword(request, response);
-            result=getMyGalleryLocal(name);
-
-            return wrapResponse(result);
+            request.setAttribute("idCheck", name);
+            //检查图片id是否合法,检查方法待定,id合法后才能进    行下一步操作
+//            if(null!=picId&&!"".equals(picId)) {
+//                request.setAttribute("localApi","/v0/face/id/"+picId);
+//                MethodUtil.getInstance().requestForword(request, response);
+//            }
         }
-        return null;
+        result = getMyGalleryLocal(name);
+        return wrapResponse(result);
     }
 
     @RequestMapping("addGallery")
@@ -515,10 +525,10 @@ public class CustomerController {
 
 
     //获取用户图库信息
-    private String getMyGalleryLocal(String name){
+    private String getMyGalleryLocal(String name) {
         String result = null;
-        HashMap<String ,String> header =new HashMap<String,String>();
-        header.put("Method","GET");
+        HashMap<String, String> header = new HashMap<String, String>();
+        header.put("Method", "GET");
         header.put("Authorization", Constant.TOKEN);
         header.put("API", "/v0/faces/gallery/" + name);
 
@@ -526,6 +536,7 @@ public class CustomerController {
 
         return result;
     }
+
     //包装返回的请求
     private JSONArray wrapResponse(String result) {
         JSONObject jsonResult = null;
@@ -535,9 +546,9 @@ public class CustomerController {
             jsonArray = (JSONArray) jsonResult.get("results");
             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject tmpJson = (JSONObject) jsonArray.get(i);
-                String tmpStrng = (String) tmpJson.get("photo");
+                String tmpStrng = (String) tmpJson.get("normalized");
                 tmpStrng = "http://192.168.10.208" + tmpStrng.substring(16);
-                ((JSONObject) jsonArray.get(i)).put("photo", tmpStrng);
+                ((JSONObject) jsonArray.get(i)).put("normalized", tmpStrng);
             }
         } catch (ParseException e) {
             e.printStackTrace();

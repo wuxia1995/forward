@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <link href="../../css/bootstrap-table.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../js/lib/bootstrap-table.js"></script>
+    <script src="../../js/lib/bootstrap-table-zh-CN.js"></script>
+</head>
+<body>
+
+<!--导航栏-->
+
+<nav class="navbar navbar-default navbar-static-top">
+
+        <!--<div class="navbar-header">-->
+            <!--<a class="navbar-brand" href="#">-->
+                <!--<img alt="Brand" src="../../img/index/one/logo.png">-->
+            <!--</a>-->
+        <!--</div>-->
+    <div class="container">
+        <ul class="nav nav-pills">
+            <li class="active" ><a href="index">用户管理</a></li>
+            <li><a href="mealManager">套餐管理</a></li>
+            <li><a href="logManager">日志管理</a></li>
+            <p class="navbar-text navbar-right"><a href="logout" class="navbar-link">退出登录</a></p>
+        </ul>
+    </div>
+</nav>
+
+
+<!--页面主题-->
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default">
+        <div class="panel-heading">查询条件</div>
+        <div class="panel-body">
+            <form id="formSearch" class="form-horizontal">
+                <div class="form-group" style="margin-top:15px">
+                    <label class="control-label col-sm-1" for="name">用户名</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="name">
+                    </div>
+                    <div class="col-sm-4" style="text-align:left;">
+                        <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-info">查询</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="toolbar" class="btn-group">
+
+        <a href="javascript:void(0);" class="btn btn-info " id="addBtn">新增</a>
+        <a href="javascript:void(0);" class="btn btn-info " id="updateBtn">修改</a>
+        <a href="javascript:void(0);" class="btn btn-info " onclick="deleteItem();">删除</a>
+        </button>
+    </div>
+    <table id="tb_departments"></table>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form  method="post" id="updateForm">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">修改</h4>
+                </div>
+                <div class="modal-body" align="center">
+
+                    <div class="form-group">
+                        <label for="userName" class="text-info">用户名&nbsp;&nbsp;&nbsp;&nbsp;:
+                            <input type="text" id="userName" readonly name="userName" ></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="text-info">类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                            <input type="text" id="contype" readonly name="contype" >
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="text-info">状态&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                            <input type="radio" name="active" id="active" required value="active">已激活
+                            <input type="radio" name="active" id="unactive" required value="unactive">未激活
+                        </label>
+                    </div>
+
+                    <div class="form-group"  >
+                        <label for="email" class="text-info">邮箱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                            <input type="text" id="email" name="email" required>
+
+                        </label>
+                    </div>
+
+                    <div class="form-group"  >
+                        <label for="token" class="text-info">token:
+                            <input type="text" id="token" name="token" required>
+
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regtime" class="text-info">注册时间：&nbsp;&nbsp;&nbsp;&nbsp;:
+                            <input type="text" id="regtime" name="regtime" required readonly></label>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <div align="center">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-info" id="updateSub">提交</button>
+
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </form>
+</div>
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form  method="post" id="addForm" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="add">添加</h4>
+                </div>
+                <div class="modal-body" align="center">
+
+                    <div class="form-group">
+                        <label for="userName1" class="text-info">用户名&nbsp;&nbsp;&nbsp;&nbsp;:
+                            <input type="text" id="userName1"  name="userName"></label>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="text-info">密码&nbsp;&nbsp;&nbsp;&nbsp;:
+                            <input type="text" id="password"  name="password"></label>
+                    </div>
+                    <div class="form-group">
+                        <label  class="text-info">类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                            <input type="text" name="contype" required id="contype1" value="用户" readonly>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="text-info">状态&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                            <input type="radio" name="active" id="active1" required value="active">激活
+                            <input type="radio" name="active" id="unactive1" required value="unactive">不激活
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="text-info">邮箱&nbsp;&nbsp;&nbsp;&nbsp;:
+                            <input type="text" id="email1" name="email"required></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="token" class="text-info">
+                            token:<input type="text" id="token1" name="token" required></label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div align="center">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">关闭</button>
+                        <input type="button" class="btn btn-info" id="submit" value="提交"/>
+                    </div>
+                    <div align="center"><span id="msg" class="text-danger"></span></div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </form>
+    <span id="addmsg"></span>
+</div>
+<script>
+
+    $(function () {
+
+        //1.初始化Table
+        var oTable = new TableInit();
+        oTable.Init();
+
+        //2.初始化Button的点击事件
+        var oButtonInit = new ButtonInit();
+        oButtonInit.Init();
+
+    });
+
+    var TableInit = function () {
+        var oTableInit = new Object();
+        //初始化Table
+        oTableInit.Init = function () {
+            $('#tb_departments').bootstrapTable({
+                url: 'findCustomers',         //请求后台的URL（*）
+                method: 'get',                      //请求方式（*）
+                toolbar: '#toolbar',                //工具按钮用哪个容器
+                striped: true,                      //是否显示行间隔色
+                cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                pagination: true,                   //是否显示分页（*）
+                sortable: false,                     //是否启用排序
+                // sortOrder: "asc",                   //排序方式
+                queryParams: oTableInit.queryParams,//传递参数（*）
+                sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
+                pageNumber: 1,                       //初始化加载第一页，默认第一页
+                pageSize: 5,                       //每页的记录行数（*）
+                pageList: [2, 3, 5, 10],           //可供选择的每页的行数（*）
+                search: true,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                //strictSearch: true,
+//                showColumns: true,                  //是否显示所有的列
+//                 showRefresh: true,                  //是否显示刷新按钮
+                minimumCountColumns: 2,             //最少允许的列数
+                clickToSelect: true,                //是否启用点击选中行
+                height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                uniqueId: "name",                     //每一行的唯一标识，一般为主键列
+                //showToggle:true,                    //是否显示详细视图和列表视图的切换按钮
+                cardView: false,                    //是否显示详细视图
+                detailView: false,                   //是否显示父子表
+                columns: [{
+                    checkbox: true
+                }, {
+                    field: 'name',
+                    title: '用户名'
+                }
+                    , {
+                        field: 'contype',
+                        title: '类型',
+                        formatter: function (value, row, index) {
+                            if (value == "admin") {
+                                return "管理员";
+                            } else if (value == "user") {
+                                return "用户"
+                            }
+                        }
+                    }, {
+                        field: 'active',
+                        title: '状态',
+                        formatter: function (value, row, index) {
+                            if (value == "1") {
+                                return "已激活";
+                            } else if (value = "0") {
+                                return "未激活"
+                            }
+                        }
+                    }, {
+                        field: 'email',
+                        title: '邮箱',
+
+                    }, {
+                        field: 'token',
+                        title: 'token',
+
+                    }, {
+                        field: 'regtime',
+                        title: '注册时间',
+                        formatter:function (value, row, index) {
+                            return changeDateFormat(value);
+                        }
+                    }
+                ],
+            });
+        };
+        //得到查询的参数
+        oTableInit.queryParams = function (params) {
+            var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                limit: params.limit,   //页面大小
+                offset: params.offset,  //页码
+                name: $("#userName").val(),
+
+            };
+            return temp;
+        };
+        return oTableInit;
+    };
+
+
+    var ButtonInit = function () {
+        var oInit = new Object();
+
+
+        oInit.Init = function () {
+
+        };
+
+        return oInit;
+    };
+    $("#updateBtn").click(function () {
+        var sleRow=$('#tb_departments').bootstrapTable('getSelections');
+        if(sleRow.length==0){
+            alert("您没有选中数据，请选择一行");
+            return false;
+        }else if(sleRow.length>1){
+            alert("您选择了多行，请只选择一行");
+            return false;
+        }else{
+           var temp=sleRow[0];
+            $("#userName").attr("value",temp.name);
+                console.log(temp.contype);
+                $("#contype").attr("value",temp.contype!=null&&temp.contype!=""?(temp.contype=="user"?"用户":"管理员"):null);
+
+            if(temp.active=="1"){
+                $("#active").attr("checked",true);
+            }
+            if(temp.active=="0"){
+                $("#unactive").attr("checked",true);
+            }
+            $("#email").attr("value",temp.email);
+            $("#token").attr("value",temp.token);
+            $("#regtime").attr("value",changeDateFormat(temp.regtime));
+            $("#myModal").modal("show");
+        }
+
+    });
+    $("#updateSub").click(function () {
+        $.ajax({
+            url:"/admin/updateCustomer",
+            type:"post",
+            dataType:"json",
+            data:{
+                "userName":$("#userName").val(),
+                "contype" :$("#contype").val()!=null&&$("#contype").val()!=""?($("#contype").val()=="用户"?"user":"admin"):null,
+                "active":$("input:radio[name='active']:checked").val(),
+                "email":$("#email").val(),
+                "token":$("#token").val(),
+                "regtime":$("#regtime").val()
+            },
+            success:function(data){
+                $('#tb_departments').bootstrapTable('refresh');
+                $("#myModal").modal("hide");
+                $("#updateForm")[0].reset();
+
+            }
+        })
+
+        $("#myModal").modal("hide");
+        $("#updateForm")[0].reset();
+    })
+    function deleteItem() {
+        var sleRow=$('#tb_departments').bootstrapTable('getSelections');
+        if(sleRow.length==0){
+            alert("您没有选中数据");
+            return false
+        }else{
+            var nameSelected=[];
+            for(var i=0;i<sleRow.length;i++){
+                nameSelected[i]=sleRow[i].name;
+            }
+            console.log(nameSelected);
+            var sure=confirm("你确定删除你选择的数据");
+            if(sure){
+                $.ajax({
+                    url:"/admin/deleteCustomers",
+                    dataType:"json",
+                    type:"post",
+                    traditional:true,
+                    async:true,
+                    data:{"nameSelected":nameSelected },
+                    success:function (data) {
+                        $('#tb_departments').bootstrapTable('refresh');
+                    }
+                })
+            }
+        }
+    }
+
+    $("#addBtn").click(function () {
+
+        $("#myModal1").modal("show");
+
+    })
+    $("#submit").click(function () {
+       if(flag){
+           $.ajax({
+               url:"addCustomer",
+               type:"post",
+               dataType:"json",
+               data:{
+                   "userName":$("#userName1").val(),
+                   "password":$("#password").val(),
+                   "active":$("input:radio[name='active']:checked").val(),
+                    "token":$("#token1").val(),
+                    "email":$("#email1").val()
+
+               },
+               success:function (data) {
+                   $('#tb_departments').bootstrapTable('refresh');
+                   $("#myModal1").modal("hide");
+                   $("#addForm")[0].reset();
+               }
+           })
+       }
+    });
+    var flag=true;
+    $("#username1").change(function () {
+        $.ajax({
+            url:"checkName",
+            type:"post",
+            dataType:"json",
+            data:{"userName":$("#userName1").val()},
+            success:function (data) {
+                if(data){
+                    flag=false;
+                    $("#addmsg").text("用户已经存在");
+                }else{
+                    flag=true;
+                }
+            }
+        })
+    })
+    //处理时间戳
+    function changeDateFormat(val) {
+        if (val != null) {
+            var date = new Date(val);
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+            return date.getFullYear() + "-" + month + "-" + currentDate;
+        }
+    }
+
+</script>
+</body>
+</html>

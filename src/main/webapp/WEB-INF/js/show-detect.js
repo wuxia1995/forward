@@ -83,8 +83,12 @@ function detectReq(img) {
         success: function (data) {
             if(data==""){
                 $('#responseDetect').html("no face detected")
+                $('#faceProperties').html("")
+                return false
             }
-            handleData(img, eval('(' + data + ')'))
+            localData= eval('(' + data + ')')
+            checkProperties(localData);
+            handleData(img,localData)
         },
         error: function (data) {
             $('#responseDetect').html("no face detected")
@@ -150,6 +154,38 @@ function handleData(imgContent,data) {
 
         }
     });
+}
+
+//检查人脸属性
+function checkProperties(data) {
+
+    faceData=data['faces']
+    elementData=[];
+    var status;
+    for(var single in faceData){
+        var status= null;
+        elementData.push("<p>第"+(parseInt(single)+1)+"张人脸的属性</p>")
+        emotion=faceData[single]['emotion']
+        age=faceData[single]['age']
+        gender=faceData[single] ['gender']
+        if(faceData[single]['age']){
+            status=true
+            elementData.push("<p>年龄:"+Math.round(faceData[single]['age'])+"</p>");
+        }
+        if(emotion){
+            status=true
+            elementData.push("<p>情绪:"+faceData[single]['emotion']+"</p>");
+        }
+        if(gender){
+            status=true
+            elementData.push("<p>性别:"+faceData[single] ['gender']+"</p>");
+        }
+    }
+    if(status){
+        $('#faceProperties').html(elementData.join(""))
+    }else{
+        $('#faceProperties').html("")
+    }
 }
 
 function Result(width, height, left, top) {

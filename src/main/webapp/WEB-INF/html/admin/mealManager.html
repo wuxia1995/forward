@@ -1,17 +1,32 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head><title>jquery DataTables插件自定义分页ajax实现</title>
+<head>
+    <title>套餐管理</title>
     <!--<script src="../js/lib/jquery-1.10.2.min.js"></script>-->
     <!--<script  src="../js/lib/bootstrap.min.js"></script>-->
 
     <!--<link href="../css/bootstrap.css" rel="stylesheet">-->
-    <link href="../css/bootstrap-table.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap-table.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="../js/lib/bootstrap-table.js"></script>
-    <script src="../js/lib/bootstrap-table-zh-CN.js"></script>
+    <script src="../../js/lib/bootstrap-table.js"></script>
+    <script src="../../js/lib/bootstrap-table-zh-CN.js"></script>
 </head>
 <body>
+
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <ul class="nav nav-pills">
+            <li><a href="index">用户管理</a></li>
+            <li class="active" ><a href="mealManager">套餐管理</a></li>
+            <li><a href="logManager">日志管理</a></li>
+            <p class="navbar-text navbar-right"><a href="logout" class="navbar-link">退出登录</a></p>
+        </ul>
+    </div>
+
+</nav>
+
+
 <div class="panel-body" style="padding-bottom:0px;">
     <div class="panel panel-default">
         <div class="panel-heading">查询条件</div>
@@ -40,7 +55,7 @@
     <table id="tb_departments"></table>
 </div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="/admin/updateSetMeal" method="post">
+    <form id="mealForm" method="post">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -97,7 +112,7 @@
             <div class="modal-footer">
                 <div align="center">
                     <button type="button" class="btn btn-info" data-dismiss="modal">关闭</button>
-                    <button type="submit" class="btn btn-info">提交</button>
+                    <button type="button" id="mealUpdate" class="btn btn-info">提交</button>
 
                 </div>
             </div>
@@ -384,9 +399,32 @@
             });
         }
     });
-     var flag=true;
+
+    $("#mealUpdate").click(function () {
+        $.ajax({
+            url:"/admin/updateSetMeal",
+            type:"post",
+            dataType:"json",
+            data:{
+                "id":$("#id").val(),
+                "userName":$("#userName").val(),
+                "contype":$("input:radio[name='contype']:checked").val(),
+                "beginTime":$("#beginTime").val(),
+                "endTime":$("#endTime").val(),
+                "totalTimes":$("#totalTimes").val(),
+                "leftTimes":$("#leftTimes").val(),
+                "enable":$("input:radio[name='enable']:checked").val()
+            },
+            success:function (data) {
+                $("#tb_departments").bootstrapTable("refresh");
+                $("#myModal").modal("hide");
+                $("#mealForm")[0].reset();
+            }
+        })
+    })
+    var flag=true;
     $("#userName1").blur(function () {
-       $("#msg").text("");
+        $("#msg").text("");
         $.ajax({
             url:"/admin/checkNameAndMeal",
             type:"post",
@@ -396,7 +434,7 @@
             },
             success:function (data) {
                 if(data){
-                   flag=true;
+                    flag=true;
                 }else{
                     flag=false;
                     $("#msg").text("该用户不存在或已存在订单，无法添加订单");
@@ -404,10 +442,7 @@
             }
         })
     });
-    function check() {
 
-        return flag;
-    }
     //按下按钮显示模态框
     $("#addBtn").click(function () {
         //显示模态框
@@ -437,7 +472,7 @@
     $("#endTime1").change(function () {
         $("#msg").text("");
 
-         console.log(parseInt( $("#beginTime1").val().replace("-","").replace("-","")))
+        console.log(parseInt( $("#beginTime1").val().replace("-","").replace("-","")))
         if($("input:radio[name='contype']:checked").val()=="date"){
             if($("#beginTime1").val()==null||$("#endTime1").val()==null){
                 $("#msg").text("开始时间或结束时间不能为空");
@@ -472,39 +507,40 @@
     $("#submit").click(function () {
         console.log($("#totalTimes1").val())
         if(flag){
-        $.ajax({
-            url:"/admin/addMeal",
-            type:"post",
-            dataType:"json",
-            async:true,
-            data:{
-                "userName":$("#userName1").val(),
-                "contype":$("input:radio[name='contype']:checked").val(),
-                "beginTime":$("#beginTime1").val(),
-                "endTime":$("#endTime1").val(),
-                "totalTimes":$("#totalTimes1").val(),
-                "leftTimes":$("#leftTimes1").val(),
-                "enable":$("input:radio[name='enable']:checked").val()
-            },
-            success:function (data) {
-                $('#tb_departments').bootstrapTable('refresh');
-            }
+            $.ajax({
+                url:"/admin/addMeal",
+                type:"post",
+                dataType:"json",
+                async:true,
+                data:{
+                    "userName":$("#userName1").val(),
+                    "contype":$("input:radio[name='contype']:checked").val(),
+                    "beginTime":$("#beginTime1").val(),
+                    "endTime":$("#endTime1").val(),
+                    "totalTimes":$("#totalTimes1").val(),
+                    "leftTimes":$("#leftTimes1").val(),
+                    "enable":$("input:radio[name='enable']:checked").val()
+                },
+                success:function (data) {
+                    $('#tb_departments').bootstrapTable('refresh');
+                }
 
-        });
+            });
         }
         $("#addForm")[0].reset();
         $("#myModal1").modal("hide");
     })
 
-        //处理时间戳
-        function changeDateFormat(val) {
-            if (val != null) {
-                var date = new Date(val);
-                var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
-                var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-                return date.getFullYear() + "-" + month + "-" + currentDate;
-            }
+
+    //处理时间戳
+    function changeDateFormat(val) {
+        if (val != null) {
+            var date = new Date(val);
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+            return date.getFullYear() + "-" + month + "-" + currentDate;
         }
+    }
 
 </script>
 </body>

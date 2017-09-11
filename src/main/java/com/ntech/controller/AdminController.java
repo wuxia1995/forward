@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -35,8 +37,8 @@ public class AdminController {
 
     //跳转登陆
     @RequestMapping("/login")
-    public String loginJump() {
-        return "admin-login";
+    public String loginJump(HttpSession session) {
+        return "admin/login-admin";
     }
 
 
@@ -59,10 +61,44 @@ public class AdminController {
     //跳转到首页
     @RequestMapping("index")
     public String IndexJump() {
-
-        return "admin-index";
+        return "admin/customerManager";
+    }
+    //退出登录
+    @RequestMapping("logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("name");
+        return "admin/login-admin";
+    }
+    //跳转到首页
+    @RequestMapping("logManager")
+    public String LogJump(HttpSession session) {
+        String name= (String) session.getAttribute("name");
+        if(null!=name&&!"".equals(name)){
+            return "admin/logManager";
+        }
+        return "error";
+    }
+    //跳转到首页
+    @RequestMapping("mealManager")
+    public String setMealJump(HttpSession session) {
+        String name= (String) session.getAttribute("name");
+        if(null!=name&&!"".equals(name)){
+            return "admin/mealManager";
+        }
+        return "error";
     }
 
+    @RequestMapping("/checkName")
+    @ResponseBody
+    public Boolean checkUserName(String userName,HttpSession session) {
+        logger.info("checkLogin");
+
+        if(!customerService.checkUserName(userName)){
+            session.setAttribute("name","sessionStatus");
+            return false;
+        }
+        return true;
+    }
 
     //验证码校验
     @RequestMapping("/checkCode")
@@ -114,19 +150,29 @@ public class AdminController {
     }
 
     //-------------------------------------用户----------------------------------------------//
-    //跳转更新页面
-    @RequestMapping("update")
-    public ModelAndView update(HttpSession session, String name) {
-        String adminName = (String) session.getAttribute("admin");
-        ModelAndView mav = new ModelAndView();
-        if (adminName.equals("ntech")) {
-            session.setAttribute("customer", customerService.findByName(name));
-            mav.setViewName("update");
-            return mav;
+    //添加用户
+    @RequestMapping("/addCustomer")
+    @ResponseBody
+    public boolean addCustomer(String userName,String password,String active,String token,String email) throws MessagingException {
+        Customer customer=new Customer();
+        if(userName!=null&&password!=null){
+            customer.setName(userName);
+            customer.setToken(token);
+            customer.setPassword(SHAencrypt.encryptSHA(password));
+            customer.setEmail(email);
+            customer.setContype("user");
+            customer.setRegtime(new Date());
+            if(active.equals("active")){
+                customer.setActive(1);
+            }else{
+                customer.setActive(0);
+            }
+            if(customerService.add(customer)==1){
+                return  true;
+            }
+            return false;
         }
-        logger.info("update failed");
-        mav.setViewName("error");
-        return mav;
+        return false;
     }
 
     //修改密码
@@ -156,58 +202,99 @@ public class AdminController {
 
     //更新用户
     @RequestMapping("updateCustomer")
-    public ModelAndView updateCustomer(HttpSession session, @RequestBody Customer customer) {
+    @ResponseBody
+    public boolean updateCustomer(HttpSession session,String
+            userName,String contype,String active,String email,
+                                  String token,String regtime) {
         String admin = (String) session.getAttribute("admin");
-        ModelAndView mav = new ModelAndView();
-        //根据session判断可否操作
-        if (admin.equals("ntech")) {
-            if (customerService.modify(customer) == 1) {
-                logger.info("customer update success");
-                mav.setViewName("customer");
-                session.setAttribute("customerList", customerService.findAll());
-                return mav;
+        Customer customer=new Customer();
+        customer.setName(userName);
+        if(active.equals("active")){
+            customer.setActive(1);
+        }else if(active.equals("unactive")){
+            customer.setActive(0);
+        }
+        if(contype!=null&&!contype.equals("")){
+            customer.setContype(contype);
+        }
+        customer.setEmail(email);
+        customer.setToken(token);
+        if(regtime!=null){
+            SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+            try{
+                customer.setRegtime(format.parse(regtime));
+            }catch (Exception e){
+                throw  new RuntimeException(e);
             }
         }
-        mav.setViewName("error");
-        logger.info("customer update fail");
-        return mav;
+//        ModelAndView mav = new ModelAndView();
+//        //根据session判断可否操作
+//        if (admin.equals("ntech")) {
+//            if (customerService.modify(customer) == 1) {
+//                logger.info("customer update success");
+//                mav.setViewName("customer");
+//                session.setAttribute("customerList", customerService.findAll());
+//                return mav;
+//            }
+//        }
+//        mav.setViewName("error");
+//        logger.info("customer update fail");
+//        return mav;
+        if(customerService.modify(customer)==1){
+            logger.info("update customer succeed"+customer.getName());
+            return true;
+        }
+        return false;
     }
 
     //查询所有用户
     @RequestMapping("findCustomers")
-    public ModelAndView findCustomers(HttpSession session) {
+    @ResponseBody
+    public JSONObject findCustomers(HttpSession session) {
         String admin = (String) session.getAttribute("admin");
-        ModelAndView mav = new ModelAndView();
-        //根据session判断可否操作
-        if (admin.equals("ntech")) {
-            logger.info("customer findCustomers success");
-            session.setAttribute("customerList", customerService.findAll());
-            mav.setViewName("customer");
-            return mav;
-        }
-        logger.info("customer findCustomers fail");
-        mav.setViewName("error");
-        return mav;
+//        ModelAndView mav = new ModelAndView();
+//        //根据session判断可否操作
+//        if (admin.equals("ntech")) {
+//            logger.info("customer findCustomers success");
+//            session.setAttribute("customerList", customerService.findAll());
+//            mav.setViewName("customer");
+//            return mav;
+//        }
+//        logger.info("customer findCustomers fail");
+//        mav.setViewName("error");
+//        return mav;
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("data",customerService.findAll());
+        // jsonObject.put("total",customerService.);
+        return jsonObject;
     }
 
     //根据用户名删除用户
-    @RequestMapping("deleteCustomer")
-    public ModelAndView deleteCustomerByName(HttpSession session, String name) {
+    @RequestMapping("deleteCustomers")
+    @ResponseBody
+    public boolean deleteCustomerByName(HttpSession session, String[] nameSelected) {
         String admin = (String) session.getAttribute("admin");
-        ModelAndView mav = new ModelAndView();
-        if (admin.equals("ntech")) {
-            if (customerService.findByName(name) != null) {
-                logger.info("delete customer succeed");
-                customerService.deleteByName(name);
+//        ModelAndView mav = new ModelAndView();
+//        if (admin.equals("ntech")) {
+//            if (customerService.findByName(name) != null) {
+//                logger.info("delete customer succeed");
+//                customerService.deleteByName(name);
+//            }
+//            logger.info("delete customer succeed");
+//            session.setAttribute("customerList", customerService.findAll());
+//            mav.setViewName("customer");
+//            return mav;
+        if(nameSelected.length>0) {
+            for (int i = 0; i < nameSelected.length; i++) {
+                if (customerService.findByName(nameSelected[i]) != null) {
+                    logger.info("delete " + nameSelected[i]);
+                    customerService.deleteByName(nameSelected[i]);
+                }
             }
-            logger.info("delete customer succeed");
-            session.setAttribute("customerList", customerService.findAll());
-            mav.setViewName("customer");
-            return mav;
+            logger.info("delete customers success");
+            return true;
         }
-        logger.info("delete customer failed");
-        mav.setViewName("error");
-        return mav;
+        return  false;
     }
 
     // 根据用户名删除用户和用户订单信息
@@ -252,7 +339,14 @@ public class AdminController {
         mav.setViewName("error");
         return mav;
     }
-    //根据姓名模糊查询  todo
+
+    @RequestMapping("findLogs")
+    @ResponseBody
+    public JSONObject finfLogs(){
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("data",logService.findAll());
+        return jsonObject;
+    }
 
     //------------------------------订单------------------------------------------------//
     //查询所有订单
@@ -308,14 +402,13 @@ public class AdminController {
         return mav;
     }
 
-    //修改订单
     @RequestMapping("/updateSetMeal")
-    public ModelAndView updateSetMeal(String id, String userName, String contype,
-                                      String beginTime, String endTime, String totalTimes,
-                                      String leftTimes, String enable) {
-        ModelAndView mav = new ModelAndView();
+    @ResponseBody
+    public boolean updateSetMeal(String id, String userName, String contype,
+                                 String beginTime, String endTime, String totalTimes,
+                                 String leftTimes, String enable) {
+        SetMeal setMeal = new SetMeal();
         try {
-            SetMeal setMeal = new SetMeal();
             //给对象赋值
             setMeal.setId(Integer.parseInt(id));
             setMeal.setUserName(userName);
@@ -326,41 +419,34 @@ public class AdminController {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 setMeal.setBeginTime(format.parse(beginTime));
                 setMeal.setEndTime(format.parse(endTime));
+
+                setMeal.setLeftTimes(null);
+                setMeal.setTotalTimes(null);
             } else if (contype.equals("times")) {
+                setMeal.setBeginTime(null);
+                setMeal.setEndTime(null);
                 setMeal.setTotalTimes(Integer.parseInt(totalTimes));
                 setMeal.setLeftTimes(Integer.parseInt(leftTimes));
-            } else {
-                logger.info("update meal error");
-                mav.setViewName("error");
             }
             if (enable.equals("able")) {
                 setMeal.setEnable(1);
             } else if (enable.equals("enable")) {
                 setMeal.setEnable(0);
-            } else {
-                logger.info("update meal error");
-                mav.setViewName("error");
             }
-
-            if (setMealService.modify(setMeal)) {
-                logger.info("update meal succeed");
-                mav.setViewName("dataTable");
-            } else {
-                logger.info("update meal error");
-                mav.setViewName("error");
-            }
+            System.out.println(setMeal.toString());
+            setMealService.modify(setMeal);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
 
-            return mav;
+            return true;
         }
     }
     @RequestMapping("addMeal")
     @ResponseBody
     public boolean addMeal(String userName, String contype,
-                                String beginTime, String endTime, String totalTimes,
-                                String leftTimes, String enable){
+                           String beginTime, String endTime, String totalTimes,
+                           String leftTimes, String enable){
         SetMeal setMeal = new SetMeal();
         try {
             //给对象赋值
@@ -385,12 +471,11 @@ public class AdminController {
             e.printStackTrace();
         } finally {
 
-           if(setMealService.add(setMeal)){
-               return  true;
-           }
-           return  false;
+            if(setMealService.add(setMeal)){
+                return  true;
+            }
+            return  false;
         }
-
     }
     //批量删除选择的订单
     @RequestMapping("deleteMealByName")

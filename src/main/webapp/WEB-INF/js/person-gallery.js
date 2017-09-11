@@ -71,9 +71,12 @@ $(document).ready(function () {
                 console.log(dom);
                 $.ajax({
                     url: 'deleteToGallery',
-                    type: 'DELETE',
+                    type: 'POST',
                     dataType: "json",
-                    data: "id:" + dom.alt,
+                    data: {"id":dom.alt},
+                    // headers: {
+                    //     "Content-Type": "application/json",
+                    //     "X-HTTP-Method-Override": "DELETE" }, //PUT,DELETE
                     success: function (data) {
                         console.log(data)
                         app.todos = data;
@@ -165,7 +168,8 @@ $(document).ready(function () {
                 //上传文件时当前的图片内容是文件,对比的对象可能时文件或者url
                 var formData = new FormData();
                 // formData.append("n",4);
-                formData.append("photo",file)
+                formData.append("photo",file);
+                img.value="";
                 $.ajax({
                     url: 'getDemoFace',
                     type: 'POST',
@@ -230,10 +234,10 @@ function showResult(dataObj) {
         // console.log("jsonObj[" + prop + "]=" + dataObj[prop]);
         for (var v in dataObj[prop]){
             preSize++;
-            var imgEle="<div>第"+preSize+"张</div><img style='' height='200' width='200' src='"+dataObj[prop][v]['face']['thumbnail']+"'>"
+            var imgEle="<div>第"+preSize+"张</div><img style=''  src='"+dataObj[prop][v]['face']['thumbnail']+"'>"
             var confidence="第"+preSize+"张是同一个人的可信度是:"+dataObj[prop][v]['confidence']
             $("#searchResult").append("<div  id='divResult"+preSize+"'>"+ confidence +"</div>");
-            $("#resultShow").append("<div class='imgboxShow' id='div"+preSize+"'>"+ imgEle +"</div>");
+            $("#resultShow").append("<div class='imgboxShow thumbnail' id='div"+preSize+"'>"+ imgEle +"</div>");
             console.log(dataObj[prop][v]['face']['thumbnail'])
         }
     }

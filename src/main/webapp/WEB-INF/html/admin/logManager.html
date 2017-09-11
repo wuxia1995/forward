@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>日志管理</title>
+    <link href="../../css/bootstrap-table.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../js/lib/bootstrap-table.js"></script>
+    <script src="../../js/lib/bootstrap-table-zh-CN.js"></script>
+</head>
+<body>
+
+
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <ul class="nav nav-pills">
+            <li><a href="index">用户管理</a></li>
+            <li><a href="mealManager">套餐管理</a></li>
+            <li class="active"><a href="logManager">日志管理</a></li>
+            <p class="navbar-text navbar-right"><a href="logout" class="navbar-link">退出登录</a></p>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default">
+        <div class="panel-heading">查询条件</div>
+        <div class="panel-body">
+            <form id="formSearch" class="form-horizontal">
+                <div class="form-group" style="margin-top:15px">
+                    <label class="control-label col-sm-1" for="name">用户名</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="name">
+                    </div>
+                    <div class="col-sm-4" style="text-align:left;">
+                        <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-info">查询</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <table id="tb_departments"></table>
+</div>
+<script>
+    $(function () {
+
+        //1.初始化Table
+        var oTable = new TableInit();
+        oTable.Init();
+
+        //2.初始化Button的点击事件
+        var oButtonInit = new ButtonInit();
+        oButtonInit.Init();
+
+    });
+
+    var TableInit = function () {
+        var oTableInit = new Object();
+        //初始化Table
+        oTableInit.Init = function () {
+            $('#tb_departments').bootstrapTable({
+                url: '/admin/findLogs',         //请求后台的URL（*）
+                method: 'post',                      //请求方式（*）
+                toolbar: '#toolbar',                //工具按钮用哪个容器
+                striped: true,                      //是否显示行间隔色
+                cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                pagination: true,                   //是否显示分页（*）
+                sortable: false,                     //是否启用排序
+                // sortOrder: "asc",                   //排序方式
+                queryParams: oTableInit.queryParams,//传递参数（*）
+                sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
+                pageNumber: 1,                       //初始化加载第一页，默认第一页
+                pageSize: 5,                       //每页的记录行数（*）
+                pageList: [2, 3, 5, 10],           //可供选择的每页的行数（*）
+                search: true,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                //strictSearch: true,
+                //showColumns: true,                  //是否显示所有的列
+                // showRefresh: true,                  //是否显示刷新按钮
+                minimumCountColumns: 2,             //最少允许的列数
+                clickToSelect: true,                //是否启用点击选中行
+                height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+                //showToggle:true,                    //是否显示详细视图和列表视图的切换按钮
+                cardView: false,                    //是否显示详细视图
+                detailView: false,                   //是否显示父子表
+                columns: [{
+                    checkbox: true
+                },  {
+                    field: 'id',
+                    title: '编号'
+                },{
+                    field: 'userName',
+                    title: '用户名'
+                }, {
+                        field: 'content',
+                        title: '使用情况',
+                    }, {
+                        field: 'result',
+                        title: '调用结果',
+                        formatter: function (value, row, index) {
+                            if (value == "1") {
+                                return "成功";
+                            } else if (value = "0") {
+                                return "失败"
+                            }
+                        }
+                    }, {
+                        field: 'time',
+                        title: '调用时间',
+                        formatter:function (value, row, index) {
+                            return changeDateFormat(value);
+                        }
+                    }
+                ],
+            });
+        };
+        //得到查询的参数
+        oTableInit.queryParams = function (params) {
+            var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                limit: params.limit,   //页面大小
+                offset: params.offset,  //页码
+                name: $("#userName").val(),
+
+            };
+            return temp;
+        };
+        return oTableInit;
+    };
+
+
+    var ButtonInit = function () {
+        var oInit = new Object();
+
+
+        oInit.Init = function () {
+
+        };
+
+        return oInit;
+    };
+    //处理时间戳
+    function changeDateFormat(val) {
+        if (val != null) {
+            var date = new Date(val);
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+            return date.getFullYear() + "-" + month + "-" + currentDate;
+        }
+    }
+</script>
+</body>
+</html>

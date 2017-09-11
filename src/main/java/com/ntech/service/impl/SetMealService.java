@@ -109,7 +109,7 @@ public class SetMealService implements ISetMealService {
         logger.info("modify set meal for user "+setMeal.getUserName());
 
 
-        if(1==setMealMapper.updateByPrimaryKeySelective(setMeal)){
+        if(1==setMealMapper.updateByPrimaryKey(setMeal)){
             logger.info("modify success");
             return true;
         }

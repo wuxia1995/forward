@@ -8,6 +8,42 @@ $(document).ready(function () {
     //     detectReq(check)
     //
     // })
+    //
+    // $.ajax({
+    //     url: 'customer/getDemoFace',
+    //     type: 'POST',
+    //     // dataType: "json",
+    //     data: formData,
+    //     processData: false,
+    //     contentType: false,
+    //     async: true,
+    //     success: function (data) {
+    //         if(data==""){
+    //             $('#reponseSearchDemo').html("有图片未检测到人脸")
+    //             $('#searchResultDemo').html("")
+    //             $('#resultShowSearchDemo').html("")
+    //             return false;
+    //         }
+    //         $('#imgShowSearchDemo').attr("src",img.src);
+    //         // console.log("success")
+    //         console.log(data)
+    //         dataObj=eval('(' + data + ')');
+    //         showResult(dataObj.results)
+    //         $('#reponseSearchDemo').html(syntaxHighlight(dataObj))
+    //
+    //     },
+    //     error: function (data) {
+    //         // if(data==""){
+    //         $('#reponseSearchDemo').html("有图片未检测到人脸")
+    //         $('#resultShowSearchDemo').html("")
+    //         $('#searchResultDemo').html("")
+    //         // }
+    //         return false
+    //     }
+    // });
+
+
+
 }); //ready
 
 var preSize=0;
@@ -46,11 +82,11 @@ function searchReqDemo(img) {
 
         },
         error: function (data) {
-            if(data==""){
+            // if(data==""){
                 $('#reponseSearchDemo').html("有图片未检测到人脸")
                 $('#resultShowSearchDemo').html("")
                 $('#searchResultDemo').html("")
-            }
+            // }
             return false
         }
     });
@@ -104,11 +140,11 @@ function uploadImgSearcheDemo(img) {
             $('#reponseSearchDemo').html(syntaxHighlight(data))
         },
         error: function (data) {
-            if(data==""){
+            // if(data==""){
                 $('#reponseSearchDemo').html("有图片未检测到人脸")
                 $('#searchResultDemo').html("")
                 $('#resultShowSearchDemo').html("")
-            }
+            // }
             // alert("no face")
             return false
         }
