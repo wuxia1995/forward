@@ -190,7 +190,7 @@ public class MethodUtil {
 		if(localAPI==null||localAPI.equals("")) {
 			String string = ConfigManager.getInstance().getParameter("PICTURE")+"/"+Base64Encrypt.encryptUserName((String)request.getAttribute("userName"));
 			if(SDKreply!=null&&!"".equals(SDKreply)) {
-				Check.timesCount((String)request.getAttribute("userName"));
+				/*Check.timesCount((String)request.getAttribute("userName"));*/
 				return SDKreply.replaceAll("http://127.0.0.1:3333/uploads",string);
 			}
 		}

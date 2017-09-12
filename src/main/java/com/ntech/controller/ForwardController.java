@@ -26,8 +26,7 @@ import java.util.Map;
 @RequestMapping("/")
 public class ForwardController {
 
-    @Autowired
-    private HttpServletRequest request;
+
 
     private final static Logger logger = Logger.getLogger(ForwardController.class);
 
@@ -35,15 +34,8 @@ public class ForwardController {
     @ResponseBody
     public String methodHandler(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes)
             throws ServletException, IOException {
-//        HashMap map = (HashMap) redirectAttributes.getFlashAttributes();
-        if (redirectAttributes.containsAttribute("request") && redirectAttributes.containsAttribute("response")) {
-            request = (HttpServletRequest) redirectAttributes.getFlashAttributes().get("request");
-            response = (HttpServletResponse) redirectAttributes.getFlashAttributes().get("response");
-
-        }
-//        HttpServletRequest request1= redirectAttributes.getFlashAttribute("request");
+//
         String reply = "";
-//        PrintWriter out = response.getWriter();
         String method = request.getMethod();
         reply = MethodUtil.getInstance().requestForword(request, response);
         if (ErrorPrompt.size() != 0)

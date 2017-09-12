@@ -16,6 +16,7 @@ public interface ICustomerService {
     boolean setContype(String name,String contype);
     String getNameByToken(String name);
     boolean deleteByName(String name);
-
+    String findByToken(String token);
+    boolean checkToken(String inputToken);
 
 }
