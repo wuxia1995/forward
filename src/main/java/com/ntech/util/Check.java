@@ -7,6 +7,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.ntech.model.LibraryKey;
+import com.ntech.service.impl.CustomerService;
+import com.ntech.service.impl.LibraryService;
+import com.ntech.service.inf.ICustomerService;
+import com.ntech.service.inf.ILibraryService;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -17,16 +22,25 @@ import com.ntech.exception.IllegalIDException;
 import com.ntech.forward.ConnectionSDK;
 
 import com.ntech.util.Mysql;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
+
+@Component
 public class Check {
 	
 	private static Logger logger = Logger.getLogger(Check.class);
 	private static JSONParser jsonParser = new JSONParser();
 	
 	private static JSONArray jsonArray = null;
-	private static Mysql mysql = new Mysql();
-	
-	public static List<String> checkId(String id) {
+	@Autowired
+	 private ICustomerService customerService ;
+	@Autowired
+	 private ILibraryService libraryService;
+
+	public List<String> checkId(String id) {
 		List<String> galleries = new ArrayList<String>();
 		Map<String, String> header = new HashMap<String,String>();
 		header.put("API","/v0/face/id"+id);
@@ -58,57 +72,35 @@ public class Check {
 		return null;
 	}
 	
-	public static boolean checkToken(String inputToken)  {
-		boolean flag = false;
-		try {
-			flag =  mysql.isToken(inputToken);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return flag;
+	public  boolean checkToken(String inputToken)  {
+		return customerService.checkToken(inputToken);
 	}
-	public static String getUserName(String inputToken)  {
-		String userName = null;
-		try {
-			userName = mysql.getUserName(inputToken);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return userName;
+	public  String getUserName(String inputToken)  {
+
+		return customerService.findByToken(inputToken);
 	}
-	public static List<String> getGalleries(String inputToken){
-		List<String> list = null;
-		try {
-			list = mysql.getGalleries(inputToken);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public  List<String> getGalleries(String inputToken){
+		List<String> galleryList = new ArrayList<String>();
+		List<LibraryKey> list = libraryService.findByToken(inputToken);
+		Iterator<LibraryKey> iterator = list.iterator();
+		while(iterator.hasNext()){
+			galleryList.add(iterator.next().getLibraryName());
 		}
-		return list;
+		return galleryList;
 	}
-	public static boolean createGallery(String inputToken,String userName,String galleryName){
-		boolean flag = false;
-		try {
-			flag =  mysql.createGallery(inputToken, userName, galleryName);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return flag;
+	public  int createGallery(String userName,String galleryName){
+		LibraryKey libraryKey = new LibraryKey();
+		libraryKey.setLibraryName(galleryName);
+		libraryKey.setUserName(userName);
+		return libraryService.insert(libraryKey);
 	}
-	public static boolean deleteGallery(String galleryName){
-		boolean flag = false;
-		try {
-			flag =  mysql.deleteGallery(galleryName);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return flag;
+	public  int deleteGallery(String userName,String galleryName){
+		LibraryKey libraryKey = new LibraryKey();
+		libraryKey.setLibraryName(galleryName);
+		libraryKey.setUserName(userName);
+		return libraryService.delete(libraryKey);
 	}
-	public static boolean timesCount(String userName){
+/*	public static boolean timesCount(String userName){
 		boolean flag = false;
 		try {
 			flag =  mysql.timesCount(userName);
@@ -122,5 +114,5 @@ public class Check {
 			e.printStackTrace();
 		}
 		return flag;
-	}
+	}*/
 }

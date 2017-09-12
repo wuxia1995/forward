@@ -95,10 +95,30 @@ public class CustomerService implements ICustomerService {
         return customer;
     }
 
+    public String findByToken(String token) {
+        logger.info("for getting user name");
+        Customer customer = null;
+        CustomerExample example = new CustomerExample();
+        example.createCriteria().andTokenEqualTo(token);
+        List<Customer> list = customerMapper.selectByExample(example);
+        if (list.size() > 0) {
+            customer = list.get(0);
+        }
+        return customer.getName();
+    }
+
     public boolean checkUserName(String userName) {
         logger.info("check user name:" + userName);
         CustomerExample example = new CustomerExample();
         example.createCriteria().andNameEqualTo(userName);
+        List<Customer> result = customerMapper.selectByExample(example);
+        return result.size() > 0 ? true : false;
+    }
+
+    public boolean checkToken(String inputToken) {
+        logger.info("check user token: "+inputToken);
+        CustomerExample example = new CustomerExample();
+        example.createCriteria().andTokenEqualTo(inputToken);
         List<Customer> result = customerMapper.selectByExample(example);
         return result.size() > 0 ? true : false;
     }

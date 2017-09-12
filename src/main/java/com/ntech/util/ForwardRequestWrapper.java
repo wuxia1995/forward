@@ -4,6 +4,7 @@ package com.ntech.util;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -14,13 +15,19 @@ import com.ntech.exception.IllegalAPIException;
 import com.ntech.exception.IllegalIDException;
 import com.ntech.forward.Constant;
 import com.ntech.exception.IllegalGalleryException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Repository;
 
 
 public class ForwardRequestWrapper extends HttpServletRequestWrapper {
+
+
+	private Check check = (Check) Constant.GSB.getBean("check");
 	
 	private Logger logger = Logger.getLogger(ForwardRequestWrapper.class);
 
-	
 	public ForwardRequestWrapper(HttpServletRequest request) throws ErrorTokenException, IllegalAPIException, IllegalIDException, IllegalGalleryException {
 		
 		super(request);
@@ -34,22 +41,22 @@ public class ForwardRequestWrapper extends HttpServletRequestWrapper {
 		String inputToken = request.getHeader("Token");
 		String requestIP = request.getRemoteHost();
 		logger.info("requestIP :"+requestIP);
-		boolean isToken = Check.checkToken(inputToken);
+		boolean isToken = check.checkToken(inputToken);
 		//Retrieve token from database
 		if(!isToken||inputToken==null||inputToken.equals(""))
 				throw new ErrorTokenException("bad_token");
-		userName = Check.getUserName(inputToken);
+		userName = check.getUserName(inputToken);
 		logger.info("UserName: "+userName);
 		request.setAttribute("userName",userName);
 		if(API.startsWith("/picture")) {
 			return;
 		}
 		logger.info("InputToken :"+inputToken);
-		galleries = Check.getGalleries(inputToken);
+		galleries = check.getGalleries(inputToken);
 		
 		//Retrieve userName and galleriesList from database
 	
-		if(galleries==null)
+		if(galleries==null||galleries.size()==0)
 			throw new IllegalGalleryException("isToken_ButNoGalleries!!!");
 		// TODO Auto-generated constructor stub
 		String method = request.getMethod();
@@ -104,7 +111,7 @@ public class ForwardRequestWrapper extends HttpServletRequestWrapper {
 				logger.info("CHECK_API :"+API);
 			break;
 			}
-			if(API.startsWith("/face/gallery")&&API.indexOf("meta")!=-1) {
+			if(API.startsWith("/face/gallery")&&API.contains("meta")) {
 				String galleryName = API.split("gallery/")[1].split("/meta")[0];
 				if(galleries.contains(galleryName)) {
 					API = "/"+version+"/face/gallery/"+galleryName+"/meta"+API.split("meta")[1];
@@ -142,7 +149,7 @@ public class ForwardRequestWrapper extends HttpServletRequestWrapper {
 			if(API.startsWith("/face/id")){
 				String id = API.split("id")[1];
 				boolean isMaster = false;
-				List<String> list = Check.checkId(id);
+				List<String> list = check.checkId(id);
 				if(list==null)
 					break;
 				Iterator<String> iterator = list.iterator();
@@ -169,7 +176,7 @@ public class ForwardRequestWrapper extends HttpServletRequestWrapper {
 				}else {
 					throw new IllegalGalleryException("bad_gallery");
 				}
-				StringBuffer api = new StringBuffer(API);
+				StringBuilder api = new StringBuilder(API);
 				String nextPage = request.getParameter("max_id");
 				String prePage = request.getParameter("min_id");
 				
@@ -205,7 +212,7 @@ public class ForwardRequestWrapper extends HttpServletRequestWrapper {
 				String createGallery = API.split("/")[2];
 				if(galleries.contains(createGallery))
 					throw new IllegalAPIException("already exist");
-				Check.createGallery(inputToken, userName, createGallery);
+				check.createGallery(userName, createGallery);
 				API = "/v0/galleries/"+createGallery;
 				logger.info("CHECK_API :"+API);
 				break;
@@ -213,7 +220,7 @@ public class ForwardRequestWrapper extends HttpServletRequestWrapper {
 				String deleteGallery = API.split("/")[2];
 				if(!galleries.contains(deleteGallery))
 					throw new IllegalGalleryException("bad_gallery");
-				Check.deleteGallery(deleteGallery);
+				check.deleteGallery(userName,deleteGallery);
 				API = "/v0/galleries/"+deleteGallery;
 				logger.info("CHECK_API :"+API);
 				break;

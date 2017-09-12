@@ -4,18 +4,23 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import com.ntech.model.LibraryKey;
+import com.ntech.service.inf.ICustomerService;
+import com.ntech.service.inf.ILibraryService;
 import org.apache.log4j.Logger;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class Mysql {
-	
+
 	private static Logger logger  = Logger.getLogger(Mysql.class);
+
 	private static Statement statement = null;
-	
 	static{
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -29,6 +34,7 @@ public class Mysql {
 			e.printStackTrace();
 		}
 	}
+
 	public List<String> getGalleries(String inputToken) throws SQLException{
 		List<String> galleryList = new ArrayList<String>();
 		String sql = "select gallery from user where token='"+inputToken+"'";
@@ -40,12 +46,14 @@ public class Mysql {
 			}
 		return galleryList;
 	}
+
 	public String getUserName(String inputToken) throws SQLException {
 		String sql = "select userName from user where token='"+inputToken+"'";
 		ResultSet resultSet = statement.executeQuery(sql);
 		resultSet.next();
 		return resultSet.getString("userName");
 	}
+
 	public boolean isToken(String inputToken) throws SQLException {
 		boolean flag = false;
 		String sql = "select count(*) from user where token='"+inputToken+"'";
@@ -58,8 +66,9 @@ public class Mysql {
 		logger.info("count(*): "+count);
 		return flag;
 	}
+
 	public boolean createGallery(String inputToken,String userName,String galleryName) throws SQLException {
-		
+
 		String sql = "insert into `user` (token,userName,gallery) values('"+inputToken+"','"+userName+"','"+galleryName+"')";
 		return statement.execute(sql);
 	}

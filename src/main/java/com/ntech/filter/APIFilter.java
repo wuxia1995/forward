@@ -18,6 +18,8 @@ import com.ntech.exception.IllegalIDException;
 import com.ntech.exception.IllegalGalleryException;
 import com.ntech.util.ErrorPrompt;
 import com.ntech.util.ForwardRequestWrapper;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Servlet Filter implementation class APIFilter
@@ -45,7 +47,7 @@ public class APIFilter implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		logger.info("------------FILTER-----------");
-		
+
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 		
@@ -89,7 +91,6 @@ public class APIFilter implements Filter {
 	 * @see Filter#init(FilterConfig)
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
-		// TODO Auto-generated method stub
 	}
 
 }
