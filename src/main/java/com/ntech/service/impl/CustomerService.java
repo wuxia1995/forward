@@ -155,4 +155,17 @@ public class CustomerService implements ICustomerService {
         content.append("</a>");
         MailUtil.send_mail(customer.getEmail(), content.toString());
     }
+
+
+    public long totalCount() {
+        CustomerExample example=new CustomerExample();
+        example.createCriteria().andNameIsNotNull();
+        logger.info("find count of customers");
+        return (int) customerMapper.countByExample(example);
+    }
+
+    @Override
+    public List<Customer> findPage(int limit, int offset) {
+        return customerMapper.findPage(limit,offset);
+    }
 }

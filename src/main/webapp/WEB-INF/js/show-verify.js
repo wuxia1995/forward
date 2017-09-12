@@ -67,10 +67,10 @@ function uploadPicVerify(obj, id) {
         },
         error:function (data) {
             removeDiv()
-            if(data==""){
+            // if(data==""){
                 $("#resultVerify").html("有图片未检测到人脸");
                 $("#reponseVerify").html("有图片未检测到人脸");
-            }
+            // }
             return false;
         }
     });
@@ -135,12 +135,12 @@ function readResData(data,id) {
 
 
 
-    $("#resultVerify").val("");
-    if (val == true && confidence >= 0.78) {
-        $("#resultVerify").html("两张照片是同一张人脸");
-    } else {
-        $("#resultVerify").html("两张照片不是同一张人脸");
-    }
+    // $("#resultVerify").val("");
+    // if (val == true && confidence >= 0.78) {
+        $("#resultVerify").html("是同一张人脸的可信度是:<br>"+confidence);
+    // } else {
+    //     $("#resultVerify").html("两张照片不是同一张人脸");
+    // }
 
 
     //

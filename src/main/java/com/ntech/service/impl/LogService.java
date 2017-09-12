@@ -33,4 +33,17 @@ public class LogService implements ILogService {
         List<Log> logs=logMapper.selectByExample(example);
         return logs;
     }
+
+    public long totalCount() {
+        LogExample example=new LogExample();
+        example.createCriteria().andContentIsNotNull();
+        return logMapper.countByExample(example);
+    }
+
+
+    public List<Log> findPage(int limit, int offset) {
+
+        return logMapper.findPage(limit,offset);
+    }
+
 }

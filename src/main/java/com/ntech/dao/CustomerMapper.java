@@ -27,4 +27,8 @@ public interface CustomerMapper {
     int updateByPrimaryKeySelective(Customer record);
 
     int updateByPrimaryKey(Customer record);
+
+    List<Customer> findPage(@Param("limit") int limit,@Param("offset") int offset);
+
+
 }

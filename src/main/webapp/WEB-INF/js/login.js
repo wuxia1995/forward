@@ -1,5 +1,10 @@
 $(function() {
     // var result;
+    $("body").keydown(function() {
+        if (event.keyCode == "13") {//keyCode=13是回车键
+            $('#submit').click();
+        }
+    });
     $('#submit').click(function () {
         if($("#name").val()==''){
             $('#msg').text("用户名不能为空");

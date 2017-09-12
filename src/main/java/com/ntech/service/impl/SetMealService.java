@@ -117,9 +117,15 @@ public class SetMealService implements ISetMealService {
         return false;
     }
 
-    public int totalCount() {
+    public long totalCount() {
         SetMealExample example=new SetMealExample();
         example.createCriteria().andIdIsNotNull();
-        return (int) setMealMapper.countByExample(example);
+        return  setMealMapper.countByExample(example);
     }
+    @Override
+    public List<SetMeal> findByPage(int limit, int offset) {
+
+        return setMealMapper.findPage(limit,offset);
+    }
+
 }

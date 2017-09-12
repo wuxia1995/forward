@@ -1,6 +1,3 @@
-/**
- * Created by niu on 2017/8/20.
- */
 $(function() {
     /*
      * 思路大概是先为每一个required添加必填的标记，用each()方法来实现。
@@ -14,17 +11,16 @@ $(function() {
      * 最后提交表单时做统一验证 做好整体与细节的处理
      */
     // 如果是必填的，则加红星标识.
-    $("form :input.required").each(function() {
-        var $required = $("<strong style='float: right;color: red;'> *</strong>"); // 创建元素
-        $(this).parent().append($required); // 然后将它追加到文档中
-    });
+    // $("form :input.required").each(function() {
+    //     var $required = $("<strong style='float: right;color: red;'> *</strong>"); // 创建元素
+    //     $(this).parent().append($required); // 然后将它追加到文档中
+    // });
     // 文本框失去焦点后
     $('form :input').blur(function() {
         var $parent = $(this).parent();
         $parent.find(".formtips").remove();
 
-
-        // 验证用户编号
+        // 验证用户名
         if ($(this).is('#userName')) {
             if (this.value == "" ||this.value != "" && !/^([a-zA-Z0-9_]{6,20})$/.test(this.value)) {
                 var errorMsg = '用户名由6位以上数字、字母或下划线组成';
@@ -41,57 +37,35 @@ $(function() {
                     success : function(data) {
                         if(!data){
                             // $parent.append('<span class="formtips">用户名可以使用</span>');
-                            $parent.removeClass("has-error");
-                            $parent.addClass("has-success");
+                            // $parent.removeClass("has-error");
+                            // $parent.addClass("has-success");
                         }
                         else{
-                            $parent.addClass("has-error");
-                            $parent.append('<span class="formtips onError">已被注册</span>');
+                            // $parent.addClass("has-error");
+                            $parent.append('<span class="formtips onError">该用户已被注册</span>');
                         }
                     }
                 });
-
-
-
-
-
             }
         }
-        //
-        // // 验证用户名
-        // if ($(this).is('#userName')) {
-        //     if (this.value == "" || this.value.length < 2 || this.value.length>16) {
-        //         var errorMsg = '请输入至少2位的用户名.';
-        //         $parent.addClass("has-error");
-        //         $parent.append('<span class="formtips onError success">' + errorMsg + '</span>');
-        //     } else {
-        //         $parent.removeClass("has-error");
-        //         $parent.addClass("has-success");
-        //
-        //     }
-        // }
         // 验证密码
         if ($(this).is('#userPassword')) {
             if(this.value == ""||this.value.length<6){
                 $parent.append('<span class="onError formtips">密码长度必须大于6位</span>');
-                $parent.addClass("has-error");
-            }
-            else {
-                $parent.removeClass("has-error");
-                $parent.addClass("has-success");
-
             }
         }
         // 保证密码一致
         if ($(this).is('#surePassword')) {
             if (this.value == ""||this.value.length<6 ||this.value != $('#userPassword' ).val()) {
                 var errorMsg = '请确保两次密码一致且长度大于6';
-                $parent.addClass("has-error");
                 $parent.append('<span class="formtips onError">' + errorMsg + '</span>');
             }
-            else {
-                $parent.removeClass("has-error");
-                $parent.addClass("has-success");
+        }
+        // 验证邮件
+        if ($(this).is('#email')) {
+            if (this.value == "" || !/.+@.+\.[a-zA-Z]{2,4}$/.test(this.value)) {
+                var errorMsg = '请输入正确的E-Mail地址.';
+                $parent.append('<span class="formtips onError">' + errorMsg + '</span>');
             }
         }
         // // 验证手机号
@@ -112,21 +86,6 @@ $(function() {
         // }
 
 
-        // 验证邮件
-        if ($(this).is('#email')) {
-            if ((this.value != "" && !/.+@.+\.[a-zA-Z]{2,4}$/.test(this.value))) {
-                var errorMsg = '请输入正确的E-Mail地址.';
-                $parent.addClass("has-error");
-                $parent.append('<span class="formtips ">' + errorMsg + '</span>');
-            } else if(this.value==""){
-                $parent.removeClass("has-error");
-                $parent.removeClass("has-success");
-            }
-            else {
-                $parent.removeClass("has-error");
-                $parent.addClass("has-success")
-            }
-        }
 
 
 
@@ -139,11 +98,16 @@ $(function() {
     // 提交，最终验证。
 
     $('#send').click(function() {
+        // $('input').trigger("blur");
         var flag= false
         if($('#authCode').val()==''){
             $('#codeMsg').text("验证码不能为空");
             return false;
         }
+        // $('input').each(function () {
+        //     $(this).triggerHandler("blur");
+        // })
+
         $.ajax({
             url : 'checkCode',
             type : 'POST',
@@ -161,7 +125,13 @@ $(function() {
             }
         });
 
-        $("form :input.required").trigger('blur');
+        // $('input').each(function () {
+        //     $(this).trigger('focus')
+        //     console.log($(this).trigger('blur'));
+        //     // $(this).triggerHandler("blur");
+        // })
+        $('input').trigger("blur");
+        // $("form :input.required").trigger('blur');
         var numError = $('.onError').length;
         if (numError) {
             flag=false

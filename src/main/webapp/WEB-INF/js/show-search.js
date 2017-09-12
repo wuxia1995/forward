@@ -48,9 +48,11 @@ $(document).ready(function () {
 
 var preSize=0;
 function searchUrlDemo(input) {
+    $("#imgShowSearchDemo").attr("src",$("#inputUrlSearchDemo").val())
     var img = new Image();
     img.src = $("#inputUrlSearchDemo").val();
     searchReqDemo(img);
+
 }
 
 function searchReqDemo(img) {

@@ -10,4 +10,7 @@ public interface ILogService {
     //添加日志
     public void add(Log info);
     List<Log> findAll();
+
+    long totalCount();
+    List<Log> findPage(int limit,int offset);
 }

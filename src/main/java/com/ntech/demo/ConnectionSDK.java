@@ -1,73 +1,86 @@
 package com.ntech.demo;
 
+import com.ntech.forward.Constant;
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-import com.ntech.forward.Constant;
-import org.json.simple.JSONObject;
-
 public class ConnectionSDK {
 	
+	private final Logger logger = Logger.getLogger(ConnectionSDK.class);
 	public static final String FORWARD_URL = Constant.SDK_IP;
-
-	public static String httpURLConnectionPOST (Map<String,String> param,Map<String,Object> body
-			,String meta) {
-		URL url;
-		StringBuffer stringBuffer= new StringBuffer();
+	
+	private static ConnectionSDK instance;
+	private ConnectionSDK() {}
+	  public static ConnectionSDK getInstance(){    //对获取实例的方法进行同步
+	     if (instance == null){
+	         synchronized(ConnectionSDK.class){
+	            if (instance == null)
+	                instance = new ConnectionSDK();
+	         }
+	     }
+	   return instance;
+	 }
+	public synchronized String httpURLConnectionSDK (Map<String,String> header) {
 		BufferedReader bufferedReader = null;
 		BufferedWriter bufferedWriter = null;
+		StringBuilder stringBuilder = null;
 		try {
-			url = new URL(FORWARD_URL+param.get("API"));
+			URL url = new URL(FORWARD_URL+header.get("API"));
+			logger.info("URL: "+url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-	           connection.setDoOutput(true);  
-	           connection.setDoInput(true); 
-	           connection.setConnectTimeout(8000);
-	           connection.setReadTimeout(6000);
-	           connection.setRequestMethod(param.get("Method"));
-	           connection.setRequestProperty("Content-Type", param.get("Content-Type"));
-	           connection.setRequestProperty("Authorization","Token "+param.get("Authorization"));
-	           if(meta.equals("yes")) {
-	        	   bufferedWriter = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
-		           JSONObject.writeJSONString(body, bufferedWriter);
-		           bufferedWriter.close();
-	           }
-        	   /*System.out.println(connection.getResponseCode());*/
-        	   connection.connect();
-	           if(connection.getResponseCode()==200) {
-	        	   InputStreamReader inputStream =new InputStreamReader(connection.getInputStream());
-	               bufferedReader = new BufferedReader(inputStream);                
-	               String lines;                
-	               stringBuffer= new StringBuffer("");              
-	               while ((lines = bufferedReader.readLine()) != null) { 
-	            	   lines = new String(lines.getBytes(),"utf-8");
-	            	   stringBuffer.append(lines);   
-	               }
-	           }
-	           connection.disconnect();
-		} catch (MalformedURLException e) {
+			connection.setDoInput(true); 
+			connection.setConnectTimeout(10000);
+			connection.setReadTimeout(50000);
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("Authorization","Token "+Constant.TOKEN);
+			connection.connect();
+			
+			if(200==connection.getResponseCode()) {
+				InputStreamReader inputStream =new InputStreamReader(connection.getInputStream());
+				bufferedReader = new BufferedReader(inputStream);                
+				String lines;                
+				stringBuilder = new StringBuilder();  
+				while ((lines = bufferedReader.readLine()) != null) { 
+					lines = new String(lines.getBytes(),"utf-8");
+					stringBuilder.append(lines);   
+				}
+			}
+			connection.disconnect();
+		}catch (IOException e) {
+			logger.error(e.getMessage());
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return null;
 		}finally {
 			try {
 				if(bufferedReader!=null)
 					bufferedReader.close();
+			} catch (IOException e) {
+				logger.error(e.getMessage());
+				e.printStackTrace();
+				return null;
+			}
+			try {
 				if(bufferedWriter!=null)
 					bufferedWriter.close();	
 			} catch (IOException e) {
+				logger.error(e.getMessage());
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				return null;
 			}
 		}
-		return stringBuffer.toString();
+		if(stringBuilder!=null)
+			return stringBuilder.toString();
+		logger.info("ERROR: noReply");
+		return null;
+		
 	}
 }

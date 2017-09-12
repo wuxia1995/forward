@@ -208,4 +208,9 @@
       time = #{time,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="findPage" resultMap="BaseResultMap">
+    select * from  log limit #{offset},#{limit}
+  </select>
+
 </mapper>

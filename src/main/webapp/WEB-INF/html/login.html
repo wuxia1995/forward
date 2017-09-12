@@ -1,61 +1,42 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../css/signin.css">
+<html>
 
-    <link rel="stylesheet" href="../css/login.css" />
-    <script type="text/javascript" src="../js/lib/jquery-3.2.1.js"></script>
-    <script type="text/javascript" src="../js/lib/bootstrap.min.js"></script>
-    <script src="../js/login.js"></script>
-    <style>
-        #upload-container {
-            position: relative;
-        // 添加自定义样式
-        // TODO
-        }
+	<head>
+		<meta charset="UTF-8">
+		<title>登录</title>
+		<link rel="stylesheet" href="../css/login.css" />
+		<script type="text/javascript" src="../js/lib/jquery.min.js" ></script>
+		<script type="text/javascript" src="../js/login.js"></script>
+	</head>
 
-        #upload {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            opacity: 0;
-        }
-    </style>
-</head>
-</head>
-
-<body>
-
-<div class="container topdis">
-<div class="form-signin">
-    <!--<form class="form-signin" id="login-form" name="login-form" action="#"  method="post">-->
-        <h2 class="form-signin-heading">登录</h2>
-        <span id="msg"></span>
-        <label for="name" class="sr-only">Email address</label>
-        <input name="name" type="text" id="name" class="form-control" placeholder="Name" required autofocus>
-        <label for="password" class="sr-only">Password</label>
-        <input name="password" type="password" id="password" class="form-control" placeholder="Password" required>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" value="remember-me"> Remember me
-            </label>
-        </div>
-        <!--<input id="submit" class="btn btn-lg btn-primary btn-block" type="submit" value="登录">-->
-    <button class="btn btn-lg btn-primary btn-block" id="submit">登录</button>
-    <!--</form>-->
-
-    <!--<a id="upload-container" href="javascript:void(0);">上传-->
-        <!--<input id="upload" type="file" accept="image/png, image/gif" name="file" />-->
-    <!--</a>-->
-    </div>
-</div> <!-- /container -->
-
-</body>
+	<body>
+		<div class="contacts">
+			<div class="right_login">
+				<div class="catchphrase">
+					<h2>恩钛智能</h2>
+					<label>领先世界的深度网络学习技术</label>
+					<label class="segmentation"></label>
+					<form>
+						<div class="account">
+							<img class="account_icon" src="../img/login/account.png"/>
+							<input id="name" class="inputting" type="text"placeholder="请输入账号" />
+						</div>
+						<div class="password">
+							<img class="account_icon" src="../img/login/pwd.png"/>
+							<input id="password" class="inputting" type="password"placeholder="请输入密码" />
+						</div>
+						<input id="submit" class="btn_login" type="button" value="登录">
+					</form>
+					<a class="registration" href="register">立即注册</a>
+				</div>
+			</div>
+		</div>
+	</body>
+    <!--<script type="text/javascript">-->
+    	<!--$(function(){-->
+    		<!--$(".btn_login").click(function(){   -->
+			    <!--window.location.href="../";-->
+			<!--})-->
+    	<!--})-->
+    <!--</script>-->
 </html>

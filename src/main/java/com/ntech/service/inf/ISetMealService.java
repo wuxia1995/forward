@@ -13,5 +13,7 @@ public interface ISetMealService {
     List<SetMeal> findAll();
     SetMeal findByName(String name);
     boolean modify(SetMeal setMeal);
-    int totalCount();
+    long totalCount();
+    List<SetMeal> findByPage(int limit, int i);
+
 }

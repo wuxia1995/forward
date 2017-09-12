@@ -17,5 +17,6 @@ public interface ICustomerService {
     String getNameByToken(String name);
     boolean deleteByName(String name);
 
-
+    long totalCount();
+    List<Customer> findPage(int limit,int offset);
 }

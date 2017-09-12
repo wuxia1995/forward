@@ -73,7 +73,7 @@ public class AdminController {
     @RequestMapping("logManager")
     public String LogJump(HttpSession session) {
         String name= (String) session.getAttribute("name");
-        if(null!=name&&!"".equals(name)){
+        if(null!=name&&!"".equals("sessionStatus")){
             return "admin/logManager";
         }
         return "error";
@@ -82,7 +82,7 @@ public class AdminController {
     @RequestMapping("mealManager")
     public String setMealJump(HttpSession session) {
         String name= (String) session.getAttribute("name");
-        if(null!=name&&!"".equals(name)){
+        if(null!=name&&!"".equals("sessionStatus")){
             return "admin/mealManager";
         }
         return "error";
@@ -93,29 +93,13 @@ public class AdminController {
     public Boolean checkUserName(String userName,HttpSession session) {
         logger.info("checkLogin");
 
-        if(!customerService.checkUserName(userName)){
+        if(!customerService.checkUserName(userName)&&userName.equals("admin")){
             session.setAttribute("name","sessionStatus");
             return false;
         }
         return true;
     }
 
-    //验证码校验
-    @RequestMapping("/checkCode")
-    @ResponseBody
-    public boolean checkCode(HttpSession session, String authCode) {
-
-        String preCode = (String) session.getAttribute("strCode");
-        logger.info("precode" + preCode);
-        logger.info("commitcode" + authCode);
-        if (preCode.equalsIgnoreCase(authCode)) {
-            logger.info("validate success");
-            return true;
-        }
-
-        return false;
-
-    }
 
     //登录
     @RequestMapping("/loginCheck")
@@ -250,21 +234,20 @@ public class AdminController {
     //查询所有用户
     @RequestMapping("findCustomers")
     @ResponseBody
-    public JSONObject findCustomers(HttpSession session) {
+    public JSONObject findCustomers(HttpSession session,int limit,int offset,String name) {
         String admin = (String) session.getAttribute("admin");
-//        ModelAndView mav = new ModelAndView();
-//        //根据session判断可否操作
-//        if (admin.equals("ntech")) {
-//            logger.info("customer findCustomers success");
-//            session.setAttribute("customerList", customerService.findAll());
-//            mav.setViewName("customer");
-//            return mav;
-//        }
-//        logger.info("customer findCustomers fail");
-//        mav.setViewName("error");
-//        return mav;
+
         JSONObject jsonObject=new JSONObject();
-        jsonObject.put("data",customerService.findAll());
+        if(name.equals("")){
+
+            jsonObject.put("rows",customerService.findPage(limit,offset));
+            jsonObject.put("total",customerService.totalCount());
+        }else{
+            List<Customer> list=new ArrayList<Customer>();
+            list.add(customerService.findByName(name));
+            jsonObject.put("rows",list);
+            jsonObject.put("total",1);
+        }
         // jsonObject.put("total",customerService.);
         return jsonObject;
     }
@@ -342,11 +325,20 @@ public class AdminController {
 
     @RequestMapping("findLogs")
     @ResponseBody
-    public JSONObject finfLogs(){
+    public JSONObject findLogs(HttpSession session,int limit,int offset,String name){
         JSONObject jsonObject=new JSONObject();
-        jsonObject.put("data",logService.findAll());
+        if(name.equals("")||name==null){
+            jsonObject.put("rows",logService.findPage(limit,offset));
+            jsonObject.put("total",logService.totalCount());
+        }else{
+            List<Log> list= logService.findByName(name);
+            jsonObject.put("rows",list);
+            jsonObject.put("total",list.size());
+        }
+
         return jsonObject;
     }
+
 
     //------------------------------订单------------------------------------------------//
     //查询所有订单
@@ -367,7 +359,7 @@ public class AdminController {
 
     @RequestMapping("testSetMeals")
     @ResponseBody
-    public JSONObject testMeals(HttpSession session) {
+    public JSONObject testMeals(HttpSession session,int limit,int offset,String name) {
         //   String admin = (String) session.getAttribute("admin");
         JSONObject jsonObject = new JSONObject();
 //        if (admin.equals("ntech")) {
@@ -377,9 +369,19 @@ public class AdminController {
 //
 //        return null;
         logger.info("findSetMeals succeed");
-        jsonObject.put("data", setMealService.findAll());
+        // setMealService.findAll()
 
-        jsonObject.put("total", setMealService.totalCount());
+        if(name.equals("")||name==null){
+            jsonObject.put("rows", setMealService.findByPage(limit,offset));
+            jsonObject.put("total", setMealService.totalCount());
+
+        }
+        else{
+            List<SetMeal> list=new ArrayList<SetMeal>();
+            list.add(setMealService.findByName(name));
+            jsonObject.put("rows",list);
+            jsonObject.put("total", 1);
+        }
 
         return jsonObject;
     }

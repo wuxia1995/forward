@@ -1,9 +1,9 @@
 package com.ntech.controller;
 
-import com.ntech.forward.ConnectionSDK;
+import com.ntech.demo.ConnectionSDK;
 import com.ntech.forward.Constant;
-import com.ntech.forward.HttpUploadFile;
-import com.ntech.forward.MethodUtil;
+import com.ntech.demo.HttpUploadFile;
+import com.ntech.demo.MethodUtil;
 import com.ntech.model.Customer;
 import com.ntech.model.LibraryKey;
 import com.ntech.model.SetMeal;
@@ -18,13 +18,9 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
-
 import javax.imageio.ImageIO;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
@@ -89,7 +85,8 @@ public class CustomerController {
             mav.addObject("msg", "注册失败");
             mav.setViewName("error");
         }
-        mav.addObject("msg", "注册成功，请到邮箱激活账号");
+        mav.setViewName("login");
+//        mav.addObject("msg", "注册成功，请到邮箱激活账号");
         return mav;
 
     }
