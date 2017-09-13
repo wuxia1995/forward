@@ -20,4 +20,6 @@ public interface ICustomerService {
     List<Customer> findPage(int limit,int offset);
     String findByToken(String token);
     boolean checkToken(String inputToken);
+    boolean enableToken(String name);
+    boolean disableToken(String name);
 }

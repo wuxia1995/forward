@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 
@@ -62,12 +63,31 @@
                         <li>
                             <a class="click_css" href="#page6">联系我们</a>
                         </li>
-                        <li>
-                            <a class="click_css" href="/customer/register">注册</a>
-                        </li>
-                        <li>
-                            <a class="click_css" href="/customer/login">登录</a>
-                        </li>
+                        <c:choose>
+                            <c:when test="${name}">
+                                ${name}
+                                <li>
+                                    <a class="click_css" href="/customer/exit">退出登录</a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+
+
+                                <li>
+                                    <a class="click_css" href="/customer/register">注册</a>
+                                </li>
+                                <li>
+                                    <a class="click_css" href="/customer/login">登录</a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
+
+
+                        </#if>
+
+
+
+
                     </ul>
                 </div>
             </nav>

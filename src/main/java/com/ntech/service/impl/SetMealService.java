@@ -3,11 +3,13 @@ package com.ntech.service.impl;
 import com.ntech.dao.SetMealMapper;
 import com.ntech.model.SetMeal;
 import com.ntech.model.SetMealExample;
+import com.ntech.service.inf.ICustomerService;
 import com.ntech.service.inf.ISetMealService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -21,6 +23,8 @@ public class SetMealService implements ISetMealService {
     @Autowired
     SetMealMapper setMealMapper;
 
+    @Autowired
+    ICustomerService customerService;
 
     public boolean add(SetMeal setMeal) {
         logger.info("add new set meal for user:" + setMeal.getUserName());
@@ -29,8 +33,10 @@ public class SetMealService implements ISetMealService {
         if(meal==null){
             setMeal.setEnable(1);
             if (1 == setMealMapper.insertSelective(setMeal)) {
-                logger.info("add success");
-                return true;
+                if(customerService.enableToken(setMeal.getUserName())){
+                    logger.info("add success");
+                    return true;
+                }
             }
         }
         //查询出结果
@@ -78,6 +84,7 @@ public class SetMealService implements ISetMealService {
         SetMealExample example = new SetMealExample();
         example.createCriteria().andUserNameEqualTo(userName).andEnableEqualTo(1);
         if(1==setMealMapper.deleteByExample(example)){
+            customerService.disableToken(userName);
             logger.info("delete success");
             return true;
         }
@@ -127,5 +134,6 @@ public class SetMealService implements ISetMealService {
 
         return setMealMapper.findPage(limit,offset);
     }
+
 
 }

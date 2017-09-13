@@ -91,6 +91,26 @@ public class CustomerController {
 
     }
 
+    @RequestMapping("record")
+    public String recordLogJump() {
+        return "record-log";
+    }
+
+    @RequestMapping("login")
+    public String loginJump(HttpSession session) {
+        String name = (String) session.getAttribute("name");
+        if(null!=name&&name.equals("")){
+            return "login";
+        }
+        return "info";
+    }
+
+    @RequestMapping("exit")
+    public String exitJump(HttpSession session) {
+        session.removeAttribute("name");
+        return "login";
+    }
+
     //登录
     @RequestMapping("loginCheck")
     @ResponseBody
@@ -418,22 +438,6 @@ public class CustomerController {
 //
 //        return false;
 //    }
-
-    @RequestMapping("record")
-    public String recordLogJump() {
-        return "record-log";
-    }
-
-    @RequestMapping("login")
-    public String loginJump() {
-        return "login";
-    }
-
-    @RequestMapping("exit")
-    public String loginJump(HttpSession session) {
-        session.removeAttribute("name");
-        return "login";
-    }
 
 
     @RequestMapping("setMealBuy")

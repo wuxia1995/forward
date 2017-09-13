@@ -6,6 +6,7 @@ import com.ntech.model.CustomerExample;
 import com.ntech.model.LibraryKey;
 import com.ntech.service.inf.ICustomerService;
 import com.ntech.service.inf.ILibraryService;
+import com.ntech.service.inf.ISetMealService;
 import com.ntech.service.inf.IShowManage;
 import com.ntech.util.MailUtil;
 import com.ntech.util.SHAencrypt;
@@ -30,9 +31,11 @@ public class CustomerService implements ICustomerService {
 
     @Autowired
     ILibraryService libraryService;
+
+    @Autowired
+    ISetMealService setMealService;
 //    @Autowired
 //    IShowManage showManage;
-
 
 
     @Transactional
@@ -40,16 +43,16 @@ public class CustomerService implements ICustomerService {
         customer.setRegtime(new Date());
         customer.setActive(1);
         int result = customerMapper.insert(customer);
-        if(result==1){
-            LibraryKey libraryKey= new LibraryKey();
+        if (result == 1) {
+            LibraryKey libraryKey = new LibraryKey();
             libraryKey.setLibraryName(customer.getName());
             libraryKey.setUserName(customer.getName());
-            if(libraryService.insert(libraryKey)==1){
+            if (libraryService.insert(libraryKey) == 1) {
 //                sendEmail(customer);
                 return 1;
             }
         }
-        logger.error("add user fail "+ customer.getName());
+        logger.error("add user fail " + customer.getName());
         return 0;
     }
 
@@ -59,9 +62,9 @@ public class CustomerService implements ICustomerService {
 
     //根据用户名删除用户
     public boolean deleteByName(String name) {
-        CustomerExample example=new CustomerExample();
+        CustomerExample example = new CustomerExample();
         example.createCriteria().andNameEqualTo(name);
-        if(customerMapper.deleteByExample(example)==1){
+        if (customerMapper.deleteByExample(example) == 1) {
             logger.info("delete customer succeess");
             return true;
         }
@@ -116,11 +119,50 @@ public class CustomerService implements ICustomerService {
     }
 
     public boolean checkToken(String inputToken) {
-        logger.info("check user token: "+inputToken);
+        logger.info("check user token: " + inputToken);
+//        if(setMealService.findByName()){
+//            return false;
+//        }
         CustomerExample example = new CustomerExample();
         example.createCriteria().andTokenEqualTo(inputToken);
         List<Customer> result = customerMapper.selectByExample(example);
         return result.size() > 0 ? true : false;
+    }
+
+    @Override
+    public boolean enableToken(String name) {
+        if (null != name && !name.equals("")) {
+            CustomerExample example = new CustomerExample();
+            example.createCriteria().andNameEqualTo(name);
+            List<Customer> result = customerMapper.selectByExample(example);
+            if (result.size() > 0) {
+                Customer customer = result.get(0);
+                customer.setToken(SHAencrypt.encryptSHA(name));
+                if(customerMapper.updateByExample(customer,example)==1){
+                    logger.info("enable token success for " +name);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean disableToken(String name) {
+        if (null != name && !name.equals("")) {
+            CustomerExample example = new CustomerExample();
+            example.createCriteria().andNameEqualTo(name);
+            List<Customer> result = customerMapper.selectByExample(example);
+            if (result.size() > 0) {
+                Customer customer = result.get(0);
+                customer.setToken(null);
+                if(customerMapper.updateByExample(customer,example)==1){
+                    logger.info("disable token success for " +name);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public boolean loginCheck(String name, String password) {
@@ -145,13 +187,13 @@ public class CustomerService implements ICustomerService {
         }
     }
 
-    public boolean setContype(String name,String contype) {
-        logger.info("set contype for user:"+ name);
+    public boolean setContype(String name, String contype) {
+        logger.info("set contype for user:" + name);
         CustomerExample example = new CustomerExample();
         example.createCriteria().andNameEqualTo(name);
-        Customer customer= customerMapper.selectByExample(example).get(0);
+        Customer customer = customerMapper.selectByExample(example).get(0);
 //        customer.setContype(contype);
-        customerMapper.updateByExample(customer,example);
+        customerMapper.updateByExample(customer, example);
         return false;
     }
 
@@ -178,7 +220,7 @@ public class CustomerService implements ICustomerService {
 
 
     public long totalCount() {
-        CustomerExample example=new CustomerExample();
+        CustomerExample example = new CustomerExample();
         example.createCriteria().andNameIsNotNull();
         logger.info("find count of customers");
         return (int) customerMapper.countByExample(example);
@@ -186,6 +228,6 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public List<Customer> findPage(int limit, int offset) {
-        return customerMapper.findPage(limit,offset);
+        return customerMapper.findPage(limit, offset);
     }
 }

@@ -41,22 +41,22 @@ public class AdminController {
         return "admin/login-admin";
     }
 
-
-    //跳转日志页面
-    @RequestMapping("log")
-    public ModelAndView logJump(HttpSession session) {
-        ModelAndView mav = new ModelAndView();
-        String name = (String) session.getAttribute("admin");
-        if (name.equals("ntech")) {
-            logger.info("log succeed");
-            session.setAttribute("logList", logService.findAll());
-            mav.setViewName("log");
-            return mav;
-        }
-        logger.info("log failed");
-        mav.setViewName("error");
-        return mav;
-    }
+//
+//    //跳转日志页面
+//    @RequestMapping("log")
+//    public ModelAndView logJump(HttpSession session) {
+//        ModelAndView mav = new ModelAndView();
+//        String name = (String) session.getAttribute("admin");
+//        if (name.equals("ntech")) {
+//            logger.info("log succeed");
+//            session.setAttribute("logList", logService.findAll());
+//            mav.setViewName("log");
+//            return mav;
+//        }
+//        logger.info("log failed");
+//        mav.setViewName("error");
+//        return mav;
+//    }
 
     //跳转到首页
     @RequestMapping("index")
@@ -66,14 +66,14 @@ public class AdminController {
     //退出登录
     @RequestMapping("logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("name");
+        session.removeAttribute("admin");
         return "admin/login-admin";
     }
     //跳转到首页
     @RequestMapping("logManager")
     public String LogJump(HttpSession session) {
-        String name= (String) session.getAttribute("name");
-        if(null!=name&&!"".equals("sessionStatus")){
+        String name= (String) session.getAttribute("admin");
+        if(null!=name&&!"".equals(name)&&!name.equals("sessionStatus")){
             return "admin/logManager";
         }
         return "error";
@@ -81,8 +81,8 @@ public class AdminController {
     //跳转到首页
     @RequestMapping("mealManager")
     public String setMealJump(HttpSession session) {
-        String name= (String) session.getAttribute("name");
-        if(null!=name&&!"".equals("sessionStatus")){
+        String name= (String) session.getAttribute("admin");
+        if(null!=name&&!"".equals(name)&&!name.equals("sessionStatus")){
             return "admin/mealManager";
         }
         return "error";
@@ -93,8 +93,8 @@ public class AdminController {
     public Boolean checkUserName(String userName,HttpSession session) {
         logger.info("checkLogin");
 
-        if(!customerService.checkUserName(userName)&&userName.equals("admin")){
-            session.setAttribute("name","sessionStatus");
+        if(!customerService.checkUserName(userName)){
+//            session.setAttribute("name","sessionStatus");
             return false;
         }
         return true;
@@ -107,9 +107,12 @@ public class AdminController {
     public boolean login(String name, String password, HttpSession session) {
         logger.info("login check user:" + name);
         boolean result = false;
+        if(null==name||!name.equals("admin")){
+            return false;
+        }
         result = customerService.loginCheck(name, password);
         if (result) {
-            session.setAttribute("admin", name);
+            session.setAttribute("admin", "sessionStatus");
         }
         return result;
     }
