@@ -40,7 +40,8 @@ public class Check {
 	public List<String> checkId(String id) {
 		List<String> galleries = new ArrayList<String>();
 		Map<String, String> header = new HashMap<String,String>();
-		header.put("API","/v0/face/id"+id);
+		header.put("API","/v0/face/id/"+id);
+		header.put("Method","GET");
 		String reply = ConnectionSDK.getInstance().httpURLConnectionSDK(header);
 		try {
 			if(reply==null||"".equals(reply)) 
@@ -116,7 +117,7 @@ public class Check {
 	}
 	public boolean mealTimesCount(String userName){
 		SetMeal setMeal = setMealService.findByName(userName);
-		if(setMeal.getTotalTimes()==null||!(setMeal.getTotalTimes()>0))
+		if(!(setMeal.getLeftTimes()>0))
 			try {
 				throw new Exception("You don't have enough times");
 			} catch (Exception e) {
@@ -127,6 +128,7 @@ public class Check {
 		setMeal.setLeftTimes(setMeal.getLeftTimes()-1);
 		return setMealService.modify(setMeal);
 	}
+
     public boolean mealDateCheck(String userName){
         SetMeal setMeal = setMealService.findByName(userName);
         boolean result = setMeal.getEndTime().after(new Date());

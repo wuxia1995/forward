@@ -27,7 +27,7 @@ public class ConnectionSDK {
 		BufferedReader bufferedReader = null;
 		StringBuilder stringBuilder = null;
 		try {
-			URL url = new URL(Constant.SDK_IP+header.get("API"));
+			URL url = new URL(new StringBuilder(Constant.SDK_IP).append(header.get("API")).toString());
 			logger.info("URL: "+url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoInput(true); 

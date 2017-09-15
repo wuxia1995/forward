@@ -24,6 +24,8 @@ public class ForwardController {
             throws ServletException, IOException {
         logger.info("enter Controller");
         String reply;
+        if(ErrorPrompt.size() != 0)
+            return ErrorPrompt.getJSONInfo();
         reply = MethodUtil.getInstance().requestForword(request, response);
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();

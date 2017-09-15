@@ -234,7 +234,8 @@ public class MethodUtil {
 					logger.info("inputOneGallery");
 					existGallery = galleries.contains(value);
 					if (!value.equals(userName))
-						galleryValue.append(value).append("_anytec_" + userName).append("," + userName).toString();
+						galleryValue.append(value).append("_anytec_" + userName).append(",");
+					galleryValue.append(userName);
 					logger.info(value+" (CHECK_RESULT) :" + existGallery);
 				}
 			}catch (IllegalGalleryException e) {

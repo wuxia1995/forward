@@ -59,183 +59,191 @@ public class ForwardRequestWrapper extends HttpServletRequestWrapper {
 			throw new IllegalAPIException("bad_version");
 		API = API.substring(3);
 		while(true) {
-			if(API.equals("/detect")) {
-                request.setAttribute("chargeAPI","detect");
-				request.setAttribute("charge",Constant.Detect);
+		try {
+			if (API.equals("/detect")) {
+				request.setAttribute("chargeAPI", "detect");
+				request.setAttribute("charge", Constant.Detect);
 				API = new StringBuilder("/").append(version).append("/detect").toString();
-				logger.info("CHECK_API :"+API);
+				logger.info("CHECK_API :" + API);
 				break;
 			}
-			if(API.equals("/verify")) {
-                request.setAttribute("chargeAPI","verify");
-				request.setAttribute("charge",Constant.Verify);
+			if (API.equals("/verify")) {
+				request.setAttribute("chargeAPI", "verify");
+				request.setAttribute("charge", Constant.Verify);
 				API = new StringBuilder("/").append(version).append("/verify").toString();
-				logger.info("CHECK_API :"+API);
+				logger.info("CHECK_API :" + API);
 				break;
 			}
-			if(API.equals("/identify")) {
-                request.setAttribute("chargeAPI","identify");
-				request.setAttribute("charge",Constant.Identify);
+			if (API.equals("/identify")) {
+				request.setAttribute("chargeAPI", "identify");
+				request.setAttribute("charge", Constant.Identify);
 				API = new StringBuilder("/").append(version).append("/faces/gallery/").append(userName).append("/identify").toString();
-				logger.info("CHECK_API :"+API);
+				logger.info("CHECK_API :" + API);
 				break;
 			}
-			if(API.startsWith("/identify/gallery")) {
-                request.setAttribute("chargeAPI","identify");
-				request.setAttribute("charge",Constant.Identify);
+			if (API.startsWith("/identify/gallery")) {
+				request.setAttribute("chargeAPI", "identify");
+				request.setAttribute("charge", Constant.Identify);
 				String gallery = API.split("gallery/")[1];
-				gallery = new StringBuilder(gallery).append("_anytec_"+userName).toString();
-				if(!galleries.contains(gallery))
+				if(!gallery.equals(userName))
+					gallery = new StringBuilder(gallery).append("_anytec_" + userName).toString();
+				if (!galleries.contains(gallery))
 					throw new IllegalGalleryException("bad_gallery");
 				API = new StringBuilder("/").append(version).append("/faces/gallery/").append(gallery).append("/identify").toString();
-				logger.info("CHECK_API :"+API);
+				logger.info("CHECK_API :" + API);
 				break;
 			}
-			if(API.equals("/face")&&method.equals("POST")) {
-                request.setAttribute("chargeAPI","face");
-				request.setAttribute("charge",Constant.Face);
-				API = new StringBuilder("/").append(version).append("face").toString();
-				logger.info("CHECK_API :"+API);
+			if (API.equals("/face") && method.equals("POST")) {
+				request.setAttribute("chargeAPI", "face");
+				request.setAttribute("charge", Constant.Face);
+				API = new StringBuilder("/").append(version).append("/face").toString();
+				logger.info("CHECK_API :" + API);
 				request.setAttribute("galleries", galleries);
 				request.setAttribute("api", "face/post");
 				break;
 			}
-			if(API.startsWith("/face/meta")){
-					String meta = API.split("/")[3];
-					StringBuilder api = new StringBuilder("/").append(version).append("/face/gallery/").append(userName).append("/meta").append(meta);
-					String nextPage = request.getParameter("max_id");
-					String prePage = request.getParameter("min_id");
-					if(nextPage!=null&&!nextPage.equals(""))
-						api.append("?max_id=").append(nextPage);
-					if(prePage!=null&&!prePage.equals(""))
-						api.append("?min_id=").append(prePage);
-					API = api.toString();
-				logger.info("CHECK_API :"+API);
-			break;
+			if (API.startsWith("/face/meta")) {
+				String meta = API.split("meta")[1];
+				StringBuilder api = new StringBuilder("/").append(version).append("/face/gallery/").append(userName).append("/meta").append(meta);
+				String nextPage = request.getParameter("max_id");
+				String prePage = request.getParameter("min_id");
+				if (nextPage != null && !nextPage.equals(""))
+					api.append("?max_id=").append(nextPage);
+				if (prePage != null && !prePage.equals(""))
+					api.append("?min_id=").append(prePage);
+				API = api.toString();
+				logger.info("CHECK_API :" + API);
+				break;
 			}
-			if(API.startsWith("/face/gallery")&&API.contains("meta")) {
+			if (API.startsWith("/face/gallery") && API.contains("/meta")) {
 				String galleryName = API.split("gallery/")[1].split("/meta")[0];
-				galleryName = new StringBuilder(galleryName).append("_anytec_"+userName).toString();
+				if(!galleryName.equals(userName))
+					galleryName = new StringBuilder(galleryName).append("_anytec_" + userName).toString();
 				StringBuilder api;
-				if(galleries.contains(galleryName)) {
-					 api = new StringBuilder("/").append(version).append("/face/gallery/").append(galleryName).append("/meta").append(API.split("meta")[1]);
-				}else {
+				if (galleries.contains(galleryName)) {
+					api = new StringBuilder("/").append(version).append("/face/gallery/").append(galleryName).append("/meta").append(API.split("meta")[1]);
+				} else {
 					throw new IllegalGalleryException("bad_gallery");
 				}
 				String nextPage = request.getParameter("max_id");
 				String prePage = request.getParameter("min_id");
-				
-				if(nextPage!=null&&!nextPage.equals(""))
+
+				if (nextPage != null && !nextPage.equals(""))
 					api.append("?max_id=").append(nextPage);
-				if(prePage!=null&&!prePage.equals(""))
+				if (prePage != null && !prePage.equals(""))
 					api.append("?min_id=").append(prePage);
 				API = api.toString();
-				
-				logger.info("CHECK_API:"+API);
+
+				logger.info("CHECK_API:" + API);
 				break;
-			}	
-			if(API.startsWith("/meta/gallery")){
+			}
+			if (API.startsWith("/meta/gallery")) {
 				String galleryName = API.split("gallery/")[1];
-				galleryName = new StringBuilder(galleryName).append("_anytec_"+userName).toString();
-				if(galleries.contains(galleryName)) {
+				if(!galleryName.equals(userName))
+					galleryName = new StringBuilder(galleryName).append("_anytec_" + userName).toString();
+				if (galleries.contains(galleryName)) {
 					API = new StringBuilder("/").append(version).append("/meta/gallery/").append(galleryName).toString();
-				}else {
+				} else {
 					throw new IllegalGalleryException("bad-gallery");
 				}
-				logger.info("CHECK_API :"+API);
-			break;
+				logger.info("CHECK_API :" + API);
+				break;
 			}
-			if(API.equals("/meta")){
+			if (API.equals("/meta")) {
 				API = new StringBuilder("/").append(version).append("/meta/gallery/").append(userName).toString();
-				logger.info("CHECK_API :"+API);
-			break;
+				logger.info("CHECK_API :" + API);
+				break;
 			}
-			if(API.startsWith("/face/id")){
+			if (API.startsWith("/face/id")) {
 				String id = API.split("id/")[1];
 				boolean isMaster = false;
 				List<String> list = check.checkId(id);
-				if(list==null)
+				if (list == null)
 					break;
 				Iterator<String> iterator = list.iterator();
-				while(iterator.hasNext()) {
-					if(galleries.contains((String)iterator.next())) {
+				while (iterator.hasNext()) {
+					if (galleries.contains((String) iterator.next())) {
 						isMaster = true;
 						break;
 					}
 				}
 				if (isMaster) {
 					API = new StringBuilder("/").append(version).append("/face/id/").append(id).toString();
-					logger.info("CHECK_API :"+API);
+					logger.info("CHECK_API :" + API);
 					logger.info(API);
-				}else {
-						throw new IllegalIDException("bad_id");
+				} else {
+					throw new IllegalIDException("bad_id");
 				}
-			break;
+				break;
 			}
-			if(API.startsWith("/faces/gallery")) {
+			if (API.startsWith("/faces/gallery")) {
 				String inputGallery = API.split("gallery/")[1];
-				inputGallery = new StringBuilder(inputGallery).append("_anytec_"+userName).toString();
+				if(!inputGallery.equals(userName))
+					inputGallery = new StringBuilder(inputGallery).append("_anytec_" + userName).toString();
 				boolean existGallery = galleries.contains(inputGallery);
 				StringBuilder api;
-				if(existGallery) {
+				if (existGallery) {
 					api = new StringBuilder("/").append(version).append("/faces/gallery/").append(inputGallery);
-				}else {
+				} else {
 					throw new IllegalGalleryException("bad_gallery");
 				}
 				String nextPage = request.getParameter("max_id");
 				String prePage = request.getParameter("min_id");
-				
-				if(nextPage!=null&&!nextPage.equals(""))
+
+				if (nextPage != null && !nextPage.equals(""))
 					api.append("?max_id=").append(nextPage);
-				if(prePage!=null&&!prePage.equals(""))
+				if (prePage != null && !prePage.equals(""))
 					api.append("?min_id=").append(prePage);
 				API = api.toString();
-				logger.info("CHECK_API :"+API);
+				logger.info("CHECK_API :" + API);
 				break;
-			}	
-			if(API.equals("/faces")) {
+			}
+			if (API.equals("/faces")) {
 				StringBuilder api = new StringBuilder("/").append(version).append("/faces/gallery/").append(userName);
 				String nextPage = request.getParameter("max_id");
 				String prePage = request.getParameter("min_id");
-				if(nextPage!=null&&!nextPage.equals(""))
+				if (nextPage != null && !nextPage.equals(""))
 					api.append("?max_id=").append(nextPage);
-				if(prePage!=null&&!prePage.equals(""))
+				if (prePage != null && !prePage.equals(""))
 					api.append("?min_id=").append(prePage);
 				API = api.toString();
-				logger.info("CHECK_API :"+API);
+				logger.info("CHECK_API :" + API);
 				break;
 			}
-			if("GET".equals(method)&&API.equals("/galleries")){
+			if ("GET".equals(method) && API.equals("/galleries")) {
 				API = "allGalleries";
-				request.setAttribute("allGalleries",galleries);
-				logger.info("CHECK_API :"+API);
+				request.setAttribute("allGalleries", galleries);
+				logger.info("CHECK_API :" + API);
 				break;
 			}
-			if("POST".equals(method)&&API.startsWith("/galleries")&&API.length()>11){
-				if(galleries.size()>4)
+			if ("POST".equals(method) && API.startsWith("/galleries")) {
+				if (galleries.size() > 4)
 					throw new IllegalAPIException("too many galleries");
 				String createGallery = API.split("/")[2];
-				createGallery = new StringBuilder(createGallery).append("_anytec_"+userName).toString();
-				if(galleries.contains(createGallery))
+				createGallery = new StringBuilder(createGallery).append("_anytec_" + userName).toString();
+				if (galleries.contains(createGallery))
 					throw new IllegalAPIException("already exist");
-                boolean result = check.createGallery(userName,createGallery);
-                logger.info("createResult: "+result);
-				request.setAttribute("charge",Constant.Gallery);
-				API = "/v0/galleries/"+createGallery;
-				logger.info("CHECK_API :"+API);
-				break;
-			}if("DELETE".equals(method)&&API.startsWith("/galleries")&&API.length()>11){
-				String deleteGallery = API.split("/")[2];
-				deleteGallery = new StringBuilder(deleteGallery).append("_anytec_"+userName).toString();
-				if(!galleries.contains(deleteGallery))
-					throw new IllegalGalleryException("bad_gallery");
-				boolean result = check.deleteGallery(userName,deleteGallery);
-                logger.info("deleteResult: "+result);
-				API = "/v0/galleries/"+deleteGallery;
-				logger.info("CHECK_API :"+API);
+				boolean result = check.createGallery(userName, createGallery);
+				logger.info("createResult: " + result);
+				request.setAttribute("charge", Constant.Gallery);
+				API = "/v0/galleries/" + createGallery;
+				logger.info("CHECK_API :" + API);
 				break;
 			}
-			
+			if ("DELETE".equals(method) && API.startsWith("/galleries")) {
+				String deleteGallery = API.split("/")[2];
+				deleteGallery = new StringBuilder(deleteGallery).append("_anytec_" + userName).toString();
+				if (!galleries.contains(deleteGallery))
+					throw new IllegalGalleryException("bad_gallery");
+				boolean result = check.deleteGallery(userName, deleteGallery);
+				logger.info("deleteResult: " + result);
+				API = "/v0/galleries/" + deleteGallery;
+				logger.info("CHECK_API :" + API);
+				break;
+			}
+		}catch (ArrayIndexOutOfBoundsException e){
+			throw new IllegalAPIException("bad_api");
+		}
 			throw new IllegalAPIException("bad_api");
 		}
 		request.setAttribute("API", API);

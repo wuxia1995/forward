@@ -240,6 +240,7 @@ public class CustomerController {
                 //计算剩余天数
                 int leftDay = (int) ((meal.getEndTime().getTime() -
                         meal.getBeginTime().getTime()) / (1000 * 3600 * 24));
+                if(leftDay<0){leftDay=0;}
                 session.setAttribute("leftDay", leftDay);
             }
         }
