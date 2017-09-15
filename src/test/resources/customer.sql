@@ -10,7 +10,7 @@ create table customer
   contype varchar(5),
   active int DEFAULT 0,
   email varchar(64),
-  token varchar(32),
+  token varchar(64),
   regtime datetime,
   primary key(name)
 )engine=innodb default charset=utf8 auto_increment=1;

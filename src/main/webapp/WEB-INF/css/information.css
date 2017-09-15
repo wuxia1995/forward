@@ -1,0 +1,268 @@
+/** 清除内外边距 **/
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, /* structural elements 结构元素 */
+dl, dt, dd, ul, ol, li, /* list elements 列表元素 */
+pre, /* text formatting elements 文本格式元素 */
+form, fieldset, legend, button, input, textarea, /* form elements 表单元素 */
+th, td /* table elements 表格元素 */ {
+    margin: 0;
+    padding: 0;
+}
+li{
+	list-style-type: none;
+}
+html{
+   border: 0;
+   padding: 0;
+   height: 100%;
+}
+body{
+	width: 100%;
+	height: 100%;
+	min-height: 700px;
+	min-width: 1200px;
+}
+.left_nav{
+	float: left;
+	width: 240px;
+	height: 100%;
+	background-color: #3abfb5;
+	position: relative;
+	box-shadow: 5px 5px 5px #ccc;
+}
+.home_box{
+	width: 90%;
+	height: 40px;
+	position: absolute;
+	bottom: 10%;
+	left: 5%;
+	font-size: 15px;
+} 
+.home_box a{
+	color: white;
+	text-decoration: none;
+}
+.home_img,.home_text{
+	margin-left: 5px;
+	float: left;
+}
+.home_text{
+	cursor: pointer;
+}
+.home_text a:hover{
+	color:#216863;
+}
+.left_icon,.right_icon{
+	color: white;
+	width:50%;
+	height: 30px;
+	float: left;
+}
+.logo{
+	width: 100%;
+	height: 18%;
+	text-align: center;
+	border-bottom: 1px solid #ebeded;
+}
+.logo img{
+	margin: auto;
+	margin-top: 20%;
+}
+.nav_ul{
+	height: 30%;
+}
+.nav_ul li{
+	color: white;
+    height: 16.5%;
+    min-height: 38px;
+    border-bottom: 1px solid #EBEDED;
+    display: block;
+    position: relative;
+    cursor: pointer;
+}
+.nav_ul li a{
+    color: white;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.icon_box img{
+    position: absolute;
+    top: 25%;
+    left: 10%;
+}
+.icon_text{
+    position: absolute;
+    top: 25%;
+    left: 23%;
+    font-size: 14px;
+}
+.active{
+	background-color: white;
+}
+.active a{
+	background-color: white;
+	color: #3abfb5 !important;
+}
+.right_content{
+   float: left;
+   height: 100%;
+   position: relative;
+}
+.content_box{
+    border: 1px solid #3abfb5;
+    width: 35%;
+    position: absolute;
+    top: 10%;
+    left: 30%;
+    height: 70%;
+    background-color: white;
+    border-radius: 11px;
+    min-width: 380px;
+    box-shadow: 8px 8px 5px #ccc;
+}
+.top_portrait{
+	width: 100%;
+	height: 40%;
+}
+.portrait_img{
+	width: 100%;
+	height: 80%;
+	background-color: #3abfb5;
+    position: relative;
+    border-radius: 10px 10px 0 0;
+    
+}
+.portrait_title{
+	width: 100%;
+    height: 20%;
+    color: white;
+    font-size: 1.2em;
+    font-family: 微软雅黑;
+    text-align: center;
+    background-color: #3abfb5;
+}
+.img_border{
+	height: 80%;
+	position: absolute;
+	top: 10%;
+	left: 50%;
+	background-color: aquamarine;
+    border-radius: 50%;
+    border: 1px solid #3abfb5;
+}
+.img_border img{
+	width: 100%;
+}
+.centent_text{
+    height: 50%;
+    margin-top: 5%;
+    width: 80%;
+    margin-left: 15%;
+    font-size: 16px;
+}
+.text_box{
+	width: 100%;
+	height: 12%;
+}
+.text1{
+	float: left;
+	width: 80px;
+	height: 100%;
+}
+.text2{
+	float: left;
+	width: 65%;
+	height: 100%;
+	
+}
+.cotnet_title{
+    width: 100%;
+    height: 20%;
+}
+.cotnet_input{
+    width: 100%;
+    height: 50%;
+}
+.cotnet_btn{
+	width: 100%;
+    height: 25%;
+}
+.title_font{
+	font-size: 25px;
+    color: #585a5a;
+    text-align: center;
+    margin-top: 12%;
+}
+.input_box1,.input_box2,.input_box3{
+	width: 70%;
+	height: 15%;
+	font-size: 17px;
+	color: #585a5a;
+	margin-left: 15%;
+	
+}
+.select_btn,.select_down,.select_text{
+	float: left;
+    height: 21px;
+}
+.select_btn{
+    width: 10%;
+    position: relative;
+}
+.select_btn input{
+    cursor: pointer;
+    width: 73%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+	opacity: 0;
+}
+.select_text{
+	font-size: 16px;
+}
+.select_down{
+	width: 25%;
+}
+.select_down select{
+	color: #8c8e8e;
+	width: 100%;
+}
+.sel_active{
+	border: 1px solid #45e0d4;
+	outline: none;
+}
+.select_down{
+	margin-left: 5%;
+}
+.pay_btn{
+	width: 60%;
+	margin-left: 20%;
+	height: 35px;
+}
+.pay_btn input{
+	border: 1px solid #45e0d4;
+	width: 100%;
+	height: 100%;
+	background-color: #45e0d4;
+	font-size: 16px;
+	color: white;
+	border-radius: 5px;
+	cursor: pointer;
+	
+}
+.pay_btn input:hover{
+    background-color: #3abfb5;
+}
+
+@media (max-width: 1500px) {
+  .centent_text{
+		font-size: 16px;
+	}
+}
+
+@media (max-width: 1300px) {
+  .centent_text{
+		font-size: 14px;
+	}
+}

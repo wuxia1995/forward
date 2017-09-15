@@ -1,5 +1,7 @@
 $(document).ready(function() {
+
 		//设置竖屏切换
+
 		$('#fullpage').fullpage({
 			sectionsColor:['white','#269ab3','#ac79f8','#6bef6e','#6269f3','white'], //控制每个section的背景颜色
 			controlArrow:true,   //是否隐藏左右滑块的箭头(默认为true)

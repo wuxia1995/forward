@@ -56,73 +56,91 @@
 </div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form id="mealForm" method="post">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">修改</h4>
-            </div>
-            <div class="modal-body" align="center">
-
-                <input type="hidden" id="id" name="id">
-                <div class="form-group">
-                    <label for="userName" class="text-info">用户名&nbsp;&nbsp;&nbsp;&nbsp;:
-                        <input type="text" id="userName" readonly name="userName"></label>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">修改</h4>
                 </div>
+                <div class="modal-body" align="center">
 
-                <div class="form-group">
-                    <label  class="text-info">类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                        <input type="radio"  name="contype" required  id="date" value="date">按天
-                        <input type="radio" name="contype" required id="times" value="times">按次
-                    </label>
+                    <input type="hidden" id="id" name="id">
+                    <div class="form-group">
+                        <label for="userName" class="text-info">用户名&emsp;:</label>
+                        <input type="text" id="userName" readonly name="userName" class="text-info">
+                    </div>
+
+                    <!--<div class="form-group">-->
+                    <!--<label  class="text-info">类型&emsp;&emsp;:-->
+                    <!--<input type="radio"  name="contype" required  id="date" value="date">按天-->
+                    <!--<input type="radio" name="contype" required id="times" value="times">按次-->
+                    <!--</label>-->
+                    <!--</div>-->
+                    <div class="form-group center-block">
+                        <label class="text-info  ">类型&emsp;&emsp;:</label>
+                        <div class="radio-inline ">
+                            <input type="radio" name="contype" required id="date" value="date">
+                            <span class="text-info">按天&emsp;&emsp;</span>
+                        </div>
+                        <div class="radio-inline">
+                            <input type="radio" name="contype" required id="times" value="times">
+                            <span class="text-info">按次&emsp;&nbsp;&nbsp;&emsp;</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="beginTime" class="text-info">开始时间:</label>
+                        <input type="date" id="beginTime" name="beginTime" required class="text-info" style="width: 174px">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="endTime" class="text-info">结束时间:</label>
+                        <input type="date" id="endTime" name="endTime" required class="text-info"  style="width: 174px">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="totalTimes" class="text-info">总次数&emsp;:</label>
+                        <input type="text" id="totalTimes" name="totalTimes" required class="text-info">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="leftTimes" class="text-info"> 剩余次数:</label>
+                        <input type="text" id="leftTimes" name="leftTimes" class="text-info" required>
+                    </div>
+
+                    <!--<div class="form-group">-->
+                    <!--<label  class="text-info">状态&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:-->
+                    <!--<input type="radio" name="enable" id="able" required value="able">已激活-->
+                    <!--<input type="radio" name="enable" id="enable" required value="enable">未激活-->
+                    <!--</label>-->
+                    <!--</div>-->
+                    <div class="form-group center-block">
+                        <label class="text-info  ">状态&emsp;&emsp;:</label>
+                        <div class="radio-inline ">
+                            <input type="radio" name="enable" id="able" required value="able">
+                            <span class="text-info">已激活&emsp;</span>
+                        </div>
+                        <div class="radio-inline">
+                            <input type="radio" name="enable" id="enable" required value="enable">
+                            <span class="text-info">未激活&nbsp;&nbsp;&emsp;</span>
+                        </div>
+                    </div>
                 </div>
+                <div class="modal-footer">
+                    <div align="center">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">关闭</button>
+                        <button type="button" id="mealUpdate" class="btn btn-info">提交</button>
 
-                <div class="form-group"  >
-                    <label for="beginTime" class="text-info">开始时间:
-                        <input type="date" id="beginTime" name="beginTime" required>
-
-                    </label>
+                    </div>
+                    <div align="center"><span id="updateMsg" class="text-danger"></span></div>
                 </div>
-
-                <div class="form-group"  >
-                    <label for="endTime" class="text-info">结束时间:
-                        <input type="date" id="endTime" name="endTime" required>
-
-                    </label>
-                </div>
-
-                <div class="form-group">
-                    <label for="totalTimes" class="text-info">总次数&nbsp;&nbsp;&nbsp;&nbsp;:
-                        <input type="text" id="totalTimes" name="totalTimes"required></label>
-                </div>
-
-                <div class="form-group">
-                    <label for="leftTimes" class="text-info">
-                        剩余次数:<input type="text" id="leftTimes" name="leftTimes" required></label>
-                </div>
-
-                <div class="form-group">
-                    <label  class="text-info">状态&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                        <input type="radio" name="enable" id="able" required value="able">已激活
-                        <input type="radio" name="enable" id="enable" required value="enable">未激活
-                    </label>
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <div align="center">
-                    <button type="button" class="btn btn-info" data-dismiss="modal">关闭</button>
-                    <button type="button" id="mealUpdate" class="btn btn-info">提交</button>
-
-                </div>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
     </form>
 </div>
 
+
 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form  method="post" id="addForm" >
+    <form method="post" id="addForm">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -132,46 +150,58 @@
                 <div class="modal-body" align="center">
 
                     <div class="form-group">
-                        <label for="userName1" class="text-info">用户名&nbsp;&nbsp;&nbsp;&nbsp;:
-                            <input type="text" id="userName1"  name="userName"></label>
+                        <label for="userName1" class="text-info">用户名&emsp;:</label>
+                        <input type="text" id="userName1" name="userName" class="text-info">
+                    </div>
+
+                    <!--<div class="form-group">-->
+                    <!--<label  class="text-info">类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:-->
+                    <!--<input type="radio"  name="contype" required  id="date1" value="date">按天-->
+                    <!--<input type="radio" name="contype" required id="times1" value="times">按次-->
+                    <!--</label>-->
+                    <!--</div>-->
+                    <div class="form-group center-block">
+                        <label class="text-info  ">类型&emsp;&emsp;:</label>
+                        <div class="radio-inline ">
+                            <input type="radio" name="contype" required id="date1" value="date">
+                            <span class="text-info">按天&emsp;&emsp;</span>
+                        </div>
+                        <div class="radio-inline">
+                            <input type="radio" name="contype" required id="times1" value="times">
+                            <span class="text-info">按次&emsp;&nbsp;&nbsp;&emsp;</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="beginTime1" class="text-info">开始时间:</label>
+                        <input type="date" id="beginTime1" name="beginTime" required class="text-info" style="width: 174px">
+
                     </div>
 
                     <div class="form-group">
-                        <label  class="text-info">类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                            <input type="radio"  name="contype" required  id="date1" value="date">按天
-                            <input type="radio" name="contype" required id="times1" value="times">按次
-                        </label>
-                    </div>
+                        <label for="endTime1" class="text-info">结束时间: </label>
+                        <input type="date" id="endTime1" name="endTime" required class="text-info" style="width: 174px">
 
-                    <div class="form-group"  >
-                        <label for="beginTime1" class="text-info">开始时间:
-                            <input type="date" id="beginTime1" name="beginTime" required>
-
-                        </label>
-                    </div>
-
-                    <div class="form-group"  >
-                        <label for="endTime1" class="text-info">结束时间:
-                            <input type="date" id="endTime1" name="endTime" required>
-
-                        </label>
                     </div>
 
                     <div class="form-group">
-                        <label for="totalTimes1" class="text-info">总次数&nbsp;&nbsp;&nbsp;&nbsp;:
-                            <input type="text" id="totalTimes1" name="totalTimes"required></label>
+                        <label for="totalTimes1" class="text-info">总次数&emsp;:</label>
+                        <input type="text" id="totalTimes1" name="totalTimes" required class="text-info" >
+                    </div>
+                    <div class="form-group">
+                        <label for="leftTimes1" class="text-info"> 剩余次数:</label>
+                        <input type="text" id="leftTimes1" name="leftTimes" required class="text-info">
                     </div>
 
-                    <div class="form-group">
-                        <label for="leftTimes1" class="text-info">
-                            剩余次数:<input type="text" id="leftTimes1" name="leftTimes" required></label>
-                    </div>
-
-                    <div class="form-group">
-                        <label  class="text-info">状态&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                            <input type="radio" name="enable" id="able1" required value="able">已激活
-                            <input type="radio" name="enable" id="enable1" required value="enable">未激活
-                        </label>
+                    <div class="form-group center-block">
+                        <label class="text-info  ">状态&emsp;&emsp;:</label>
+                        <div class="radio-inline ">
+                            <input type="radio" name="enable" id="able1" required value="able">
+                            <span class="text-info">已激活&emsp;</span>
+                        </div>
+                        <div class="radio-inline">
+                            <input type="radio" name="enable" id="enable1" required value="enable">
+                            <span class="text-info">未激活&nbsp;&nbsp;&emsp;</span>
+                        </div>
                     </div>
 
                 </div>
@@ -180,7 +210,7 @@
                         <button type="button" class="btn btn-info" data-dismiss="modal">关闭</button>
                         <input type="button" class="btn btn-info" id="submit" value="提交"/>
                     </div>
-                   <div align="center"><span id="msg" class="text-danger"></span></div>
+                    <div align="center"><span id="msg" class="text-danger"></span></div>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
@@ -308,7 +338,6 @@
     };
 
 
-
     function deleteItem() {
         var selRow = $('#tb_departments').bootstrapTable('getSelections');
         var selectedName = []
@@ -320,20 +349,23 @@
             for (var i = 0; i < selRow.length; i++) {
                 selectedName[i] = selRow[i].userName;
             }
+            var sure=confirm("确定删除你所选中的数据？")
+            if(sure){
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    cache: false,
+                    async: true,
+                    dataType: "json",
+                    url: "/admin/deleteMealByName",
+                    data: {"selectedName": selectedName},
+                    success: function (data) {
+                        $('#tb_departments').bootstrapTable('refresh');
 
-            $.ajax({
-                type: "POST",
-                traditional: true,
-                cache: false,
-                async: true,
-                dataType: "json",
-                url: "/admin/deleteMealByName",
-                data: {"selectedName": selectedName},
-                success: function (data) {
-                    $('#tb_departments').bootstrapTable('refresh');
+                    }
+                });
+            }
 
-                }
-            });
 
         }
     }
@@ -358,6 +390,8 @@
                 $("#leftTimes").attr("readonly", 'readonly');
                 $("#beginTime").attr('value', changeDateFormat(temp.beginTime));
                 $("#endTime").attr('value', changeDateFormat(temp.endTime));
+                $("#totalTimes").attr('value', null);
+                $("#leftTimes").attr('value', null);
 
             } else if (temp.contype == 'times') {
                 $("#times").attr("checked", true);
@@ -365,6 +399,8 @@
                 $("#endTime").attr("readonly", 'readonly');
                 $("#totalTimes").attr('value', temp.totalTimes);
                 $("#leftTimes").attr('value', temp.leftTimes);
+                $("#beginTime").attr('value', null);
+                $("#endTime").attr('value', null);
             }
 
 
@@ -374,71 +410,118 @@
                 $("#enable").attr("checked", true);
             }
 
-
+            $("updateMsg").text("");
             $("#myModal").modal("show");
-            $("input:radio[name='contype']").change(function () {
-                $("#totalTimes").removeAttr("readonly")
-                $("#leftTimes").removeAttr("readonly")
-                $("#beginTime").removeAttr("readonly")
-                $("#endTime").removeAttr("readonly")
-                var type = $("input:radio[name='contype']:checked").val();
-                if (type == "date") {
-                    $("#beginTime").attr('value', changeDateFormat(temp.beginTime));
-                    $("#endTime").attr('value', changeDateFormat(temp.endTime));
-                    $("#totalTimes").attr("readonly", "readonly");
-                    $("#leftTimes").attr("readonly", 'readonly');
-                    $("#totalTimes").attr('value', null);
-                    $("#leftTimes").attr('value', null);
-                } else if (type == "times") {
-                    $("#totalTimes").attr('value', temp.totalTimes);
-                    $("#leftTimes").attr('value', temp.leftTimes);
-                    $("#beginTime").attr("readonly", 'readonly');
-                    $("#endTime").attr("readonly", 'readonly');
-                    $("#beginTime").attr('value', null);
-                    $("#endTime").attr('value', null);
 
-                }
-            });
         }
     });
-
+    //验证修改信息的标志
+    var flag1=true;
     $("#mealUpdate").click(function () {
-        $.ajax({
-            url:"/admin/updateSetMeal",
-            type:"post",
-            dataType:"json",
-            data:{
-                "id":$("#id").val(),
-                "userName":$("#userName").val(),
-                "contype":$("input:radio[name='contype']:checked").val(),
-                "beginTime":$("#beginTime").val(),
-                "endTime":$("#endTime").val(),
-                "totalTimes":$("#totalTimes").val(),
-                "leftTimes":$("#leftTimes").val(),
-                "enable":$("input:radio[name='enable']:checked").val()
-            },
-            success:function (data) {
-                $("#tb_departments").bootstrapTable("refresh");
-                $("#myModal").modal("hide");
-                $("#mealUpdate")[0].reset();
-            }
-        })
+        if(flag1){
+            $.ajax({
+                url: "/admin/updateSetMeal",
+                type: "post",
+                dataType: "json",
+                data: {
+                    "id": $("#id").val(),
+                    "userName": $("#userName").val(),
+                    "contype": $("input:radio[name='contype']:checked").val(),
+                    "beginTime": $("#beginTime").val(),
+                    "endTime": $("#endTime").val(),
+                    "totalTimes": $("#totalTimes").val(),
+                    "leftTimes": $("#leftTimes").val(),
+                    "enable": $("input:radio[name='enable']:checked").val()
+                },
+                success: function (data) {
+                    $("#tb_departments").bootstrapTable("refresh");
+                    $("#myModal").modal("hide");
+                    $("#mealForm")[0].reset();
+                }
+            })
+        }
     })
-    var flag=true;
+    $("input:radio[name='contype']").change(function () {
+        var selRow = $('#tb_departments').bootstrapTable('getSelections');
+        var temp=selRow[0];
+        $("#totalTimes").removeAttr("readonly")
+        $("#leftTimes").removeAttr("readonly")
+        $("#beginTime").removeAttr("readonly")
+        $("#endTime").removeAttr("readonly")
+        var type = $("input:radio[name='contype']:checked").val();
+        if (type == "date") {
+            $("#beginTime").attr('value', changeDateFormat(temp.beginTime));
+            $("#endTime").attr('value', changeDateFormat(temp.endTime));
+            $("#totalTimes").attr("readonly", "readonly");
+            $("#leftTimes").attr("readonly", 'readonly');
+            $("#totalTimes").attr('value', null);
+            $("#leftTimes").attr('value', null);
+        } else if (type == "times") {
+            $("#totalTimes").attr('value', temp.totalTimes);
+            $("#leftTimes").attr('value', temp.leftTimes);
+            $("#beginTime").attr("readonly", 'readonly');
+            $("#endTime").attr("readonly", 'readonly');
+            $("#beginTime").attr('value', null);
+            $("#endTime").attr('value', null);
+
+        }
+    });
+    $("#endTime").change(function () {
+        $("#updateMsg").text("");
+        alert("oooooooo")
+        if ($("input:radio[name='contype']:checked").val() == "date") {
+            if ($("#beginTime").val() == null || $("#endTime").val() == null) {
+                $("#updateMsg").text("开始时间或结束时间不能为空");
+                flag1 = false;
+            } else {
+                flag1=true;
+                if (parseInt($("#beginTime").val().replace("-", "").replace("-", ""))
+                    > parseInt($("#endTime").val().replace("-", "").replace("-", ""))) {
+                    $("#updateMsg").text("开始时间大于结束时间");
+                    flag1 = false;
+                }else{
+                    $("#updateMsg").text("")
+                    flag1=true;
+                }
+            }
+        }
+
+    })
+    $("#leftTimes").change(function () {
+        $("#updateMsg").text();
+        console.log("changed");
+        if ($("input:radio[name='contype']:checked").val() == "times") {
+            if ($("#totalTimes").val() == null || $("#leftTimes").val() == null) {
+                flag1 = false;
+                $("#updateMsg").text("总次数或剩余次数为空");
+            } else {
+                flag1=true;
+                if (parseInt($("#totalTimes").val()) < parseInt($("#leftTimes").val())) {
+                    flag1 = false;
+                    $("#updateMsg").text("总次数小于剩余次数");
+                }else{
+                    flag1=true;
+                    $("#updateMsg").text("");
+                }
+            }
+
+        }
+    })
+    var flag = true;
     $("#userName1").blur(function () {
         $("#msg").text("");
         $.ajax({
-            url:"/admin/checkNameAndMeal",
-            type:"post",
-            dataType:"json",
-            data:{
-                "name":$("#userName1").val()
+            url: "/admin/checkNameAndMeal",
+            type: "post",
+            dataType: "json",
+            data: {
+                "name": $("#userName1").val()
             },
-            success:function (data) {
-                if(data){
-                    flag=true;
-                }else{
-                    flag=false;
+            success: function (data) {
+                if (data) {
+                    flag = true;
+                } else {
+                    flag = false;
                     $("#msg").text("该用户不存在或已存在订单，无法添加订单");
                 }
             }
@@ -457,33 +540,33 @@
         $("#endTime1").removeAttr("readonly")
         var type = $("input:radio[name='contype']:checked").val();
         $("#msg").text("");
-        if(type=="date"){
-            $("#totalTimes1").attr("readonly","readonly")
-            $("#leftTimes1").attr("readonly","readonly")
+        if (type == "date") {
+            $("#totalTimes1").attr("readonly", "readonly")
+            $("#leftTimes1").attr("readonly", "readonly")
             //console.log("xixixi")
 
-        }else if(type=="times"){
-            $("#beginTime1").attr("readonly","readonly")
-            $("#endTime1").attr("readonly","readonly")
+        } else if (type == "times") {
+            $("#beginTime1").attr("readonly", "readonly")
+            $("#endTime1").attr("readonly", "readonly")
 
-        }else{
-            flag=false;
+        } else {
+            flag = false;
             $("#msg").text("未选中套餐类型");
         }
     });
     $("#endTime1").change(function () {
         $("#msg").text("");
 
-        console.log(parseInt( $("#beginTime1").val().replace("-","").replace("-","")))
-        if($("input:radio[name='contype']:checked").val()=="date"){
-            if($("#beginTime1").val()==null||$("#endTime1").val()==null){
+        console.log(parseInt($("#beginTime1").val().replace("-", "").replace("-", "")))
+        if ($("input:radio[name='contype']:checked").val() == "date") {
+            if ($("#beginTime1").val() == null || $("#endTime1").val() == null) {
                 $("#msg").text("开始时间或结束时间不能为空");
-                flag=false;
-            }else{
-                if(parseInt( $("#beginTime1").val().replace("-","").replace("-",""))
-                    >parseInt( $("#endTime1").val().replace("-","").replace("-",""))){
+                flag = false;
+            } else {
+                if (parseInt($("#beginTime1").val().replace("-", "").replace("-", ""))
+                    > parseInt($("#endTime1").val().replace("-", "").replace("-", ""))) {
                     $("#msg").text("开始时间大于结束时间");
-                    flag=false;
+                    flag = false;
                 }
             }
         }
@@ -492,13 +575,13 @@
     $("#leftTimes1").change(function () {
         $("#msg").text();
         console.log("changed");
-        if($("input:radio[name='contype']:checked").val()=="times"){
-            if($("#totalTimes1").val()==null||$("#leftTimes1").val()==null){
-                flag=false;
+        if ($("input:radio[name='contype']:checked").val() == "times") {
+            if ($("#totalTimes1").val() == null || $("#leftTimes1").val() == null) {
+                flag = false;
                 $("#msg").text("总次数或剩余次数为空");
-            }else{
-                if(parseInt($("#totalTimes1").val())<parseInt($("#leftTimes1").val())){
-                    flag=false;
+            } else {
+                if (parseInt($("#totalTimes1").val()) < parseInt($("#leftTimes1").val())) {
+                    flag = false;
                     $("#msg").text("总次数小于剩余次数");
                 }
             }
@@ -507,30 +590,36 @@
     })
 
     $("#submit").click(function () {
-        console.log($("#totalTimes1").val())
-        if(flag){
+        // console.log($("#totalTimes1").val())
+        if($("input:radio[name='contype']:checked").val()==null){
+            $("#msg").text("")
+            $("#msg").text("未选中套餐");
+            flag=false;
+        }
+        if (flag) {
             $.ajax({
-                url:"/admin/addMeal",
-                type:"post",
-                dataType:"json",
-                async:true,
-                data:{
-                    "userName":$("#userName1").val(),
-                    "contype":$("input:radio[name='contype']:checked").val(),
-                    "beginTime":$("#beginTime1").val(),
-                    "endTime":$("#endTime1").val(),
-                    "totalTimes":$("#totalTimes1").val(),
-                    "leftTimes":$("#leftTimes1").val(),
-                    "enable":$("input:radio[name='enable']:checked").val()
+                url: "/admin/addMeal",
+                type: "post",
+                dataType: "json",
+                async: true,
+                data: {
+                    "userName": $("#userName1").val(),
+                    "contype": $("input:radio[name='contype']:checked").val(),
+                    "beginTime": $("#beginTime1").val(),
+                    "endTime": $("#endTime1").val(),
+                    "totalTimes": $("#totalTimes1").val(),
+                    "leftTimes": $("#leftTimes1").val(),
+                    "enable": $("input:radio[name='enable']:checked").val()
                 },
-                success:function (data) {
+                success: function (data) {
                     $('#tb_departments').bootstrapTable('refresh');
+                    $("#addForm")[0].reset();
+                    $("#myModal1").modal("hide");
                 }
 
             });
         }
-        $("#addForm")[0].reset();
-        $("#myModal1").modal("hide");
+
     })
 
 
@@ -545,5 +634,6 @@
     }
 
 </script>
+
 </body>
 </html>

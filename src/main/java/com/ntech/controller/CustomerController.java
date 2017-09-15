@@ -10,6 +10,7 @@ import com.ntech.model.SetMeal;
 import com.ntech.service.inf.ICustomerService;
 import com.ntech.service.inf.ILibraryService;
 import com.ntech.service.inf.ISetMealService;
+import com.ntech.util.PictureShow;
 import com.ntech.util.SHAencrypt;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -92,14 +93,18 @@ public class CustomerController {
     }
 
     @RequestMapping("record")
-    public String recordLogJump() {
+    public String recordLogJump(HttpSession session) {
+        String name = (String) session.getAttribute("name");
+        if(null==name||"".equals(name)){
+            return "error";
+        }
         return "record-log";
     }
 
     @RequestMapping("login")
     public String loginJump(HttpSession session) {
         String name = (String) session.getAttribute("name");
-        if(null!=name&&name.equals("")){
+        if(null==name||name.equals("")){
             return "login";
         }
         return "info";
@@ -251,19 +256,23 @@ public class CustomerController {
     }
 
     @RequestMapping("setMeal")
-    public String setMealJump() {
+    public String setMealJump(HttpSession session) {
+        String name = (String) session.getAttribute("name");
+        if(null==name||"".equals(name)){
+            return "error";
+        }
         return "set-meal";
     }
 
-    @RequestMapping("detect")
-    public String faceDetectJump() {
-        return "show-detect";
-    }
-
-    @RequestMapping("verify")
-    public String faceVerifyJump() {
-        return "show-verify";
-    }
+//    @RequestMapping("detect")
+//    public String faceDetectJump() {
+//        return "show-detect";
+//    }
+//
+//    @RequestMapping("verify")
+//    public String faceVerifyJump() {
+//        return "show-verify";
+//    }
 
     //个人相册,判断session中是否有用户名,根据session中的用户名来获取该用户的相册
     @RequestMapping("gallery")
@@ -297,7 +306,10 @@ public class CustomerController {
     public ModelAndView getDemoGallery(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView("show-gallery-demo");
         String name = (String) session.getAttribute("name");
-
+        if(null==name||"".equals(name)){
+            modelAndView.setViewName("error");
+            return modelAndView;
+        }
         String result = null;
         try {
             logger.info(request.getRequestURI());
@@ -324,7 +336,7 @@ public class CustomerController {
     //在用户库中的人脸做搜索,如果session中的用户名不存在则则demo_defalut库中搜索
     @RequestMapping("getDemoFace")
     @ResponseBody
-    public String getDemoSearchFace(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    public JSONArray getDemoSearchFace(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         String name = (String) session.getAttribute("name");
         String result = null;
         if (null != name && !"".equals(name)) {
@@ -335,11 +347,12 @@ public class CustomerController {
         result = MethodUtil.getInstance().requestForword(request, response);
         if (null != result && !"".equals(result)) {
             //暂定方案是获取sdk服务器上的图片信息用于展示,后续再考虑优化方案.
-            return result.replaceAll("http://127.0.0.1:3333/uploads", "http://192.168.10.208:3333/uploads");
+//            return result.replaceAll("http://127.0.0.1:3333/uploads", "http://192.168.10.208:3333/uploads");
+            return wrapResponseForSearch(result);
         }
 
 
-        return result;
+        return null;
 
     }
 
@@ -516,13 +529,13 @@ public class CustomerController {
         }
         return result;
     }
-
-    @RequestMapping("")
-    @ResponseBody
-    public String forwardVerify(HttpServletRequest request, HttpServletResponse response) {
-        String result = null;
-        return result;
-    }
+//
+//    @RequestMapping("")
+//    @ResponseBody
+//    public String forwardVerify(HttpServletRequest request, HttpServletResponse response) {
+//        String result = null;
+//        return result;
+//    }
 
 
     //获取用户图库信息
@@ -539,17 +552,66 @@ public class CustomerController {
     }
 
     //包装返回的请求
+    private JSONArray wrapResponseForSearch(String result) {
+        JSONObject jsonResult = null;
+        JSONArray jsonArrayResult = new JSONArray();
+        try {
+            logger.info(result);
+            jsonResult = (JSONObject) new JSONParser().parse(result);
+            JSONObject jsonResult1 = (JSONObject) jsonResult.get("results");
+//            jsonArray=jsonResult1.;
+            JSONArray jsonArrayFace=null;
+            for(Object key:jsonResult1.keySet()){
+                jsonArrayFace= (JSONArray) jsonResult1.get(key);
+            }
+            for (int i = 0; i < jsonArrayFace.size(); i++) {
+                JSONObject tmpJson = (JSONObject) jsonArrayFace.get(i);
+
+                JSONObject tmpJson1 = (JSONObject) tmpJson.get("face");
+                String confidence=tmpJson.get("confidence")+"";
+                String tmpStrng = (String) tmpJson1.get("normalized");
+//                String photo = (String) tmpJson.get("photo");
+//                String thumbnail = (String) tmpJson.get("thumbnail");
+                tmpStrng = "http://192.168.10.208" + tmpStrng.substring(16);
+                String picBase64=PictureShow.getInstance().getBase64Picture(tmpStrng);
+//                String picBase64 = "http://192.168.10.208" + tmpStrng.substring(16);
+                JSONObject objectTemp=(JSONObject) jsonArrayFace.get(i);
+                tmpJson1.remove("normalized");
+                tmpJson1.remove("photo");
+                tmpJson1.remove("thumbnail");
+                tmpJson1.put("normalized", picBase64);
+                tmpJson1.put("photo", "photoUrl");
+                tmpJson1.put("thumbnail", "thumbnailUrl");
+                JSONObject finalSingle = new JSONObject();
+                finalSingle.put("confidence",confidence);
+                finalSingle.put("face",tmpJson1);
+                jsonArrayResult.add(finalSingle);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return jsonArrayResult;
+    }
+  //包装返回的请求
     private JSONArray wrapResponse(String result) {
         JSONObject jsonResult = null;
         JSONArray jsonArray = null;
         try {
+            logger.info(result);
             jsonResult = (JSONObject) new JSONParser().parse(result);
             jsonArray = (JSONArray) jsonResult.get("results");
             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject tmpJson = (JSONObject) jsonArray.get(i);
                 String tmpStrng = (String) tmpJson.get("normalized");
+//                String photo = (String) tmpJson.get("photo");
+//                String thumbnail = (String) tmpJson.get("thumbnail");
                 tmpStrng = "http://192.168.10.208" + tmpStrng.substring(16);
-                ((JSONObject) jsonArray.get(i)).put("normalized", tmpStrng);
+                String picBase64=PictureShow.getInstance().getBase64Picture(tmpStrng);
+//                String picBase64 = "http://192.168.10.208" + tmpStrng.substring(16);
+                ((JSONObject) jsonArray.get(i)).put("normalized", picBase64);
+                ((JSONObject) jsonArray.get(i)).put("photo", "photoUrl");
+                ((JSONObject) jsonArray.get(i)).put("thumbnail", "thumbnailUrl");
             }
         } catch (ParseException e) {
             e.printStackTrace();
