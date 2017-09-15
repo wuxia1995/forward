@@ -1,7 +1,6 @@
 package com.ntech.forward;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -12,8 +11,7 @@ import org.apache.log4j.Logger;
 public class ConnectionSDK {
 	
 	private final Logger logger = Logger.getLogger(ConnectionSDK.class);
-	public static final String FORWARD_URL = Constant.SDK_IP;
-	
+
 	private static ConnectionSDK instance;
 	private ConnectionSDK() {}
 	  public static ConnectionSDK getInstance(){    //对获取实例的方法进行同步
@@ -27,16 +25,15 @@ public class ConnectionSDK {
 	 }
 	public synchronized String httpURLConnectionSDK (Map<String,String> header) {
 		BufferedReader bufferedReader = null;
-		BufferedWriter bufferedWriter = null;
 		StringBuilder stringBuilder = null;
 		try {
-			URL url = new URL(FORWARD_URL+header.get("API"));
+			URL url = new URL(Constant.SDK_IP+header.get("API"));
 			logger.info("URL: "+url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoInput(true); 
 			connection.setConnectTimeout(10000);
 			connection.setReadTimeout(50000);
-			connection.setRequestMethod("GET");
+			connection.setRequestMethod(header.get("Method"));
 			connection.setRequestProperty("Authorization","Token "+Constant.TOKEN);
 			connection.connect();
 			
@@ -53,7 +50,6 @@ public class ConnectionSDK {
 			connection.disconnect();
 		}catch (IOException e) {
 			logger.error(e.getMessage());
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}finally {
@@ -63,16 +59,6 @@ public class ConnectionSDK {
 			} catch (IOException e) {
 				logger.error(e.getMessage());
 				e.printStackTrace();
-				return null;
-			}
-			try {
-				if(bufferedWriter!=null)
-					bufferedWriter.close();	
-			} catch (IOException e) {
-				logger.error(e.getMessage());
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
 			}
 		}
 		if(stringBuilder!=null)

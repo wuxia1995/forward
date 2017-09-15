@@ -54,7 +54,7 @@
                 </tr>
                 <tr>
                     <td>token</td>
-                    <td align="center"><#if customer.token??>SSS</#if></td>
+                    <td align="center"><#if customer.token??>${customer.token}</#if></td>
                 </tr>
                 <#if meal??>
                     <#if meal.enable==1>

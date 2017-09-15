@@ -39,9 +39,9 @@ public class PictureForward {
 	 }
 	public synchronized void requestForward (HttpServletRequest request,HttpServletResponse response) {
 		
-		InputStream inputStream = null;
+		InputStream inputStream;
+		OutputStream outputStream;
 		DataInputStream dataInputStream = null;
-		OutputStream outputStream = null;
 		DataOutputStream dataOutputStream = null;
 		BufferedInputStream bufferedInputStream = null;
 		BufferedOutputStream bufferedOutputStream = null;
@@ -90,11 +90,9 @@ public class PictureForward {
 	           connection.disconnect();
 		} catch (MalformedURLException e) {
 			logger.error(e.getMessage());
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
 			logger.error(e.getMessage());
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
 			if(bufferedInputStream!=null)
@@ -102,7 +100,6 @@ public class PictureForward {
 					dataInputStream.close();
 				} catch (IOException e) {
 					logger.error(e.getMessage());
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			if(bufferedOutputStream!=null)

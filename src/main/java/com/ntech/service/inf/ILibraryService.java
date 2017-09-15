@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface ILibraryService {
     int insert(LibraryKey libraryKey);
+    int create(LibraryKey libraryKey);
     int delete(LibraryKey libraryKey);
     int modify(LibraryKey libraryKey);
     List<LibraryKey> findAll();

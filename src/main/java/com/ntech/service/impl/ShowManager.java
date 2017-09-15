@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import com.ntech.forward.ConnectionSDK;
 import com.ntech.forward.Constant;
 import com.ntech.forward.HttpUploadFile;
 import com.ntech.service.inf.IShowManage;
@@ -36,9 +37,8 @@ public class ShowManager implements IShowManage {
 		if(!containsGallery(galleryName)) {
 
 			header.put("Method","POST");
-			header.put("Authorization", Constant.TOKEN);
 			header.put("API","/v0/galleries/"+galleryName);
-			String reply = HttpUploadFile.getInstance().httpURLConnectionSDK(header, null,null, "no");
+			String reply = ConnectionSDK.getInstance().httpURLConnectionSDK(header);
 		}
 		if(containsGallery(galleryName))
 			flag = true;
@@ -48,9 +48,8 @@ public class ShowManager implements IShowManage {
 		
 		boolean flag = false;
 		header.put("Method","GET");
-		header.put("Authorization",Constant.TOKEN);
 		header.put("API","/v0/galleries");
-		String reply = HttpUploadFile.getInstance().httpURLConnectionSDK(header,null,null, "no");
+		String reply = ConnectionSDK.getInstance().httpURLConnectionSDK(header);
 		logger.info(reply);
 		try {
 			jsonObject = (JSONObject) jsonParser.parse(reply);
@@ -73,9 +72,8 @@ public class ShowManager implements IShowManage {
 		
 		boolean flag = false;
 		header.put("Method","DELETE");
-		header.put("Authorization",Constant.TOKEN);
 		header.put("API","/v0/galleries/"+galleryName);
-		String reply = HttpUploadFile.getInstance().httpURLConnectionSDK(header,null,null, "no");
+		String reply = ConnectionSDK.getInstance().httpURLConnectionSDK(header);
 		if(!containsGallery(galleryName))
 			flag = true;
 		return flag; 

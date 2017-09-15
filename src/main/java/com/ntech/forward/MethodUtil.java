@@ -27,173 +27,221 @@ import com.ntech.util.ErrorPrompt;
 public class MethodUtil {
 	private static MethodUtil instance;
 	private final Logger logger = Logger.getLogger(MethodUtil.class);
-	
+	private final Check check = (Check) Constant.GSB.getBean("check");
+
 	private static FileItemFactory factory = new DiskFileItemFactory();
-	private static Map<String ,String> header = new HashMap<String,String>();
-	private static Map<String,String> param = new HashMap<String,String>();
-	private static Map<String,Object> file = new HashMap<String,Object>(2);
-	
+	private static Map<String, String> header = new HashMap<String, String>();
+	private static Map<String, String> param = new HashMap<String, String>();
+	private static Map<String, Object> file = new HashMap<String, Object>(2);
+
 	private List<String> galleries = null;
+
+
 	private MethodUtil() {
 	}
-	public static MethodUtil getInstance(){    //对获取实例的方法进行同步
-	      if (instance == null){
-	          synchronized(MethodUtil.class){
-	             if (instance == null)
-	                 instance = new MethodUtil(); 
-	          }
-	      }
-     return instance;
+
+	public static MethodUtil getInstance() {    //对获取实例的方法进行同步
+		if (instance == null) {
+			synchronized (MethodUtil.class) {
+				if (instance == null)
+					instance = new MethodUtil();
+			}
+		}
+		return instance;
 	}
-	 
+
 	@SuppressWarnings("unchecked")
 	public String requestForword(HttpServletRequest request,
-			HttpServletResponse response)  {
+								 HttpServletResponse response) {
 		logger.info("*************START***********");
-		logger.info(request.getParameter("test"));
-		String SDKreply="";
+		String SDKreply;
 		String meta = "no";
 		String API = (String) request.getAttribute("API");
 		String api = (String) request.getAttribute("api");
 		header.clear();
 		param.clear();
 		file.clear();
-		if(api!=null&&api.equals("face/post")) {
+		String userName = (String)request.getAttribute("userName");
+		if (api != null && api.equals("face/post")) {
 			galleries = (List<String>) request.getAttribute("galleries");
 			String inputGalleries = request.getParameter("galleries");
-			if(galleries.size()!=0&&(inputGalleries==null||inputGalleries.equals("")))
-				param.put("galleries",(String) request.getAttribute("userName"));
+			if (galleries.size() != 0 && (inputGalleries == null || inputGalleries.equals("")))
+				param.put("galleries", userName);
 		}
-		if("allGalleries".equals(API)) {
-			return JSONArray.toJSONString((List<String>)request.getAttribute("allGalleries"));
+		if ("allGalleries".equals(API)) {
+			String reply = JSONArray.toJSONString((List<String>) request.getAttribute("allGalleries"));
+			return reply.replaceAll("_anytec_"+userName,"");
 		}
 		//判断是否有文件输入
 		boolean isMultiPart = ServletFileUpload.isMultipartContent(request);
-		if(isMultiPart) {
+		if (isMultiPart) {
 			logger.info("********* HAS FILE********");
 			meta = "isFile";
-		
+
 			ServletFileUpload upload = new ServletFileUpload(factory);
 			try {
 				List<FileItem> items = upload.parseRequest(request);
 				Iterator<FileItem> iterator = items.iterator();
-				while(iterator.hasNext()) {
+				while (iterator.hasNext()) {
 					FileItem item = iterator.next();
-					if(item.isFormField()) {
+					if (item.isFormField()) {
+						//文本
 						String filedName = item.getFieldName();
 						String value = new String(item.getString().getBytes("iso-8859-1"));
-						if(filedName.equals("galleries")||filedName.equals("gallery")) {
-							logger.info("inputGaleries :"+value);
+						if (filedName.equals("galleries") || filedName.equals("gallery")) {
+							logger.info("inputGaleries :" + value);
 							filedName = "galleries";
-							boolean existGallery = false;
-							if(galleries!=null&&galleries.size()!=0) {
-								logger.info("*******USER_HOLD_GALLERY*******");
-								String[] inputGalleries = null;
-								if (value.indexOf(",")!=-1) {
-									logger.info("inputMoreGalleries");
-									inputGalleries = value.split(","); 
-									for(int i=0;i<inputGalleries.length;i++) {
-										logger.info(inputGalleries[i]);
-										existGallery = galleries.contains(inputGalleries[i]);
-										logger.info("FACE_GALLERIES_CHECK_RESULT :"+existGallery);
-										if(!existGallery)
-											break;
-									}
-								}else {
-									logger.info("inputOneGallery");
-									existGallery = galleries.contains(value);
-									if(!value.equals(request.getAttribute("userName")))
-										value = new StringBuilder(value).append(","+(String)request.getAttribute("userName")).toString();
-									logger.info("FACE_GALLERIES_CHECK_RESULT :"+existGallery);
-								}
-							}
-							if(!existGallery)
-								throw new IllegalGalleryException("BAD_GALLERIES");
-							param.put("galleries",value);
+							StringBuilder galleryValue = new StringBuilder();
+							checkInputGalleries(value,userName,galleryValue);
+							param.put(filedName,galleryValue.toString());
+						}else {
+							param.put(filedName, value);
 						}
-						param.put(filedName, value);
-						logger.info("文本域："+filedName+"——"+value);
-					}else {
-						file.put("contentType",item.getContentType());
-						logger.info("contentType:"+item.getContentType());
+						logger.info("文本域：" + filedName + "——" + value);
+						//有上传文件
+					} else {
+						file.put("contentType", item.getContentType());
+						logger.info("contentType:" + item.getContentType());
 						String filedName = item.getFieldName();
 						String fileName = item.getName();
-						logger.info("文件控件: "+filedName+"--"+fileName);
-						if(item.getSize()>1024*1024*10) {
+						logger.info("文件控件: " + filedName + "--" + fileName);
+						if (item.getSize() > 1024 * 1024 * 10) {
 							logger.info("*******上传图片过大*******");
 						}
 						byte[] pic = item.get();
-						logger.info("PICTURE.LENGTH:"+pic.length);
-						
+						logger.info("PICTURE.LENGTH:" + pic.length);
+
 						file.put(filedName, pic);
-					}	
+					}
 				}
 			} catch (FileUploadException e) {
 				response.setStatus(500);
-				logger.error("*****FILE_UPLOAD_FAIL*****@"+request.getAttribute("userName"));
+				logger.error("*****FILE_UPLOAD_FAIL*****@" + request.getAttribute("userName"));
 				ErrorPrompt.addInfo("error", "file upload fail");
 				logger.error(e.getMessage());
 				e.printStackTrace();
-			
+
 				return null;
 			} catch (UnsupportedEncodingException e) {
 				logger.error(e.getMessage());
 				e.printStackTrace();
 				return null;
-			} catch (IllegalGalleryException e) {
-				logger.error("*****BAD_GALLERY*****@"+request.getAttribute("userName"));
-				ErrorPrompt.addInfo("error", "bad_gallery");
-				e.printStackTrace();
-				return null;
-			} 
+			}
 		}
 		//获取表单文本数据
 		Enumeration<String> enumeration = request.getParameterNames();
-		while(enumeration.hasMoreElements()) {
+		while (enumeration.hasMoreElements()) {
 			logger.info("*********HAS INPUT*********");
 			meta = "yes";
 			String name = enumeration.nextElement();
-			if((name.equals("max_id")||name.equals("min_id"))&&request.getMethod().equals("GET")) {
+			if ((name.equals("max_id") || name.equals("min_id")) && request.getMethod().equals("GET")) {
 				meta = "no";
-			}else {
-				param.put(name,request.getParameter(name));
+			} else {
+				param.put(name, request.getParameter(name));
 			}
-			logger.info("PARAM:"+name+"--"+""+param.get(name));
+			logger.info("PARAM:" + name + "--" + "" + param.get(name));
 		}
 		//转发和设定报头信息
-		header.put("Method",request.getMethod());
-		
+		header.put("Method", request.getMethod());
+
 		String localAPI = (String) request.getAttribute("localAPI");
-		if(localAPI==null||localAPI.equals("")) {
-			header.put("API",API);
-		}else {
-			header.put("API",localAPI);
+		if (localAPI == null || localAPI.equals("")) {
+			header.put("API", API);
+		} else {
+			header.put("API", localAPI);
 		}
 		//判断
 		String galleries = (String) request.getAttribute("personFaceInsert");
-		if(galleries!=null&&!galleries.equals("")) {
-            param.put("galleries",galleries);
+		if (galleries != null && !galleries.equals("")) {
+			param.put("galleries", galleries);
 		}
 
-		logger.info((String)request.getAttribute("API"));
-		logger.info("Token :"+request.getHeader("Token"));
+		logger.info(request.getAttribute("API").toString());
+		logger.info("Token :" + request.getHeader("Token"));
 		try {
 			SDKreply = HttpUploadFile.getInstance().httpURLConnectionSDK(header, param, file, meta);
 			response.setStatus(HttpUploadFile.status);
 		} catch (IOException e) {
-			ErrorPrompt.addInfo("code","BAD_INPUT");
+			ErrorPrompt.addInfo("code", "BAD_INPUT");
 			response.setStatus(400);
-        	logger.error(e.getMessage()+"@"+request.getAttribute("userName"));
-            e.printStackTrace();
-            return null;
-        } 
-		if(localAPI==null||localAPI.equals("")) {
-			String string = ConfigManager.getInstance().getParameter("PICTURE")+"/"+Base64Encrypt.encryptUserName((String)request.getAttribute("userName"));
-			if(SDKreply!=null&&!"".equals(SDKreply)) {
-				/*Check.timesCount((String)request.getAttribute("userName"));*/
-				return SDKreply.replaceAll("http://127.0.0.1:3333/uploads",string);
+			logger.error(e.getMessage() + "@" + userName);
+			e.printStackTrace();
+			return null;
+		}
+		response.setHeader("Cache-control", "no-cache");
+		//计费信息
+		String contype = check.getContype(userName);
+		if(contype==null)
+			try {
+				throw new Exception("set meal contype is null");
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		if(HttpUploadFile.status==200&&request.getAttribute("chargeAPI")!=null) {
+			String chargeAPI = (String) request.getAttribute("chargeAPI");
+			String charge = (String) request.getAttribute("charge");
+
+			if (contype.equals("times")) {
+				int status = 0;
+				boolean result = check.mealTimesCount(userName);
+				if (result)
+					status = 1;
+				check.setLog(userName, chargeAPI + " ￥" + charge, status);
+				logger.info("timesCount: " + result);
+			} else {
+				int status = 0;
+				boolean result = check.mealDateCheck(userName);
+				if (result)
+					status = 1;
+				check.setLog(userName, chargeAPI + " ￥" + charge, status);
+				logger.info("dateCheck： "+result);
+			}
+		}
+		if(contype.equals("date"))
+			check.mealDateCheck(userName);
+		if (localAPI == null || localAPI.equals("")) {
+			String string = ConfigManager.getInstance().getParameter("PICTURE") + "/" + Base64Encrypt.encryptUserName((String) request.getAttribute("userName"));
+			if (SDKreply != null && !"".equals(SDKreply)) {
+				//包装响应FindfaceSDK响应（转发图片，包装库名）
+				return SDKreply.replaceAll("_anytec_"+userName,"").replaceAll("http://127.0.0.1:3333/uploads", string);
 			}
 		}
 		return SDKreply;
+	}
+
+
+	//对用户输入的galleries参数进行权限检查
+	private void checkInputGalleries(String value, String userName,StringBuilder galleryValue) {
+		boolean existGallery;
+		if (galleries != null && galleries.size() != 0) {
+			logger.info("*******USER_HOLD_GALLERY*******");
+			try {
+				if (value.contains(",")) {
+					String[] inputGalleries;
+					logger.info("inputMoreGalleries");
+					inputGalleries = value.split(",");
+					for (String inputGallery : inputGalleries) {
+						logger.info(inputGallery);
+						inputGallery = new StringBuilder(inputGallery).append("_anytec_" + userName).toString();
+						existGallery = galleries.contains(inputGallery);
+						logger.info(inputGallery+" (CHECK_RESULT) :" + existGallery);
+						if (!existGallery)
+							throw new IllegalGalleryException("bad_galleries");
+						galleryValue.append(inputGallery);
+					}
+				} else {
+					logger.info("inputOneGallery");
+					existGallery = galleries.contains(value);
+					if (!value.equals(userName))
+						galleryValue.append(value).append("_anytec_" + userName).append("," + userName).toString();
+					logger.info(value+" (CHECK_RESULT) :" + existGallery);
+				}
+			}catch (IllegalGalleryException e) {
+				logger.error("*****BAD_GALLERY*****@" + userName);
+				ErrorPrompt.addInfo("error", "bad_gallery");
+				e.printStackTrace();
+			}
+		}
 	}
 }

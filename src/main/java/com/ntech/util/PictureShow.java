@@ -26,9 +26,9 @@ public class PictureShow {
 	   return instance;
 	 }
 	public synchronized String getBase64Picture (String Url) {
-		InputStream inputStream = null;
+		InputStream inputStream ;
+		BufferedInputStream bufferedInputStream;
 		DataInputStream dataInputStream = null;
-		BufferedInputStream bufferedInputStream = null;
 		HttpURLConnection connection = null;
 		try {
 			URL url = new URL(Url);
@@ -46,25 +46,24 @@ public class PictureShow {
 	        	   bufferedInputStream = new BufferedInputStream(dataInputStream);
 	        	   byte[] b = new byte[connection.getContentLength()];
 	        	   logger.info("ContentLength: "+connection.getContentLength()); 
-	        	   bufferedInputStream.read(b);
+	        	   int length = bufferedInputStream.read(b);
+	        	   logger.info("Length: "+length);
 	        	   return "data:image/jpeg;base64,"+Base64Encrypt.byteArrayToString(b);
 	           }
 		} catch (MalformedURLException e) {
 			logger.error(e.getMessage());
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
 			logger.error(e.getMessage());
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
-			connection.disconnect();
+			if(connection!=null)
+				connection.disconnect();
 			if(dataInputStream!=null)
 				try {
 					dataInputStream.close();
 				} catch (IOException e) {
 					logger.error(e.getMessage());
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		}

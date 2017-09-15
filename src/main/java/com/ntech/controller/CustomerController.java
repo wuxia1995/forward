@@ -100,9 +100,9 @@ public class CustomerController {
     public String loginJump(HttpSession session) {
         String name = (String) session.getAttribute("name");
         if(null!=name&&name.equals("")){
-            return "login";
+            return "info";
         }
-        return "info";
+        return "login";
     }
 
     @RequestMapping("exit")
@@ -392,7 +392,7 @@ public class CustomerController {
     public JSONArray deleteToGallery(String id ,HttpSession session, HttpServletRequest request, HttpServletResponse response) {
         String name = (String) session.getAttribute("name");
         logger.info(id);
-        HashMap<String,String> header = new HashMap<>();
+        HashMap<String,String> header = new HashMap<String,String>();
         header.put("Method","DELETE");
         header.put("API","/v0/face/id/"+id);
         String result = null;
