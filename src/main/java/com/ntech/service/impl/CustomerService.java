@@ -129,7 +129,6 @@ public class CustomerService implements ICustomerService {
         return result.size() > 0 ? true : false;
     }
 
-    @Override
     public boolean enableToken(String name) {
         if (null != name && !name.equals("")) {
             CustomerExample example = new CustomerExample();
@@ -138,6 +137,7 @@ public class CustomerService implements ICustomerService {
             if (result.size() > 0) {
                 Customer customer = result.get(0);
                 customer.setToken(SHAencrypt.encryptSHA(name));
+                logger.info(SHAencrypt.encryptSHA(name));
                 if(customerMapper.updateByExample(customer,example)==1){
                     logger.info("enable token success for " +name);
                     return true;
@@ -147,7 +147,6 @@ public class CustomerService implements ICustomerService {
         return false;
     }
 
-    @Override
     public boolean disableToken(String name) {
         if (null != name && !name.equals("")) {
             CustomerExample example = new CustomerExample();
@@ -225,8 +224,6 @@ public class CustomerService implements ICustomerService {
         logger.info("find count of customers");
         return (int) customerMapper.countByExample(example);
     }
-
-    @Override
     public List<Customer> findPage(int limit, int offset) {
         return customerMapper.findPage(limit, offset);
     }

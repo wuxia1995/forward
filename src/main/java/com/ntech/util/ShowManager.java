@@ -76,7 +76,7 @@ public class ShowManager {
 			flag = true;
 		return flag; 
 	}
-	public  boolean containsGallery(String galleryName) throws IOException {
+	private  boolean containsGallery(String galleryName) throws IOException {
 		
 		boolean flag = false;
 		List<String> list = getGalleries();

@@ -129,7 +129,7 @@ public class SetMealService implements ISetMealService {
         example.createCriteria().andIdIsNotNull();
         return  setMealMapper.countByExample(example);
     }
-    @Override
+
     public List<SetMeal> findByPage(int limit, int offset) {
 
         return setMealMapper.findPage(limit,offset);

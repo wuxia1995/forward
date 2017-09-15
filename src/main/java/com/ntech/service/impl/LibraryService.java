@@ -46,11 +46,13 @@ public class LibraryService implements ILibraryService{
         }
         return result;
     }
+    public int create(LibraryKey libraryKey) {
+        return libraryMapper.insert(libraryKey);
+    }
 
     public int delete(LibraryKey libraryKey) {
         return libraryMapper.deleteByPrimaryKey(libraryKey);
     }
-
     public int modify(LibraryKey libraryKey) {
         LibraryExample example = new LibraryExample();
         example.createCriteria().andLibraryNameEqualTo(libraryKey.getUserName());

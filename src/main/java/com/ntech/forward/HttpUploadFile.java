@@ -28,10 +28,6 @@ public class HttpUploadFile {
 	private static final String POST_URL = Constant.SDK_IP;
 	private static HttpUploadFile instance;
 	
-    private BufferedWriter bufferedWriter = null;
-    private BufferedReader bufferedReader = null;
-    private OutputStream out = null;
-	
 	private HttpUploadFile() {}
 	  public static HttpUploadFile getInstance(){    //对获取实例的方法进行同步
 	         if (instance == null){
@@ -67,8 +63,11 @@ public class HttpUploadFile {
     		}
     	}
 		//×××××××××××××××××××××××××××××××××××		
-        String reply = "";
-        String BOUNDARY = "-------------------------"+System.currentTimeMillis(); 
+        String reply;
+        String BOUNDARY = "-------------------------"+System.currentTimeMillis();
+		OutputStream out;
+		BufferedWriter bufferedWriter;
+		BufferedReader bufferedReader;
       
             URL url = new URL(POST_URL+header.get("API"));
             logger.info("URL :"+url);
@@ -86,7 +85,6 @@ public class HttpUploadFile {
 	        	bufferedWriter = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
 		        JSONObject.writeJSONString(param, bufferedWriter);
 		        bufferedWriter.close();
-		        bufferedWriter = null;
 	        }else if(meta.equals("isFile")) {
 	        	logger.info("META=ISFILE");
 	            connection.setRequestProperty("Content-Type","multipart/form-data; boundary=" + BOUNDARY);
@@ -94,7 +92,7 @@ public class HttpUploadFile {
 	            // text
 	            if (null!=param&&param.size()!=0) {
 	            	logger.info("******** FILE-TEXT ********");
-	                StringBuffer stringBuffer = new StringBuffer();
+	                StringBuilder stringBuilder = new StringBuilder();
 	                Iterator<Entry<String, String>> iterator = param.entrySet().iterator();
 	                while (iterator.hasNext()) {
 	                    Entry<String, String> entry = iterator.next();
@@ -104,13 +102,13 @@ public class HttpUploadFile {
 	                    if (inputValue == null) {
 	                        continue;
 	                    }
-	                    stringBuffer.append("\r\n").append("--").append(BOUNDARY)
+	                    stringBuilder.append("\r\n").append("--").append(BOUNDARY)
 	                            .append("\r\n");
-	                    stringBuffer.append("Content-Disposition: form-data; name=\""
+	                    stringBuilder.append("Content-Disposition: form-data; name=\""
 	                            + inputName + "\"\r\n\r\n");
-	                    stringBuffer.append(inputValue);
+	                    stringBuilder.append(inputValue);
 	                }
-	                out.write(stringBuffer.toString().getBytes());
+	                out.write(stringBuilder.toString().getBytes());
 	            }
 	            // file
 	            if (null!=file&&file.size()!=0) {
@@ -130,14 +128,14 @@ public class HttpUploadFile {
 	                    if (contentType == null || "".equals(contentType)) {
 	                        contentType = "application/octet-stream";
 	                    }
-	                    StringBuffer strBuf = new StringBuffer();
-	                    strBuf.append("\r\n").append("--").append(BOUNDARY)
+	                    StringBuilder stringBuilder = new StringBuilder();
+	                    stringBuilder.append("\r\n").append("--").append(BOUNDARY)
 	                            .append("\r\n");
-	                    strBuf.append("Content-Disposition: form-data; name=\""
+	                    stringBuilder.append("Content-Disposition: form-data; name=\""
 	                            + filed + "\"; filename=\"" + filed
 	                            + "\"\r\n");
-	                    strBuf.append("Content-Type:" + contentType + "\r\n\r\n");
-	                    out.write(strBuf.toString().getBytes());
+	                    stringBuilder.append("Content-Type:" + contentType + "\r\n\r\n");
+	                    out.write(stringBuilder.toString().getBytes());
 	                    byte[] pic = (byte[]) entry.getValue();
 	                    out.write(pic);
 	                }
@@ -155,7 +153,7 @@ public class HttpUploadFile {
 				ErrorPrompt.addInfo("execute","successful");
 				return null;
 			}
-            if(200!=status&&204!=status) {
+            if(200!=status) {
 				logger.error("ERROR_CODE: "+status);
 				bufferedReader = new BufferedReader(new InputStreamReader(
 	                    connection.getErrorStream()));
@@ -164,15 +162,13 @@ public class HttpUploadFile {
 	                    connection.getInputStream()));
 			}
             logger.info("HTTP_CODE: "+status);
-            String line = null;
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
                 stringBuilder.append(line).append("\n");
             }
             reply = stringBuilder.toString();
             bufferedReader.close();
-            if (connection != null) {
-                connection.disconnect();
-            }
+			connection.disconnect();
             return reply;
     }
 }

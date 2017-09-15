@@ -9,16 +9,16 @@ public class ErrorPrompt {
 	
 	private static final Map<String,String> map = new HashMap<String,String>();
 	
-	public static final void addInfo(String key,String value) {
+	public static void addInfo(String key,String value) {
 		map.put(key, value);
 	}
-	public static final void clear() {
+	public static void clear() {
 		map.clear();
 	}
-	public static final String getJSONInfo() {
+	public static String getJSONInfo() {
 		return JSONObject.toJSONString(map);
 	}
-	public static final int size() {
+	public static int size() {
 		return map.size();
 	}
 }
