@@ -60,8 +60,12 @@ public class AdminController {
 
     //跳转到首页
     @RequestMapping("index")
-    public String IndexJump() {
-        return "admin/customerManager";
+    public String IndexJump(HttpSession session) {
+        String name= (String) session.getAttribute("admin");
+        if(null!=name&&!"".equals(name)&&name.equals("sessionStatus")){
+            return "admin/customerManager";
+        }
+        return "error";
     }
     //退出登录
     @RequestMapping("logout")
@@ -73,7 +77,7 @@ public class AdminController {
     @RequestMapping("logManager")
     public String LogJump(HttpSession session) {
         String name= (String) session.getAttribute("admin");
-        if(null!=name&&!"".equals(name)&&!name.equals("sessionStatus")){
+        if(null!=name&&!"".equals(name)&&name.equals("sessionStatus")){
             return "admin/logManager";
         }
         return "error";
@@ -82,7 +86,7 @@ public class AdminController {
     @RequestMapping("mealManager")
     public String setMealJump(HttpSession session) {
         String name= (String) session.getAttribute("admin");
-        if(null!=name&&!"".equals(name)&&!name.equals("sessionStatus")){
+        if(null!=name&&!"".equals(name)&&name.equals("sessionStatus")){
             return "admin/mealManager";
         }
         return "error";
@@ -90,16 +94,15 @@ public class AdminController {
 
     @RequestMapping("/checkName")
     @ResponseBody
-    public Boolean checkUserName(String userName,HttpSession session) {
-        logger.info("checkLogin");
+    public boolean checkUserName(String userName) {
+        logger.info("checkName");
 
-        if(!customerService.checkUserName(userName)){
-//            session.setAttribute("name","sessionStatus");
-            return false;
+        if(customerService.checkUserName(userName)){
+
+            return true;
         }
-        return true;
+        return false;
     }
-
 
     //登录
     @RequestMapping("/loginCheck")
@@ -140,11 +143,11 @@ public class AdminController {
     //添加用户
     @RequestMapping("/addCustomer")
     @ResponseBody
-    public boolean addCustomer(String userName,String password,String active,String token,String email) throws MessagingException {
+    public boolean addCustomer(String userName,String password,String active,String email) throws MessagingException {
         Customer customer=new Customer();
         if(userName!=null&&password!=null){
             customer.setName(userName);
-            customer.setToken(token);
+//            customer.setToken(token);
             customer.setPassword(SHAencrypt.encryptSHA(password));
             customer.setEmail(email);
             customer.setContype("user");

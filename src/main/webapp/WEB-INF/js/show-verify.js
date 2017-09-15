@@ -3,13 +3,14 @@ var leftUploadFile
 var rightUploadFile
 
 function verifyUrl(id) {
-    removeDiv()
-    var img = new Image();
-    img.src = $("#inputUrl" + id).val();
-    verifyReq(img, id);
+    // var img = new Image();
+    // img.src = $("#inputUrl" + id).val();
+    verifyReq($("#inputUrl" + id).val(), id);
 }
 
 function uploadPicVerify(obj, id) {
+    document.getElementById("imgShow" + id).style.height="100%";
+    document.getElementById("imgShow" + id).style.width="100%";
     removeDiv()
     var img = document.getElementById("imgShow" + id)
     var file = obj.files[0];
@@ -18,11 +19,31 @@ function uploadPicVerify(obj, id) {
     }
     var reader = new FileReader();
     reader.onloadend = function (e) {
-        console.log("成功读取....");
+        var imgUrl=e.target.result
+        getImageWidth(imgUrl,function (widthImg,heightImg) {
+            var imgShowDiv = document.getElementById("picDiv"+id);
+            var imgShow = document.getElementById("imgShow" + id);
+            console.log("height:"+heightImg)
+            console.log("widht:"+widthImg)
+            console.log(imgShowDiv.offsetHeight)
+            if(heightImg!=widthImg){
+                if(heightImg>widthImg){
+                    imgShow.style.width=widthImg/heightImg*100+"%"
+                    imgShow.style.height="100%"
+                }
+                if(heightImg<widthImg){
+                    imgShow.style.height=heightImg/widthImg*100+"%"
+                    imgShow.style.width="100%"
+                }
+            }else{
+                imgShow.style.height="100%"
+                imgShow.style.width="100%"
+            }
+            $("#imgShow" + id).attr("src", imgUrl)
+        })
         img.src = e.target.result;
         if(id==1){
             leftUploadFile=file
-
         }
         if(id==2){
             rightUploadFile=file
@@ -58,31 +79,33 @@ function uploadPicVerify(obj, id) {
         contentType: false,
         async: true,
         success: function (data) {
+            var dataObj=eval('(' + data + ')')
             if(data==""){
                 $("#resultVerify").html("有图片未检测到人脸");
                 $("#reponseVerify").html("有图片未检测到人脸");
                 return false;
             }
-            readResData(eval('(' + data + ')'),id)
+            readResData(dataObj,id)
         },
         error:function (data) {
             removeDiv()
             // if(data==""){
-                $("#resultVerify").html("有图片未检测到人脸");
-                $("#reponseVerify").html("有图片未检测到人脸");
+            $("#resultVerify").html("图片未检查到人脸或文件格式不符或文件太大");
+            $("#reponseVerify").html("");
             // }
             return false;
         }
     });
 
 }
-function drawDiv(image,result,parentId){
+function drawDiv(image,w,h,result,parentId){
     var imgVerifyDiv = document.getElementById(parentId);
-    var widthRate = imgVerifyDiv.offsetWidth / image.naturalWidth
-    var heightRate = imgVerifyDiv.offsetHeight / image.naturalHeight
-
-    result.x1 = result.x1 * widthRate - 4
-    result.x2 = result.x2 * widthRate - 4
+    // var widthRate = imgVerifyDiv.offsetWidth / image.naturalWidth
+    // var heightRate = imgVerifyDiv.offsetHeight / image.naturalHeight
+    var widthRate = image.width / w
+    var heightRate = image.height / h
+    result.x1 = result.x1 * widthRate
+    result.x2 = result.x2 * widthRate
     result.y1 = result.y1 * heightRate
     result.y2 = result.y2 * heightRate
 
@@ -107,7 +130,7 @@ function drawDiv(image,result,parentId){
 function readResData(data,id) {
     removeDiv()
     // console.log({width: w, height: h});
-    $("#reponseVerify").html(data);//设置返回的json数据
+    // $("#reponseVerify").html(data);//设置返回的json数据
     console.log(data);
 
     //读取返回的json数据
@@ -123,30 +146,30 @@ function readResData(data,id) {
 
     console.log(rect1);
     console.log(rect2);
-    removeDiv();
+    var imgshow1=document.getElementById("imgShow1");
+    var imgshow2=document.getElementById("imgShow2");
     if(id==1){
-        drawDiv(document.getElementById("imgShow1"),rect1,"picDiv1")
-        drawDiv(document.getElementById("imgShow2"),rect2,'picDiv2')
+        getImageWidth(imgshow1.src,function (w,h) {
+            drawDiv(imgshow1,w,h,rect1,"picDiv1")
+        })
+        getImageWidth(imgshow2.src,function (w,h) {
+            drawDiv(imgshow2,w,h,rect2,'picDiv2')
+        })
+
+
     }else{
-        drawDiv(document.getElementById("imgShow1"),rect2,'picDiv1')
-        drawDiv(document.getElementById("imgShow2"),rect1,'picDiv2')
+        getImageWidth(imgshow1.src,function (w,h) {
+            drawDiv(imgshow1,w,h,rect2,"picDiv1")
+        })
+        getImageWidth(imgshow2.src,function (w,h) {
+            drawDiv(imgshow2,w,h,rect1,'picDiv2')
+        })
     }
 
 
 
-
-    // $("#resultVerify").val("");
-    // if (val == true && confidence >= 0.78) {
         $("#resultVerify").html("是同一张人脸的可信度是:<br>"+confidence);
-    // } else {
-    //     $("#resultVerify").html("两张照片不是同一张人脸");
-    // }
 
-
-    //
-    // console.log("width:" + img.width)
-    // console.log("height:" + img.height)
-    // if(img.naturalWidth>400){
 
 }
 
@@ -161,61 +184,77 @@ function removeDiv() {
 
 $(document).ready(function () {
 }); //ready
-function verifyReq(img, id) {
-    if ($('#imgShow11')) {
-        $('#imgShow11').remove();
-    }
-    if ($('#imgShow21')) {
-        $('#imgShow21').remove();
-    }
+function verifyReq(imgUrl, id) {
+    document.getElementById("imgShow" + id).style.height="100%";
+    document.getElementById("imgShow" + id).style.width="100%";
 
-    $("#imgShow" + id).attr("src", img.src);
-    var notId=id==1?2:1
+    removeDiv()
 
-
-    var selfImg = document.getElementById("imgShow" + id)
-    var anotherImg = document.getElementById("imgShow" + notId)
-    var formData = new FormData();
-    if(anotherImg.src.indexOf("data:image")==0||anotherImg.src.indexOf("data:;base64")==0){
-        formData.append("photo1", selfImg.src)
-        if(id==1) {
-            formData.append("photo2", rightUploadFile)
-        }else if(id==2){
-            formData.append("photo2", leftUploadFile)
-        }else {
-            return false
-        }
-    }else {
-        formData.append("photo1", selfImg.src)
-        formData.append("photo2", anotherImg.src)
-    }
-
-
-    $.ajax({
-        url: 'customer/verify-face',
-        type: 'POST',
-        // dataType: "json",
-        data:formData,
-        processData: false,
-        contentType: false,
-        async: true,
-        success: function (data) {
-            if(data==""){
-                $("#resultVerify").html("有图片未检测到人脸");
-                $("#reponseVerify").html("有图片未检测到人脸");
-                return false;
+    getImageWidth(imgUrl,function (widthImg,heightImg) {
+        var imgShowDiv = document.getElementById("picDiv"+id);
+        var imgShow = document.getElementById("imgShow" + id);
+        console.log("height:"+heightImg)
+        console.log("widht:"+widthImg)
+        console.log(imgShowDiv.offsetHeight)
+        if(heightImg!=widthImg){
+            if(heightImg>widthImg){
+                imgShow.style.width=widthImg/heightImg*100+"%"
+                imgShow.style.height="100%"
             }
-            readResData(eval('(' + data + ')'),id)
-        },
-        error:function(data){
-            // if(data==""){
-                $("#resultVerify").html("有图片未检测到人脸");
-                $("#reponseVerify").html("有图片未检测到人脸");
-                return false;
-            // }
-            console.log(data)
+            if(heightImg<widthImg){
+                imgShow.style.height=heightImg/widthImg*100+"%"
+                imgShow.style.width="100%"
+            }
+        }else{
+            imgShow.style.height="100%"
+            imgShow.style.width="100%"
         }
-    });
+        $("#imgShow" + id).attr("src",imgUrl);
+        var notId=id==1?2:1
+        var selfImg = document.getElementById("imgShow" + id)
+        var anotherImg = document.getElementById("imgShow" + notId)
+        var formData = new FormData();
+        if(anotherImg.src.indexOf("data:image")==0||anotherImg.src.indexOf("data:;base64")==0){
+            formData.append("photo1", selfImg.src)
+            if(id==1) {
+                formData.append("photo2", rightUploadFile)
+            }else if(id==2){
+                formData.append("photo2", leftUploadFile)
+            }else {
+                return false
+            }
+        }else {
+            formData.append("photo1", selfImg.src)
+            formData.append("photo2", anotherImg.src)
+        }
+        $.ajax({
+            url: 'customer/verify-face',
+            type: 'POST',
+            // dataType: "json",
+            data:formData,
+            processData: false,
+            contentType: false,
+            async: true,
+            success: function (data) {
+                if(data==""){
+                    $("#resultVerify").html("有图片未检测到人脸");
+                    $("#reponseVerify").html("有图片未检测到人脸");
+                    return false;
+                }
+                readResData(eval('(' + data + ')'),id)
+            },
+            error:function(data){
+                // if(data==""){
+                $("#resultVerify").html("文件格式不符或文件太大");
+                $("#reponseVerify").html("");
+                return false;
+                // }
+                // console.log(data)
+            }
+        });
+    })
+
+
 }
 
 function getImageWidth(url, callback) {

@@ -1,49 +1,8 @@
 $(document).ready(function () {
-    $("#mamageMyGallery").click(function () {
-        $("#loginTip").removeClass("hidden")
-    })
-    // $('#check-btn').click(function () {
-    //     var check = document.getElementById("inputUrl");
-    //     console.log(check.tagName)
-    //     detectReq(check)
-    //
+    // $("#mamageMyGallery").click(function () {
+    //     $("#loginTip").removeClass("hidden")
     // })
     //
-    // $.ajax({
-    //     url: 'customer/getDemoFace',
-    //     type: 'POST',
-    //     // dataType: "json",
-    //     data: formData,
-    //     processData: false,
-    //     contentType: false,
-    //     async: true,
-    //     success: function (data) {
-    //         if(data==""){
-    //             $('#reponseSearchDemo').html("有图片未检测到人脸")
-    //             $('#searchResultDemo').html("")
-    //             $('#resultShowSearchDemo').html("")
-    //             return false;
-    //         }
-    //         $('#imgShowSearchDemo').attr("src",img.src);
-    //         // console.log("success")
-    //         console.log(data)
-    //         dataObj=eval('(' + data + ')');
-    //         showResult(dataObj.results)
-    //         $('#reponseSearchDemo').html(syntaxHighlight(dataObj))
-    //
-    //     },
-    //     error: function (data) {
-    //         // if(data==""){
-    //         $('#reponseSearchDemo').html("有图片未检测到人脸")
-    //         $('#resultShowSearchDemo').html("")
-    //         $('#searchResultDemo').html("")
-    //         // }
-    //         return false
-    //     }
-    // });
-
-
-
 }); //ready
 
 var preSize=0;
@@ -56,7 +15,30 @@ function searchUrlDemo(input) {
 }
 
 function searchReqDemo(img) {
-
+    document.getElementById("imgShowSearchDemo").style.height="100%";
+    document.getElementById("imgShowSearchDemo").style.width="100%";
+    getImageWidth(img.src,function (widthImg,heightImg) {
+        var imgShowDiv = document.getElementById("imgShowSearchDemoDiv");
+        var imgShow = document.getElementById("imgShowSearchDemo");
+        console.log("height:"+heightImg)
+        console.log("widht:"+widthImg)
+        console.log(imgShowDiv.offsetHeight)
+        if(heightImg!=widthImg){
+            if(heightImg>widthImg){
+                imgShow.style.width=widthImg/heightImg*100+"%"
+                imgShow.style.height="100%"
+            }
+            if(heightImg<widthImg){
+                imgShow.style.height=heightImg/widthImg*100+"%"
+                imgShow.style.width="100%"
+            }
+        }else{
+            imgShow.style.height="100%"
+            imgShow.style.width="100%"
+        }
+        // imgShow.src = e.target.result;
+        // $("#imgShowDetect").attr("src", imgUrl)
+    })
     var formData = new FormData();
     formData.append("n",4);
     formData.append("photo",img.src)
@@ -69,26 +51,23 @@ function searchReqDemo(img) {
         contentType: false,
         async: true,
         success: function (data) {
-            if(data==""){
-                $('#reponseSearchDemo').html("有图片未检测到人脸")
+            if(data==""||data.length==0){
+                $('#reponseSearchDemo').html("图库中未搜索相似人脸")
                 $('#searchResultDemo').html("")
                 $('#resultShowSearchDemo').html("")
                 return false;
             }
             $('#imgShowSearchDemo').attr("src",img.src);
-            // console.log("success")
-            console.log(data)
-            dataObj=eval('(' + data + ')');
-            showResult(dataObj.results)
-            $('#reponseSearchDemo').html(syntaxHighlight(dataObj))
+            // console.log(data)
+            dataObj=eval(data);
+            showResult(dataObj)
+            $('#reponseSearchDemo').html(syntaxHighlight(filter(dataObj)))
 
         },
         error: function (data) {
-            // if(data==""){
-                $('#reponseSearchDemo').html("有图片未检测到人脸")
+                $('#reponseSearchDemo').html("文件格式不符或文件太大")
                 $('#resultShowSearchDemo').html("")
                 $('#searchResultDemo').html("")
-            // }
             return false
         }
     });
@@ -105,6 +84,8 @@ function removeBefore(size) {
     }
 }
 function uploadImgSearcheDemo(img) {
+    document.getElementById("imgShowSearchDemo").style.height="100%";
+    document.getElementById("imgShowSearchDemo").style.width="100%";
 
     var imgShow = document.getElementById("imgShowSearchDemo")
     var file = img.files[0];
@@ -112,9 +93,35 @@ function uploadImgSearcheDemo(img) {
         return false;
     }
     var reader = new FileReader();
-    reader.onloadend = function (e) {
-        console.log("成功读取....");
+    reader.onload = function (e) {
+
+        // imgShow.src = e.target.result;
+
         imgShow.src = e.target.result;
+        getImageWidth(imgShow.src,function (widthImg,heightImg) {
+            var imgShowDiv = document.getElementById("imgShowSearchDemoDiv");
+            // var imgShow = document.getElementById("imgShowSearchDemo");
+            console.log("height:"+heightImg)
+            console.log("widht:"+widthImg)
+            console.log(imgShowDiv.offsetHeight)
+            if(heightImg!=widthImg){
+                if(heightImg>widthImg){
+                    imgShow.style.width=widthImg/heightImg*100+"%"
+                    imgShow.style.height="100%"
+                }
+                if(heightImg<widthImg){
+                    imgShow.style.height=heightImg/widthImg*100+"%"
+                    imgShow.style.width="100%"
+                }
+            }else{
+                imgShow.style.height="100%"
+                imgShow.style.width="100%"
+            }
+            // imgShow.src = e.target.result;
+            // $("#imgShowDetect").attr("src", imgUrl)
+        })
+
+
     }
     reader.readAsDataURL(file)
     //上传文件时当前的图片内容是文件,对比的对象可能时文件或者url
@@ -126,24 +133,24 @@ function uploadImgSearcheDemo(img) {
     $.ajax({
         url: 'customer/getDemoFace',
         type: 'POST',
-        dataType: "json",
+        // dataType: "json",
         data: formData,
         processData: false,
         contentType: false,
         async: true,
         success: function (data) {
-            if(data==""){
-                $('#reponseSearchDemo').html("有图片未检测到人脸")
+            if(data==""||data.length==0){
+                $('#reponseSearchDemo').html("图库中未搜索相似人脸")
                 $('#searchResultDemo').html("")
                 $('#resultShowSearchDemo').html("")
             }
             dataObj=eval(data.results);
             showResult(dataObj)
-            $('#reponseSearchDemo').html(syntaxHighlight(data))
+            $('#reponseSearchDemo').html(syntaxHighlight(filter(dataObj)))
         },
         error: function (data) {
             // if(data==""){
-                $('#reponseSearchDemo').html("有图片未检测到人脸")
+                $('#reponseSearchDemo').html("文件格式不符或文件太大")
                 $('#searchResultDemo').html("")
                 $('#resultShowSearchDemo').html("")
             // }
@@ -157,22 +164,34 @@ function showResult(dataObj) {
 
     removeBefore(preSize)
     preSize=0;
-    for (var prop in dataObj)
-    {
+
+
+
+    // for (var prop in dataObj)
+    // {
         // console.log("jsonObj[" + prop + "]=" + dataObj[prop]);
-        for (var v in dataObj[prop]){
+        for (var v in dataObj){
             preSize++;
             var imgEle=
                 "<div>第"+preSize+"张</div>" +
-                "<div class='graphic_img4'><img src='"+dataObj[prop][v]['face']['normalized']+"'></div>"
-            var confidence="第"+preSize+"张是同一个人的可信度是:"+dataObj[prop][v]['confidence']
+                "<div class='graphic_img4'><img src='"+dataObj[v]['face']['normalized']+"'></div>"
+            var confidence="第"+preSize+"张是同一个人的可信度是:"+dataObj[v]['confidence']
             $("#searchResultDemo").append("<div  id='divResult"+preSize+"'>"+ confidence +"</div>");
             $("#resultShowSearchDemo").append("<div class='results_graphic4'  class='imgboxShow' id='div"+preSize+"'>"+ imgEle +"</div>");
-            console.log(dataObj[prop][v]['face']['normalized'])
+            // console.log(dataObj[v]['face']['normalized'])
         }
-    }
+    // }
 }
 
+function filter(data) {
+    if(data.length==0){
+        return false;
+    }
+    for(var obj in data){
+        data[obj]['face'].normalized="normalizedUrl"
+    }
+    return data;
+}
 
 
 //

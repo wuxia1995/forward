@@ -12,14 +12,18 @@
     <!--竖屏切换css-->
     <link rel="stylesheet" href="css/index.css" />
     <script type="text/javascript" src="js/lib/jquery.min.js"></script>
-    <script type="text/javascript" src="js/lib/jquery.form.js"></script>
+    <%--<script type="text/javascript" src="js/lib/jquery.form.js"></script>--%>
     <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/lib/jquery.fullPage.js"></script>
     <!--竖屏切换js-->
-    <script type="text/javascript" src="js/index.js"></script>
+    <%--<script type="text/javascript" src="js/index.js"></script>--%>
     <script src="../js/show-detect.js"></script>
     <script src="../js/show-verify.js"></script>
     <script src="../js/show-search.js"></script>
+
+
+    <!--百度地图API-->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.1&services=true"></script>
 </head>
 
 <body>
@@ -64,15 +68,13 @@
                             <a class="click_css" href="#page6">联系我们</a>
                         </li>
                         <c:choose>
-                            <c:when test="${name}">
-                                ${name}
+                            <c:when test="${! empty name}">
+                                <li><a href="/customer/personInfo">${name}</a></li>
                                 <li>
                                     <a class="click_css" href="/customer/exit">退出登录</a>
                                 </li>
                             </c:when>
                             <c:otherwise>
-
-
                                 <li>
                                     <a class="click_css" href="/customer/register">注册</a>
                                 </li>
@@ -81,12 +83,6 @@
                                 </li>
                             </c:otherwise>
                         </c:choose>
-
-
-                        </#if>
-
-
-
 
                     </ul>
                 </div>
@@ -153,7 +149,7 @@
                     <div class="maximg_box2">
                         <div class="img_bgbox2" reveal_sign="width">
                             <div  class="detect_img2">
-                                <div id="imgShowDetectDiv" style="position: relative;height: 100%;width: 100%;border: 1px black solid">
+                                <div id="imgShowDetectDiv" style="position: relative;height: 100%;width: 100%;">
                                 <img id="imgShowDetect" src="http://192.168.10.212:8080/images/1.jpg">
                                 </div>
                             </div>
@@ -177,7 +173,7 @@
                         </div>
                         <div class="upload2-3">
                             <div class="upload2-3img">
-                                <div id="" class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" class="img_active" src="http://192.168.10.212:8080/images/1.jpg"></div>
+                                <div id="" class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" class="img_active" src="http://192.168.10.212:8080/img/index/two/max_img1.png"></div>
                                 <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)"src="http://192.168.10.212:8080/img/index/two/max_img2.png"></div>
                                 <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" src="http://192.168.10.212:8080/img/index/two/max_img3.png"></div>
                                 <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" src="http://192.168.10.212:8080/img/index/two/max_img4.png"></div>
@@ -208,41 +204,6 @@
                         </div>
                         <div class="code_text3">
 										<textarea id="reponseVerify" disabled="disabled">
-                                            {
-	  "image_id": "O2alrpeRIXFejHWe6WlRqw==",
-	  "request_id": "1504752872,78700459-3630-4cbb-9e2b-f23404a6df16",
-	  "time_used": 875,
-	  "faces": [
-	    {
-	      "landmark": {
-	        "mouth_upper_lip_left_contour2": {
-	          "y": 489,
-	          "x": 519
-	        },
-	        "mouth_upper_lip_top": {
-	          "y": 484,
-	          "x": 527
-	        },
-	        "mouth_upper_lip_left_contour1": {
-	          "y": 483,
-	          "x": 521
-	        },
-	        "left_eye_upper_left_quarter": {
-	          "y": 408,
-	          "x": 511
-	        },
-	        "left_eyebrow_lower_middle": {
-	          "y": 395,
-	          "x": 512
-	        },
-	        "mouth_upper_lip_left_contour3": {
-	          "y": 494,
-	          "x": 524
-	        },
-	        "left_eyebrow_lower_left_quarter": {
-	          "y": 394,
-	          "x": 505
-	        },
                                         </textarea>
                         </div>
                     </div>
@@ -262,7 +223,7 @@
                     <div class="results_gightimg3">
                         <div class="results_maxbox3" reveal_sign="width">
                             <div class="results_maximg3" reveal_sign="width">
-                                <div id="picDiv1" style="position: relative;height: 100%;width: 100%;border: 1px black solid">
+                                <div id="picDiv1" style="position: relative;height: 100%;width: 100%">
                                     <img id="imgShow1" class="showcasing_img3" src="http://192.168.10.212:8080/img/index/two/max_img5.png">
                                 </div>
                             </div>
@@ -278,11 +239,11 @@
                                 <div class="detect_btn3" onclick="verifyUrl(1)">检测</div>
                             </div>
                             <div class="detect_minimg3">
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this,1)" src="http://192.168.10.212:8080/img/index/two/max_img1.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this,1)" src="http://192.168.10.212:8080/img/index/two/max_img2.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this,1)" src="http://192.168.10.212:8080/img/index/two/max_img3.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this,1)" src="http://192.168.10.212:8080/img/index/two/max_img4.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this,1)" class="img_active"  src="http://192.168.10.212:8080/img/index/two/max_img5.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://192.168.10.212:8080/img/index/two/max_img1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://192.168.10.212:8080/img/index/two/max_img2.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://192.168.10.212:8080/img/index/two/max_img3.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://192.168.10.212:8080/img/index/two/max_img4.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" class="img_active"  src="http://192.168.10.212:8080/img/index/two/max_img5.png"></div>
                             </div>
                         </div>
                     </div>
@@ -292,7 +253,7 @@
                     <div class="results_gightimg3">
                         <div class="results_maxbox3" reveal_sign="width">
                             <div class="results_maximg3" reveal_sign="width">
-                                <div id="picDiv2" style="position: relative;height: 100%;width: 100%;border: 1px black solid">
+                                <div id="picDiv2" style="position: relative;height: 100%;width: 100%;">
                                     <img id="imgShow2" class="showcasing_img3" src="http://192.168.10.212:8080/img/index/two/max_img5.png">
                                 </div>
                                 <%--<img class="showcasing_img3" src="img/index/two/max_img5.png" />--%>
@@ -308,11 +269,11 @@
                                 <div class="detect_btn3"  onclick="verifyUrl(2)">检测</div>
                             </div>
                             <div class="detect_minimg3">
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this,2)" src="http://192.168.10.212:8080/img/index/two/max_img1.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this,2)" src="http://192.168.10.212:8080/img/index/two/max_img2.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this,2)" src="http://192.168.10.212:8080/img/index/two/max_img3.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this,2)" src="http://192.168.10.212:8080/img/index/two/max_img4.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this,2)" class="img_active" src="http://192.168.10.212:8080/img/index/two/max_img5.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://192.168.10.212:8080/img/index/two/max_img1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://192.168.10.212:8080/img/index/two/max_img2.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://192.168.10.212:8080/img/index/two/max_img3.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://192.168.10.212:8080/img/index/two/max_img4.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" class="img_active" src="http://192.168.10.212:8080/img/index/two/max_img5.png"></div>
                             </div>
                         </div>
                     </div>
@@ -419,7 +380,15 @@
                                 <span><img class="attribute_img4" src="img/index/two/icon-right.png"></span>&nbsp;&nbsp;管理您的人脸图片集合
                             </div>
                             <div class="attribute_text4">
-                                请先<a href="/customer/login">登录</a>
+
+                                <c:choose>
+                                    <c:when test="${! empty name}">
+                                        <a href="/customer/personInfo">点击跳转至个人中心</a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        请先<a href="/customer/login">登录</a>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                     </div>
@@ -432,9 +401,69 @@
     </div>
     <!--第六屏(联系我们)-->
     <div class="section">
-        <div class="container-fluid fluid_six">555555555</div>
+        <div class="container-fluid fluid_six">
+            <!--顶部倒三角背景以及文字-->
+            <div class="title_bg6">
+                <img class="img-responsive center-block" src="img/index/six/title_img6.png" />
+                <div class="title_text6">联系我们</div>
+            </div>
+            <!--正文部分-->
+            <div class="formal_box6">
+                <div class="left_box6">
+                    <div class="contact6_1">
+                        <div class="contact_icon6"><img src="img/index/six/icon1.png"/></div>
+                        <div class="contact_text6">
+                            <div class="contact_text6_1">联系电话</div>
+                            <div class="contact_text6_2">0755 - 8653 7776</div>
+                        </div>
+                    </div>
+                    <div class="contact6_1">
+                        <div class="contact_icon6"><img src="img/index/six/icon2.png"/></div>
+                        <div class="contact_text6">
+                            <div class="contact_text6_1">客服邮箱</div>
+                            <div class="contact_text6_2">info@anytec.cn</div>
+                        </div>
+                    </div>
+                    <div class="contact6_1">
+                        <div class="contact_icon6"><img src="img/index/six/icon3.png"/></div>
+                        <div class="contact_text6">
+                            <div class="contact_text6_1">商务邮箱</div>
+                            <div class="contact_text6_2">sales@anytec.cn</div>
+                        </div>
+                    </div>
+                    <div class="contact6_1">
+                        <div class="contact_icon6"><img src="img/index/six/icon4.png"/></div>
+                        <div class="contact_text6">
+                            <div class="contact_text6_1">地址</div>
+                            <div class="contact_text6_2">518063 深圳市南山区粤海街道高新南七道018号高新工业村R3-A座四层</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right_box6">
+                    <div class="mapapi" id="dituContent"></div>
+                </div>
+            </div>
+            <!--底部版权-->
+            <div class="copyright6">
+                <div class="copyright6_1">Copyright 2017 All Right Reserved 恩钛智能技术有限公司  ICP:08118166 网站地图</div>
+                <div class="copyright6_2">地址：深圳市南山区粤海街道高新南七道高新工业村018号R3-A座四层</div>
+            </div>
+        </div>
     </div>
 
+</div>
+</body>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $(".demo3").animatext({speed: 150,
+            mode: "words",
+            effect: 'swing',
+            infinite: true
+        });
+    })
+
+</script>
 </div>
 </body>
 

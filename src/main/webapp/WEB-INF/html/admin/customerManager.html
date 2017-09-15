@@ -60,7 +60,7 @@
     <table id="tb_departments"></table>
 </div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form  method="post" id="updateForm">
+    <form method="post" id="updateForm">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -70,57 +70,65 @@
                 <div class="modal-body" align="center">
 
                     <div class="form-group">
-                        <label for="userName" class="text-info">用户名&nbsp;&nbsp;&nbsp;&nbsp;:
-                            <input type="text" id="userName" readonly name="userName" ></label>
+                        <label for="userName" class="text-info">用户名&emsp;:</label>
+                        <input type="text" id="userName" readonly name="userName" class="text-info">
                     </div>
 
                     <div class="form-group">
-                        <label  class="text-info">类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                            <input type="text" id="contype" readonly name="contype" >
-                        </label>
+                        <label class="text-info">类型&emsp;&emsp;:</label>
+                        <input type="text" id="contype" readonly name="contype" class="text-info">
                     </div>
 
-                    <div class="form-group">
-                        <label  class="text-info">状态&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                            <input type="radio" name="active" id="active" required value="active">已激活
-                            <input type="radio" name="active" id="unactive" required value="unactive">未激活
-                        </label>
+                    <!--<div class="form-group">-->
+                    <!--<label class="text-info">状态&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:-->
+                    <!--<input type="radio" name="active" id="active" required value="active">已激活-->
+                    <!--<input type="radio" name="active" id="unactive" required value="unactive">未激活-->
+                    <!--</label>-->
+                    <!--</div>-->
+                    <div class="form-group center-block">
+                        <label class="text-info  ">状态&emsp;&emsp;:</label>
+                        <div class="radio-inline ">
+                            <input type="radio" name="active" id="active" required value="active">
+                            <span class="text-info">激活&emsp;</span>
+                        </div>
+                        <div class="radio-inline">
+                            <input type="radio" name="active" id="unactive" required value="unactive">
+                            <span class="text-info">不激活&emsp;&nbsp;&nbsp;&emsp;</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="text-info">邮箱&emsp;&emsp;:</label>
+                            <input type="email" id="email" name="email" required class="text-info">
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="token" class="text-info">token&nbsp;&emsp;:</label>
+                            <input type="text" id="token" name="token" required class="text-info">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="regtime" class="text-info">注册时间:</label>
+                            <input type="text" id="regtime" name="regtime" required readonly class="text-info">
+                        </div>
+
+
                     </div>
-
-                    <div class="form-group"  >
-                        <label for="email" class="text-info">邮箱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                            <input type="text" id="email" name="email" required>
-
-                        </label>
+                    <div class="modal-footer">
+                        <div align="center">
+                            <button type="button" class="btn btn-info" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-info" id="updateSub">提交</button>
+                        </div>
+                        <div align="center"><span id="updateMsg" class="text-danger"></span></div>
                     </div>
-
-                    <div class="form-group"  >
-                        <label for="token" class="text-info">token:
-                            <input type="text" id="token" name="token" required>
-
-                        </label>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="regtime" class="text-info">注册时间：&nbsp;&nbsp;&nbsp;&nbsp;:
-                            <input type="text" id="regtime" name="regtime" required readonly></label>
-                    </div>
-
-
-                </div>
-                <div class="modal-footer">
-                    <div align="center">
-                        <button type="button" class="btn btn-info" data-dismiss="modal">关闭</button>
-                        <button type="button" class="btn btn-info" id="updateSub">提交</button>
-
-                    </div>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
     </form>
 </div>
+
+
 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form  method="post" id="addForm" >
+    <form method="post" id="addForm">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -130,35 +138,36 @@
                 <div class="modal-body" align="center">
 
                     <div class="form-group">
-                        <label for="userName1" class="text-info">用户名&nbsp;&nbsp;&nbsp;&nbsp;:
-                            <input type="text" id="userName1"  name="userName"></label>
+                        <label for="userName1" class="text-info ">用户名:</label>
+                        <input type="text" id="userName1" name="userName" class="text-info">
                     </div>
                     <div class="form-group">
-                        <label for="password" class="text-info">密码&nbsp;&nbsp;&nbsp;&nbsp;:
-                            <input type="text" id="password"  name="password"></label>
+                        <label for="password" class="text-info ">密码&emsp;:</label>
+                        <input type="text" id="password" name="password" class="text-info">
                     </div>
                     <div class="form-group">
-                        <label  class="text-info">类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                            <input type="text" name="contype" required id="contype1" value="用户" readonly>
-                        </label>
+                        <label class="text-info ">类型&emsp;:</label>
+                        <input type="text" name="contype" required id="contype1" value="用户" readonly class="text-info">
+
+                    </div>
+
+                    <div class="form-group center-block">
+                        <label class="text-info  ">状态&emsp;:&emsp;</label>
+                        <div class="radio-inline ">
+                            <input type="radio" name="active" id="active1" required value="active">
+                            <span class="text-info">激活&emsp;</span>
+                        </div>
+                        <div class="radio-inline">
+                            <input type="radio" name="active" id="unactive1" required value="unactive">
+                            <span class="text-info">不激活&emsp;&nbsp;&nbsp;</span>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label  class="text-info">状态&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                            <input type="radio" name="active" id="active1" required value="active">激活
-                            <input type="radio" name="active" id="unactive1" required value="unactive">不激活
-                        </label>
+                        <label for="email" class="text-info ">邮箱&emsp;:</label>
+                        <input type="text" id="email1" name="email" required class="text-info">
                     </div>
 
-                    <div class="form-group">
-                        <label for="email" class="text-info">邮箱&nbsp;&nbsp;&nbsp;&nbsp;:
-                            <input type="text" id="email1" name="email"required></label>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="token" class="text-info">
-                            token:<input type="text" id="token1" name="token" required></label>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <div align="center">
@@ -170,13 +179,11 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </form>
-    <span id="addmsg"></span>
+    <!--<span id="addmsg"></span>-->
 </div>
 <script>
-
     $("#btn_query").click(function () {
         $("#tb_departments").bootstrapTable("refresh")
-
     });
     $(function () {
 
@@ -256,7 +263,7 @@
                     }, {
                         field: 'regtime',
                         title: '注册时间',
-                        formatter:function (value, row, index) {
+                        formatter: function (value, row, index) {
                             return changeDateFormat(value);
                         }
                     }
@@ -288,46 +295,46 @@
         return oInit;
     };
     $("#updateBtn").click(function () {
-        var sleRow=$('#tb_departments').bootstrapTable('getSelections');
-        if(sleRow.length==0){
+        var sleRow = $('#tb_departments').bootstrapTable('getSelections');
+        if (sleRow.length == 0) {
             alert("您没有选中数据，请选择一行");
             return false;
-        }else if(sleRow.length>1){
+        } else if (sleRow.length > 1) {
             alert("您选择了多行，请只选择一行");
             return false;
-        }else{
-            var temp=sleRow[0];
-            $("#userName").attr("value",temp.name);
+        } else {
+            var temp = sleRow[0];
+            $("#userName").attr("value", temp.name);
             console.log(temp.contype);
-            $("#contype").attr("value",temp.contype!=null&&temp.contype!=""?(temp.contype=="user"?"用户":"管理员"):null);
+            $("#contype").attr("value", temp.contype != null && temp.contype != "" ? (temp.contype == "user" ? "用户" : "管理员") : null);
 
-            if(temp.active=="1"){
-                $("#active").attr("checked",true);
+            if (temp.active == "1") {
+                $("#active").attr("checked", true);
             }
-            if(temp.active=="0"){
-                $("#unactive").attr("checked",true);
+            if (temp.active == "0") {
+                $("#unactive").attr("checked", true);
             }
-            $("#email").attr("value",temp.email);
-            $("#token").attr("value",temp.token);
-            $("#regtime").attr("value",changeDateFormat(temp.regtime));
+            $("#email").attr("value", temp.email);
+            $("#token").attr("value", temp.token);
+            $("#regtime").attr("value", changeDateFormat(temp.regtime));
             $("#myModal").modal("show");
         }
 
     });
     $("#updateSub").click(function () {
         $.ajax({
-            url:"/admin/updateCustomer",
-            type:"post",
-            dataType:"json",
-            data:{
-                "userName":$("#userName").val(),
-                "contype" :$("#contype").val()!=null&&$("#contype").val()!=""?($("#contype").val()=="用户"?"user":"admin"):null,
-                "active":$("input:radio[name='active']:checked").val(),
-                "email":$("#email").val(),
-                "token":$("#token").val(),
-                "regtime":$("#regtime").val()
+            url: "/admin/updateCustomer",
+            type: "post",
+            dataType: "json",
+            data: {
+                "userName": $("#userName").val(),
+                "contype": $("#contype").val() != null && $("#contype").val() != "" ? ($("#contype").val() == "用户" ? "user" : "admin") : null,
+                "active": $("input:radio[name='active']:checked").val(),
+                "email": $("#email").val(),
+                "token": $("#token").val(),
+                "regtime": $("#regtime").val()
             },
-            success:function(data){
+            success: function (data) {
                 $('#tb_departments').bootstrapTable('refresh');
                 $("#myModal").modal("hide");
                 $("#updateForm")[0].reset();
@@ -335,30 +342,30 @@
             }
         })
 
-        $("#myModal").modal("hide");
-        $("#updateForm")[0].reset();
+
     })
+
     function deleteItem() {
-        var sleRow=$('#tb_departments').bootstrapTable('getSelections');
-        if(sleRow.length==0){
+        var sleRow = $('#tb_departments').bootstrapTable('getSelections');
+        if (sleRow.length == 0) {
             alert("您没有选中数据");
             return false
-        }else{
-            var nameSelected=[];
-            for(var i=0;i<sleRow.length;i++){
-                nameSelected[i]=sleRow[i].name;
+        } else {
+            var nameSelected = [];
+            for (var i = 0; i < sleRow.length; i++) {
+                nameSelected[i] = sleRow[i].name;
             }
             console.log(nameSelected);
-            var sure=confirm("你确定删除你选择的数据");
-            if(sure){
+            var sure = confirm("你确定删除你选择的数据");
+            if (sure) {
                 $.ajax({
-                    url:"/admin/deleteCustomers",
-                    dataType:"json",
-                    type:"post",
-                    traditional:true,
-                    async:true,
-                    data:{"nameSelected":nameSelected },
-                    success:function (data) {
+                    url: "/admin/deleteCustomers",
+                    dataType: "json",
+                    type: "post",
+                    traditional: true,
+                    async: true,
+                    data: {"nameSelected": nameSelected},
+                    success: function (data) {
                         $('#tb_departments').bootstrapTable('refresh');
                     }
                 })
@@ -367,25 +374,31 @@
     }
 
     $("#addBtn").click(function () {
-
+        $("#msg").text("");
         $("#myModal1").modal("show");
 
     })
+    var flag = true;
     $("#submit").click(function () {
-        if(flag){
+        if($("input:radio[name='active']:checked").val()==null){
+            $("#msg").text("")
+            $("#msg").text("未选中状态")
+            flag=false;
+        }else{
+            flag=true;
+        }
+        if (flag) {
             $.ajax({
-                url:"/admin/addCustomer",
-                type:"post",
-                dataType:"json",
-                data:{
-                    "userName":$("#userName1").val(),
-                    "password":$("#password").val(),
-                    "active":$("input:radio[name='active']:checked").val(),
-                    "token":$("#token1").val(),
-                    "email":$("#email1").val()
-
+                url: "/admin/addCustomer",
+                type: "post",
+                dataType: "json",
+                data: {
+                    "userName": $("#userName1").val(),
+                    "password": $("#password").val(),
+                    "active": $("input:radio[name='active']:checked").val(),
+                    "email": $("#email1").val()
                 },
-                success:function (data) {
+                success: function (data) {
                     $('#tb_departments').bootstrapTable('refresh');
                     $("#myModal1").modal("hide");
                     $("#addForm")[0].reset();
@@ -393,23 +406,33 @@
             })
         }
     });
-    var flag=true;
-    $("#username1").change(function () {
-        $.ajax({
-            url:"/admin/checkName",
-            type:"post",
-            dataType:"json",
-            data:{"userName":$("#userName1").val()},
-            success:function (data) {
-                if(data){
-                    flag=false;
-                    $("#addmsg").text("用户已经存在");
-                }else{
-                    flag=true;
+
+    $("#userName1").change(function () {
+        $("#msg").text("")
+        //alert("heheh")
+        if($("#userName1").val().length<6){
+            //
+            $("#msg").text("用户名必须大于6位")
+            flag=false;
+        }else{
+            //   alert("run here")
+            $.ajax({
+                url: "/admin/checkName",
+                type: "post",
+                dataType: "json",
+                data: {"userName": $("#userName1").val()},
+                success: function (data) {
+                    if (data) {
+                        flag = false;
+                        $("#msg").text("用户已经存在");
+                    } else {
+                        flag = true;
+                    }
                 }
-            }
-        })
+            });
+        }
     })
+
     //处理时间戳
     function changeDateFormat(val) {
         if (val != null) {

@@ -1,9 +1,6 @@
 package com.ntech.util;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -42,12 +39,21 @@ public class PictureShow {
         	   logger.info("http_code:"+connection.getResponseCode());
 	           if(connection.getResponseCode()==200) {
 	        	   inputStream =connection.getInputStream();
-	        	   dataInputStream = new DataInputStream(inputStream);
-	        	   bufferedInputStream = new BufferedInputStream(dataInputStream);
-	        	   byte[] b = new byte[connection.getContentLength()];
-	        	   logger.info("ContentLength: "+connection.getContentLength()); 
-	        	   int length = bufferedInputStream.read(b);
-	        	   logger.info("Length: "+length);
+	        	   byte[] b=streamToByte(inputStream);
+//	        	   dataInputStream = new DataInputStream(inputStream);
+//	        	   bufferedInputStream = new BufferedInputStream(dataInputStream);
+//
+//	        	   byte[] b = new byte[connection.getContentLength()];
+//	        	   logger.info("ContentLength: "+connection.getContentLength());
+//	        	   bufferedInputStream.read(b);
+//
+//				   byte[] bytes = new byte[1024];
+//
+//				   while ((byteCount = inputStream.read(bytes)) != -1)
+//				   {
+//					   outputStream.write(bytes, bytesWritten, byteCount);
+//					   bytesWritten += byteCount;
+//				   }
 	        	   return "data:image/jpeg;base64,"+Base64Encrypt.byteArrayToString(b);
 	           }
 		} catch (MalformedURLException e) {
@@ -66,6 +72,31 @@ public class PictureShow {
 					logger.error(e.getMessage());
 					e.printStackTrace();
 				}
+		}
+		return null;
+	}
+
+
+	public static byte[] streamToByte(InputStream is) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		int c = 0;
+		byte[] buffer = new byte[8 * 1024];
+		try {
+			while ((c = is.read(buffer)) != -1) {
+				baos.write(buffer, 0, c);
+				baos.flush();
+			}
+			return baos.toByteArray();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (baos != null) {
+					baos.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
