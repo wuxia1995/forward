@@ -27,17 +27,17 @@ function uploadPicDetect(obj) {
             var imgShowDiv = document.getElementById("imgShowDetectDiv");
             var imgShow = document.getElementById("imgShowDetect");
             imgShow.src=imgUrl
-            if(widthImg*heightImg>1000000){
-                var text=compress(imgShow,widthImg*0.1,heightImg*0.1,1)
-
-                imgShow.src=text
-                   getImageWidth(imgShow.src,function (widthImg,heightImg) {
-                       resizePic(imgShow,imgShowDiv,widthImg,heightImg)
-                   })
-                file=dataURItoBlob(text);
-            }else{
-                resizePic(imgShow,imgShowDiv,widthImg,heightImg)
-            }
+            // if(widthImg*heightImg>1000000){
+            //     var text=compress(imgShow,widthImg*0.1,heightImg*0.1,1)
+            //
+            //     imgShow.src=text
+            //        getImageWidth(imgShow.src,function (widthImg,heightImg) {
+            //            resizePic(imgShow,imgShowDiv,widthImg,heightImg)
+            //        })
+            //     file=dataURItoBlob(text);
+            // }else{
+            resizePic(imgShow,imgShowDiv,widthImg,heightImg)
+            // }
             var detectForm = new FormData();
             detectForm.append("photo", file);
             //清除input框的状态
@@ -93,6 +93,7 @@ function uploadPicDetect(obj) {
 //     // })
 //     return fileObj;
 // }
+
 //将base64图片转成input能处理的二进制流
 function dataURItoBlob(dataURI) {
     var byteString = atob(dataURI.split(',')[1]);
@@ -144,6 +145,7 @@ function resizePic(imgShow,imgShowDiv,widthImg,heightImg){
 $(document).ready(function () {
 
 }); //ready
+
 // function setPicSize(url) {
 //     getImageWidth(url,function (widthImg,heightImg) {
 //         var imgShowDiv = document.getElementById("imgShowDetectDiv");
@@ -170,6 +172,7 @@ $(document).ready(function () {
 // }
 
 //定义全局变量num记录图片中人脸的个数
+
 var num = 0;
 
 function detectUrl() {

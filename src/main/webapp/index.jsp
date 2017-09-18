@@ -6,7 +6,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-    <title></title>
+    <title>恩钛智能</title>
+    <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/jquery.fullPage.css" />
     <!--竖屏切换css-->
@@ -454,16 +456,6 @@
 </div>
 </body>
 <script type="text/javascript" src="js/index.js"></script>
-<script type="text/javascript">
-    $(function(){
-        $(".demo3").animatext({speed: 150,
-            mode: "words",
-            effect: 'swing',
-            infinite: true
-        });
-    })
-
-</script>
 </div>
 </body>
 

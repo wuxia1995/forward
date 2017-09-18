@@ -76,6 +76,10 @@ $(document).ready(function () {
             },
 
             deleteMyGallery: function (dom) {
+                var message=confirm("确认删除");
+                if(message==false){
+                    return false
+                }
                 if($('#picPreload')){
                     $('#picPreload').remove()
                 }
@@ -89,7 +93,7 @@ $(document).ready(function () {
                     //     "Content-Type": "application/json",
                     //     "X-HTTP-Method-Override": "DELETE" }, //PUT,DELETE
                     success: function (data) {
-                        console.log(data)
+                        // console.log(data)
                         if($('#picPreload')){
                             $('#picPreload').remove()
                         }
@@ -97,7 +101,7 @@ $(document).ready(function () {
 //                        $('#' + dom.alt ).remove();
                     },
                     error: function (data) {
-                        console.log(data)
+                        // console.log(data)
                         if($('#picPreload')){
                             $('#picPreload').remove()
                         }
@@ -109,10 +113,8 @@ $(document).ready(function () {
             },
 
             myLibUrlCheck: function () {
-                if($('#picPreload')){
-                    $('#picPreload').remove()
-                }
                 if (app.myLibUrl == "") {
+                    alert("url不能为空")
                     return false
                 } else {
                     var formData = new FormData();
@@ -126,7 +128,7 @@ $(document).ready(function () {
                         contentType: false,
                         async: true,
                         success: function (data) {
-                            console.log(data)
+                            // console.log(data)
 //                        dataObj = eval(data.results);
                             if($('#picPreload')){
                                 $('#picPreload').remove()
@@ -135,7 +137,7 @@ $(document).ready(function () {
 
                         },
                         error: function (data) {
-                            alert("no face")
+                            alert("no face or image too large")
                             return false
                         }
                     });
@@ -143,7 +145,6 @@ $(document).ready(function () {
             },
 
             myLibSearchUrl: function () {
-
                 var img = new Image();
                 img.src = $("#myLibSearchInputUrl").val();
                 app.myLibSearchReq(img);
@@ -158,7 +159,7 @@ $(document).ready(function () {
                 $.ajax({
                     url: 'getDemoFace',
                     type: 'POST',
-                    dataType: "json",
+                    // dataType: "json",
                     data: formData,
                     processData: false,
                     contentType: false,
@@ -166,17 +167,22 @@ $(document).ready(function () {
                     success: function (data) {
 
                         $('#imgShow').attr("src", img.src);
-                        // console.log("success")
-                        // console.log(data)
                         dataObj = eval(data);
+                        if(data==""||data.length==0){
+                            $('#reponse').html("未在库中搜索到相似人脸或图片格式不符")
+                            $("#searchResult").html("")
+                            $("#resultShow").html("")
+                            return false;
+                        }
                         showResult(dataObj)
                         $('#reponse').html(syntaxHighlight(filter(data)))
 
                     },
                     error: function (data) {
-                        // img.src = ""
-                        alert("no face")
-                        return false
+                        $('#reponse').html("未在库中搜索到相似人脸或图片格式不符")
+                        $("#searchResult").html("")
+                        $("#resultShow").html("")
+                        return false;
                     }
                 });
             },
@@ -202,19 +208,29 @@ $(document).ready(function () {
                 $.ajax({
                     url: 'getDemoFace',
                     type: 'POST',
-                    dataType: "json",
+                    // dataType: "json",
                     data: formData,
                     processData: false,
                     contentType: false,
                     async: true,
                     success: function (data) {
                         dataObj = eval(data);
+                        if(data==""||data.length==0){
+                            $('#reponse').html("未在库中搜索到相似人脸或图片格式不符")
+                            $("#searchResult").html("")
+                            $("#resultShow").html("")
+                            return false;
+                        }
                         showResult(dataObj)
                         $('#reponse').html(syntaxHighlight(filter(data)))
                     },
                     error: function (data) {
-                        alert("no face")
-                        return false
+                        if(data==""||data.length==0){
+                            $('#reponse').html("未在库中搜索到相似人脸或图片格式不符")
+                            $("#searchResult").html("")
+                            $("#resultShow").html("")
+                            return false;
+                        }
                     }
                 });
             }
@@ -343,7 +359,7 @@ function filter(data) {
     return data;
 }
 
-function syntaxHighlight(json) {
+function  syntaxHighlight(json) {
     if (typeof json != 'string') {
         json = JSON.stringify(json, undefined, 2);
     }
@@ -361,6 +377,6 @@ function syntaxHighlight(json) {
         } else if (/null/.test(match)) {
             cls = 'null';
         }
-        return '<span class="' + cls + '">' + match + '</span>';
+        return match;
     });
 }

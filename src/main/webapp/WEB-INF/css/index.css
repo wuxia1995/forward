@@ -80,7 +80,7 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	font-size: 20px;
+	font-size: 22px;
 	color: white;
 	width: 39%;
 	height: 100%;
@@ -90,16 +90,16 @@
 }
 
 .introduce_text2 {
-	width: 74%;
-	height: 100%;
-	line-height: 2;
-	color: white;
-	font-size: 20px;
-	text-align: center;
-	padding-top: 12%;
-	position: absolute;
-	top: 0;
-	right: 0;
+    width: 74%;
+    height: 100%;
+    line-height: 2;
+    color: white;
+    font-size: 17px;
+    text-align: center;
+    padding-top: 14%;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .formal_box2 {
@@ -747,7 +747,7 @@
 .results_maxbox4 {
 	border-radius: 10px;
 	background-color: #79f0b4;
-	width: 80%;
+	width: 60%;
 	position: relative;
 }
 

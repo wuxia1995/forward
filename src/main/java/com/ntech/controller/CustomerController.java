@@ -602,7 +602,7 @@ public class CustomerController {
             logger.info(result);
             jsonResult = (JSONObject) new JSONParser().parse(result);
             jsonArray = (JSONArray) jsonResult.get("results");
-            for (int i = 0; i < jsonArray.size(); i++) {
+             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject tmpJson = (JSONObject) jsonArray.get(i);
                 String tmpStrng = (String) tmpJson.get("normalized");
 //                String photo = (String) tmpJson.get("photo");
