@@ -1,8 +1,5 @@
 $(document).ready(function () {
-    // $("#mamageMyGallery").click(function () {
-    //     $("#loginTip").removeClass("hidden")
-    // })
-    //
+
 }); //ready
 
 var preSize=0;
@@ -36,8 +33,6 @@ function searchReqDemo(img) {
             imgShow.style.height="100%"
             imgShow.style.width="100%"
         }
-        // imgShow.src = e.target.result;
-        // $("#imgShowDetect").attr("src", imgUrl)
     })
     var formData = new FormData();
     formData.append("n",4);
@@ -117,8 +112,6 @@ function uploadImgSearcheDemo(img) {
                 imgShow.style.height="100%"
                 imgShow.style.width="100%"
             }
-            // imgShow.src = e.target.result;
-            // $("#imgShowDetect").attr("src", imgUrl)
         })
 
 
@@ -133,7 +126,6 @@ function uploadImgSearcheDemo(img) {
     $.ajax({
         url: 'customer/getDemoFace',
         type: 'POST',
-        // dataType: "json",
         data: formData,
         processData: false,
         contentType: false,
@@ -149,27 +141,19 @@ function uploadImgSearcheDemo(img) {
             $('#reponseSearchDemo').html(syntaxHighlight(filter(dataObj)))
         },
         error: function (data) {
-            // if(data==""){
                 $('#reponseSearchDemo').html("文件格式不符或文件太大")
                 $('#searchResultDemo').html("")
                 $('#resultShowSearchDemo').html("")
-            // }
-            // alert("no face")
             return false
         }
     });
 
 }
-function showResult(dataObj) {
 
+//search showResult
+function showResult(dataObj) {
     removeBefore(preSize)
     preSize=0;
-
-
-
-    // for (var prop in dataObj)
-    // {
-        // console.log("jsonObj[" + prop + "]=" + dataObj[prop]);
         for (var v in dataObj){
             preSize++;
             var imgEle=
@@ -178,9 +162,8 @@ function showResult(dataObj) {
             var confidence="第"+preSize+"张是同一个人的可信度是:"+dataObj[v]['confidence']
             $("#searchResultDemo").append("<div  id='divResult"+preSize+"'>"+ confidence +"</div>");
             $("#resultShowSearchDemo").append("<div class='results_graphic4'  class='imgboxShow' id='div"+preSize+"'>"+ imgEle +"</div>");
-            // console.log(dataObj[v]['face']['normalized'])
         }
-    // }
+
 }
 
 function filter(data) {
@@ -192,27 +175,3 @@ function filter(data) {
     }
     return data;
 }
-
-
-//
-// function syntaxHighlight(json) {
-//     if (typeof json != 'string') {
-//         json = JSON.stringify(json, undefined, 2);
-//     }
-//     json = json.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>');
-//     return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
-//         var cls = 'number';
-//         if (/^"/.test(match)) {
-//             if (/:$/.test(match)) {
-//                 cls = 'key';
-//             } else {
-//                 cls = 'string';
-//             }
-//         } else if (/true|false/.test(match)) {
-//             cls = 'boolean';
-//         } else if (/null/.test(match)) {
-//             cls = 'null';
-//         }
-//         return '<span class="' + cls + '">' + match + '</span>';
-//     });
-// }

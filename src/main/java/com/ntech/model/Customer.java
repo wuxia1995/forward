@@ -17,6 +17,8 @@ public class Customer {
 
     private Date regtime;
 
+    private Integer faceNumber;
+
     public String getName() {
         return name;
     }
@@ -71,5 +73,13 @@ public class Customer {
 
     public void setRegtime(Date regtime) {
         this.regtime = regtime;
+    }
+
+    public Integer getFaceNumber() {
+        return faceNumber;
+    }
+
+    public void setFaceNumber(Integer faceNumber) {
+        this.faceNumber = faceNumber;
     }
 }

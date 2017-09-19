@@ -147,6 +147,7 @@ $(document).ready(function () {
             myLibSearchUrl: function () {
                 var img = new Image();
                 img.src = $("#myLibSearchInputUrl").val();
+                setPicSize(img.src)
                 app.myLibSearchReq(img);
             },
             myLibSearchReq: function (img) {
@@ -188,7 +189,7 @@ $(document).ready(function () {
             },
             myLibSearchUpload(img) {
                 var imgShow = document.getElementById("imgShow")
-                var imgShowDiv = document.getElementById("imgShowDiv")
+                // var imgShowDiv = document.getElementById("imgShowDiv")
                 var file = img.files[0];
                 if (!file) {
                     return false;
@@ -197,7 +198,7 @@ $(document).ready(function () {
                 reader.onloadend = function (e) {
                     // console.log("成功读取....");
                     imgShow.src = e.target.result;
-                    // setPicSize(e.target.result,imgShowDiv,imgShow)
+                    setPicSize(e.target.result)
                 }
                 reader.readAsDataURL(file)
                 //上传文件时当前的图片内容是文件,对比的对象可能时文件或者url
@@ -225,12 +226,12 @@ $(document).ready(function () {
                         $('#reponse').html(syntaxHighlight(filter(data)))
                     },
                     error: function (data) {
-                        if(data==""||data.length==0){
+                        // if(data==""||data.length==0){
                             $('#reponse').html("未在库中搜索到相似人脸或图片格式不符")
                             $("#searchResult").html("")
                             $("#resultShow").html("")
                             return false;
-                        }
+                        // }
                     }
                 });
             }
@@ -246,8 +247,8 @@ var preSize = 0;
 
 function setPicSize(imgUrl,imgShowDiv,imgShow) {
     getImageWidth(imgUrl, function (widthImg, heightImg) {
-        // var imgShowDiv = document.getElementById("picDiv" + id);
-        // var imgShow = document.getElementById("imgShow" + id);
+        var imgShow = document.getElementById("imgShow")
+        var imgShowDiv = document.getElementById("imgShowDiv")
         console.log("height:" + heightImg)
         console.log("widht:" + widthImg)
         console.log(imgShowDiv.offsetHeight)

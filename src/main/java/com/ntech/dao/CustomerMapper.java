@@ -28,7 +28,5 @@ public interface CustomerMapper {
 
     int updateByPrimaryKey(Customer record);
 
-    List<Customer> findPage(@Param("limit") int limit,@Param("offset") int offset);
-
-
+    List<Customer> findPage(int limit,int offset);
 }

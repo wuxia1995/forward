@@ -246,7 +246,7 @@ public class AdminController {
         JSONObject jsonObject=new JSONObject();
         if(name.equals("")){
 
-            jsonObject.put("rows",customerService.findPage(limit,offset));
+//            jsonObject.put("rows",customerService.findPage(limit,offset));
             jsonObject.put("total",customerService.totalCount());
         }else{
             List<Customer> list=new ArrayList<Customer>();
@@ -334,7 +334,7 @@ public class AdminController {
     public JSONObject findLogs(HttpSession session,int limit,int offset,String name){
         JSONObject jsonObject=new JSONObject();
         if(name.equals("")||name==null){
-            jsonObject.put("rows",logService.findPage(limit,offset));
+//            jsonObject.put("rows",logService.findPage(limit,offset));
             jsonObject.put("total",logService.totalCount());
         }else{
             List<Log> list= logService.findByName(name);
@@ -378,7 +378,7 @@ public class AdminController {
         // setMealService.findAll()
 
         if(name.equals("")||name==null){
-            jsonObject.put("rows", setMealService.findByPage(limit,offset));
+//            jsonObject.put("rows", setMealService.findByPage(limit,offset));
             jsonObject.put("total", setMealService.totalCount());
 
         }

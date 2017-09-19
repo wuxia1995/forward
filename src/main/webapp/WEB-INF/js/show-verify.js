@@ -3,8 +3,6 @@ var leftUploadFile
 var rightUploadFile
 
 function verifyUrl(id) {
-    // var img = new Image();
-    // img.src = $("#inputUrl" + id).val();
     verifyReq($("#inputUrl" + id).val(), id);
 }
 
@@ -100,8 +98,6 @@ function uploadPicVerify(obj, id) {
 }
 function drawDiv(image,w,h,result,parentId){
     var imgVerifyDiv = document.getElementById(parentId);
-    // var widthRate = imgVerifyDiv.offsetWidth / image.naturalWidth
-    // var heightRate = imgVerifyDiv.offsetHeight / image.naturalHeight
     var widthRate = image.width / w
     var heightRate = image.height / h
     result.x1 = result.x1 * widthRate
@@ -129,8 +125,6 @@ function drawDiv(image,w,h,result,parentId){
 }
 function readResData(data,id) {
     removeDiv()
-    // console.log({width: w, height: h});
-    // $("#reponseVerify").html(data);//设置返回的json数据
     console.log(data);
 
     //读取返回的json数据
@@ -257,6 +251,7 @@ function verifyReq(imgUrl, id) {
 
 }
 
+
 function getImageWidth(url, callback) {
     var img = new Image();
     img.src = url;
@@ -272,24 +267,3 @@ function getImageWidth(url, callback) {
     }
 
 }
-// function syntaxHighlight(json) {
-//     if (typeof json != 'string') {
-//         json = JSON.stringify(json, undefined, 2);
-//     }
-//     json = json.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>');
-//     return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
-//         var cls = 'number';
-//         if (/^"/.test(match)) {
-//             if (/:$/.test(match)) {
-//                 cls = 'key';
-//             } else {
-//                 cls = 'string';
-//             }
-//         } else if (/true|false/.test(match)) {
-//             cls = 'boolean';
-//         } else if (/null/.test(match)) {
-//             cls = 'null';
-//         }
-//         return '<span class="' + cls + '">' + match + '</span>';
-//     });
-// }

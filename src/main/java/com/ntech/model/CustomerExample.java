@@ -574,6 +574,66 @@ public class CustomerExample {
             addCriterion("regtime not between", value1, value2, "regtime");
             return (Criteria) this;
         }
+
+        public Criteria andFaceNumberIsNull() {
+            addCriterion("face_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFaceNumberIsNotNull() {
+            addCriterion("face_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFaceNumberEqualTo(Integer value) {
+            addCriterion("face_number =", value, "faceNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andFaceNumberNotEqualTo(Integer value) {
+            addCriterion("face_number <>", value, "faceNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andFaceNumberGreaterThan(Integer value) {
+            addCriterion("face_number >", value, "faceNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andFaceNumberGreaterThanOrEqualTo(Integer value) {
+            addCriterion("face_number >=", value, "faceNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andFaceNumberLessThan(Integer value) {
+            addCriterion("face_number <", value, "faceNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andFaceNumberLessThanOrEqualTo(Integer value) {
+            addCriterion("face_number <=", value, "faceNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andFaceNumberIn(List<Integer> values) {
+            addCriterion("face_number in", values, "faceNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andFaceNumberNotIn(List<Integer> values) {
+            addCriterion("face_number not in", values, "faceNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andFaceNumberBetween(Integer value1, Integer value2) {
+            addCriterion("face_number between", value1, value2, "faceNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andFaceNumberNotBetween(Integer value1, Integer value2) {
+            addCriterion("face_number not between", value1, value2, "faceNumber");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

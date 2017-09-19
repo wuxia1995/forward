@@ -65,10 +65,10 @@ $(document).ready(function() {
     //单选按钮判断
      $(".select_btn input").click(function(){
             if($(this).is(":checked")){
-		         $(".select_btn img").attr("src","img/information/radio_no.png");
+		         $(".select_btn img").attr("src","../img/information/radio_no.png");
 		         $("select").removeClass("sel_active");
 		         $("select").attr("disabled","disabled")
-		         $(this).siblings("img").attr("src","img/information/radio_yes.png");
+		         $(this).siblings("img").attr("src","../img/information/radio_yes.png");
 		         $(this).parent().siblings(".select_down").children().addClass("sel_active");
 		         $(this).parent().siblings(".select_down").children().attr("disabled",false);
 		    }

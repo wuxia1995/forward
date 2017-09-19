@@ -28,5 +28,5 @@ public interface SetMealMapper {
 
     int updateByPrimaryKey(SetMeal record);
 
-    List<SetMeal> findPage(@Param("limit") int limit, @Param("begin") int begin);
+    List<SetMeal> findPage(int limit,int offset);
 }

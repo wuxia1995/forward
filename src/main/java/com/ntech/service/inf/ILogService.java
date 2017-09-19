@@ -12,5 +12,5 @@ public interface ILogService {
     List<Log> findAll();
 
     long totalCount();
-    List<Log> findPage(int limit,int offset);
+//    List<Log> findPage(int limit,int offset);
 }
