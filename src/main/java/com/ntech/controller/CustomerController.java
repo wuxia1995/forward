@@ -77,6 +77,7 @@ public class CustomerController {
         logger.info("commit register");
         Customer customer = new Customer();
         customer.setName(name);
+        customer.setFaceNumber(0);
         customer.setPassword(SHAencrypt.encryptSHA(password));
         customer.setEmail(email);
         try {
@@ -233,8 +234,8 @@ public class CustomerController {
         ModelAndView mav = new ModelAndView();
         String name = (String) session.getAttribute("name");
         if (name == null || name.equals("") || !customerService.checkUserName(name)) {
-            mav.addObject("msg", "用户存在异常");
-            mav.setViewName("error");
+//            mav.addObject("msg", "用户存在异常");
+            mav.setViewName("login");
             return mav;
         }
         SetMeal meal = setMealService.findByName(name);
@@ -260,7 +261,7 @@ public class CustomerController {
     public String setMealJump(HttpSession session) {
         String name = (String) session.getAttribute("name");
         if(null==name||"".equals(name)){
-            return "error";
+            return "login";
         }
         return "set-meal";
     }
@@ -290,8 +291,8 @@ public class CustomerController {
 //                modelAndView.addObject("test2", "test2Content");
             } else {
 //                logger.info("");
-                modelAndView.setViewName("msg");
-                modelAndView.addObject("msg", "用户会话过期,请重新登录 <a href='login'>点击登录</a>");
+                modelAndView.setViewName("login");
+//                modelAndView.addObject("msg", "用户会话过期,请重新登录 <a href='login'>点击登录</a>");
 
             }
         } catch (Exception e) {
@@ -308,7 +309,7 @@ public class CustomerController {
         ModelAndView modelAndView = new ModelAndView("show-gallery-demo");
         String name = (String) session.getAttribute("name");
         if(null==name||"".equals(name)){
-            modelAndView.setViewName("error");
+            modelAndView.setViewName("login");
             return modelAndView;
         }
         String result = null;
@@ -381,10 +382,13 @@ public class CustomerController {
 
     @RequestMapping("addToGallery")
     @ResponseBody
-    public JSONArray addToGallery(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+    public String addToGallery(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
         String name = (String) session.getAttribute("name");
         String result = null;
         if (null != name && !"".equals(name)) {
+            if(!customerService.checkFaceNumber(name)){
+                return "0";
+            }
             if (request.getRequestURI().equals("/customer/addToGallery")) {
                 request.setAttribute("localAPI", "/v0/face/");
             }
@@ -392,18 +396,21 @@ public class CustomerController {
             result = MethodUtil.getInstance().requestForword(request, response);
             if (result != null) {
                 //添加后获取最新的图片列表
+
+                customerService.operateFaceNumber(name,1,1);
                 result = getMyGalleryLocal(name);
+
             }
-            return wrapResponse(result);
+            return wrapResponse(result).toJSONString();
         }
-        return null;
+        return "login";
     }
 
 
     //通过id删除个人人脸库中的图片
     @RequestMapping("deleteToGallery")
     @ResponseBody
-    public JSONArray deleteToGallery(String id ,HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+    public String deleteToGallery(String id , HttpSession session, HttpServletRequest request, HttpServletResponse response) {
         String name = (String) session.getAttribute("name");
         logger.info(id);
         HashMap<String,String> header = new HashMap<String,String>();
@@ -411,12 +418,16 @@ public class CustomerController {
         header.put("API","/v0/face/id/"+id);
         String result = null;
         if (null != name && !"".equals(name)) {
+            if(!customerService.checkFaceNumber(name)){
+                return "1";
+            }
             try {
                 HttpUploadFile.getInstance().httpURLConnectionSDK(header, null, null, "no");
             } catch (IOException e) {
                 e.printStackTrace();
             }
             request.setAttribute("idCheck", name);
+            customerService.operateFaceNumber(name,0,1);
             //检查图片id是否合法,检查方法待定,id合法后才能进    行下一步操作
 //            if(null!=picId&&!"".equals(picId)) {
 //                request.setAttribute("localApi","/v0/face/id/"+picId);
@@ -424,7 +435,7 @@ public class CustomerController {
 //            }
         }
         result = getMyGalleryLocal(name);
-        return wrapResponse(result);
+        return wrapResponse(result).toJSONString();
     }
 
     @RequestMapping("addGallery")

@@ -12,6 +12,19 @@ $(document).ready(function () {
             seen: true,
             todos: []
         },
+        watch:{
+          todos:{
+              handler:function () {
+                  console.log("change");
+
+                  setTimeout(function () {
+                      var administer_img=$(".administer_img").width();
+                      $(".delete_icon").css({"width":administer_img/4,"height":administer_img/4})
+                  },10);
+                  // width();
+              }
+          }
+        },
         mounted: function () {
             // getMyGallery()
         },
@@ -22,7 +35,6 @@ $(document).ready(function () {
             myLibUploadInput: function () {
 
                 var fileContent = document.getElementById('myLibUpload')
-                console.log(fileContent.files[0])
                 var file = fileContent.files[0];
                 if (!file) {
                     return false;
@@ -41,14 +53,20 @@ $(document).ready(function () {
                     success: function (data) {
                         // console.log(data)
 //                        dataObj = eval(data.results);
+                        if(data==0){
+                            alert("个人人脸数量已达到上限");
+                            return false;
+                        }
                         if($('#picPreload')){
                             $('#picPreload').remove()
                         }
+
                         app.todos = data;
+                        // width();
 
                     },
                     error: function (data) {
-                        alert("no face or image too large")
+                        alert("未检查到人脸或图片格式不符")
                         return false
                     }
                 });
@@ -56,21 +74,22 @@ $(document).ready(function () {
 
 
             getMyGallery: function () {
-                if($('#picPreload')){
-                    $('#picPreload').remove()
-                }
+
                 $.ajax({
                     url: 'getMyGallery',
                     type: 'GET',
                     dataType: "json",
                     success: function (data) {
-                        console.log(data)
-                        app.todos = data;
-                    },
-                    error: function (data) {
-                        alert("no face")
+                        if($('#picPreload')){
+                            $('#picPreload').remove()
+                        }
+                        ;
                         app.todos = data;
 
+                    },
+                    error: function (data) {
+                        alert("未检查到人脸或图片格式不符")
+                        return false
                     }
                 });
             },
@@ -83,25 +102,24 @@ $(document).ready(function () {
                 if($('#picPreload')){
                     $('#picPreload').remove()
                 }
-                console.log(dom);
                 $.ajax({
                     url: 'deleteToGallery',
                     type: 'POST',
-                    // dataType: "json",
+                    dataType: "json",
                     data: {"id": dom.alt},
-                    // headers: {
-                    //     "Content-Type": "application/json",
-                    //     "X-HTTP-Method-Override": "DELETE" }, //PUT,DELETE
                     success: function (data) {
-                        // console.log(data)
+                        if(data==1){
+                            alert("出现错误");
+                            return false;
+                        }
                         if($('#picPreload')){
                             $('#picPreload').remove()
                         }
                         app.todos = data;
+                        width()
 //                        $('#' + dom.alt ).remove();
                     },
                     error: function (data) {
-                        // console.log(data)
                         if($('#picPreload')){
                             $('#picPreload').remove()
                         }
@@ -128,8 +146,10 @@ $(document).ready(function () {
                         contentType: false,
                         async: true,
                         success: function (data) {
-                            // console.log(data)
-//                        dataObj = eval(data.results);
+                            if(data==0){
+                                alert("个人人脸数量已达到上限");
+                                return false;
+                            }
                             if($('#picPreload')){
                                 $('#picPreload').remove()
                             }
@@ -137,21 +157,29 @@ $(document).ready(function () {
 
                         },
                         error: function (data) {
-                            alert("no face or image too large")
+                            alert("未检查到人脸或图片格式不符")
                             return false
                         }
                     });
+
                 }
             },
 
             myLibSearchUrl: function () {
+                var imgValue=$("#myLibSearchInputUrl").val();
+                if(imgValue==""){
+                    alert("url不能为空")
+                    return false;
+                }
                 var img = new Image();
-                img.src = $("#myLibSearchInputUrl").val();
-                setPicSize(img.src)
+                img.src = imgValue
                 app.myLibSearchReq(img);
             },
             myLibSearchReq: function (img) {
+                $('#imgShow').attr("src", img.src);
+                setPicSize(img.src)
 
+                // setPicSize(img.src)
                 // document.getElementById("imgShow").style.height="100%"
                 // document.getElementById("imgShowDiv").style.height="100%"
                 var formData = new FormData();
@@ -167,12 +195,11 @@ $(document).ready(function () {
                     async: true,
                     success: function (data) {
 
-                        $('#imgShow').attr("src", img.src);
                         dataObj = eval(data);
                         if(data==""||data.length==0){
-                            $('#reponse').html("未在库中搜索到相似人脸或图片格式不符")
+                            $('#reponse').html("")
                             $("#searchResult").html("")
-                            $("#resultShow").html("")
+                            $("#resultShow").html("未在库中搜索到相似人脸或图片格式不符")
                             return false;
                         }
                         showResult(dataObj)
@@ -180,14 +207,15 @@ $(document).ready(function () {
 
                     },
                     error: function (data) {
-                        $('#reponse').html("未在库中搜索到相似人脸或图片格式不符")
+                        $('#reponse').html("")
                         $("#searchResult").html("")
-                        $("#resultShow").html("")
+                        $("#resultShow").html("未在库中搜索到相似人脸或图片格式不符")
                         return false;
                     }
                 });
             },
             myLibSearchUpload(img) {
+
                 var imgShow = document.getElementById("imgShow")
                 // var imgShowDiv = document.getElementById("imgShowDiv")
                 var file = img.files[0];
@@ -196,7 +224,6 @@ $(document).ready(function () {
                 }
                 var reader = new FileReader();
                 reader.onloadend = function (e) {
-                    // console.log("成功读取....");
                     imgShow.src = e.target.result;
                     setPicSize(e.target.result)
                 }
@@ -217,9 +244,9 @@ $(document).ready(function () {
                     success: function (data) {
                         dataObj = eval(data);
                         if(data==""||data.length==0){
-                            $('#reponse').html("未在库中搜索到相似人脸或图片格式不符")
+                            $('#reponse').html("")
                             $("#searchResult").html("")
-                            $("#resultShow").html("")
+                            $("#resultShow").html("未在库中搜索到相似人脸或图片格式不符")
                             return false;
                         }
                         showResult(dataObj)
@@ -227,9 +254,9 @@ $(document).ready(function () {
                     },
                     error: function (data) {
                         // if(data==""||data.length==0){
-                            $('#reponse').html("未在库中搜索到相似人脸或图片格式不符")
+                            $('#reponse').html("")
                             $("#searchResult").html("")
-                            $("#resultShow").html("")
+                            $("#resultShow").html("未在库中搜索到相似人脸或图片格式不符")
                             return false;
                         // }
                     }
@@ -244,14 +271,10 @@ $(document).ready(function () {
 
 var preSize = 0;
 
-
 function setPicSize(imgUrl,imgShowDiv,imgShow) {
     getImageWidth(imgUrl, function (widthImg, heightImg) {
         var imgShow = document.getElementById("imgShow")
         var imgShowDiv = document.getElementById("imgShowDiv")
-        console.log("height:" + heightImg)
-        console.log("widht:" + widthImg)
-        console.log(imgShowDiv.offsetHeight)
         if (heightImg != widthImg) {
             if (heightImg > widthImg) {
                 imgShow.style.width = widthImg / heightImg * 100 + "%"
@@ -291,7 +314,6 @@ function getMyGallery() {
         type: 'GET',
         dataType: "json",
         success: function (data) {
-            console.log(data)
             app.todos = data
             return data;
         },
@@ -316,25 +338,11 @@ function removeBefore(size) {
 }
 
 function showResult(dataObj) {
-
-    removeBefore(preSize)
+    $('#reponse').html("")
+    $("#searchResult").html("")
+    $("#resultShow").html("")
+    // removeBefore(preSize)
     preSize = 0;
-    // for (var prop in dataObj) {
-    //     // console.log("jsonObj[" + prop + "]=" + dataObj[prop]);
-    //     for (var v in dataObj[prop]) {
-    //         preSize++;
-    //         var imgEle = "<div>第" + preSize + "张</div><img style=''  src='" + dataObj[prop][v]['face']['thumbnail'] + "'>"
-    //         var confidence = "第" + preSize + "张是同一个人的可信度是:" + dataObj[prop][v]['confidence']
-    //         $("#searchResult").append("<div  id='divResult" + preSize + "'>" + confidence + "</div>");
-    //         $("#resultShow").append("<div class='imgboxShow thumbnail' id='div" + preSize + "'>" + imgEle + "</div>");
-    //         console.log(dataObj[prop][v]['face']['thumbnail'])
-    //     }
-    // }
-
-
-    // for (var prop in dataObj)
-    // {
-    // console.log("jsonObj[" + prop + "]=" + dataObj[prop]);
     for (var v in dataObj){
         preSize++;
         var imgEle=
@@ -342,10 +350,8 @@ function showResult(dataObj) {
             "<div><img src='"+dataObj[v]['face']['normalized']+"'></div>"
         var confidence="第"+preSize+"张是同一个人的可信度是:"+dataObj[v]['confidence']
         $("#searchResult").append("<div  id='divResult"+preSize+"'>"+ confidence +"</div>");
-        $("#resultShow").append("<div class='imgboxShow thumbnail'  id='div"+preSize+"'>"+ imgEle +"</div>");
-        // console.log(dataObj[v]['face']['normalized'])
+        $("#resultShow").append("<div class='results_minimg'  id='div"+preSize+"'>"+ imgEle +"</div>");
     }
-    // }
 
 }
 

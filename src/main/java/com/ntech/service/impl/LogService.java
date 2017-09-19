@@ -41,9 +41,14 @@ public class LogService implements ILogService {
     }
 
 
-//    public List<Log> findPage(int limit, int offset) {
-//
-//        return logMapper.findPage(limit,offset);
-//    }
+    public List<Log> findPage(int limit, int offset) {
+
+        return logMapper.findPage(limit,offset);
+    }
+
+    public List<Log> findByNameWithLimit(String name, int limit, int offset) {
+
+        return logMapper.findWithLimit(name, limit, offset);
+    }
 
 }

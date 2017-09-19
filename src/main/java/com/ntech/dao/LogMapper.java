@@ -28,5 +28,7 @@ public interface LogMapper {
 
     int updateByPrimaryKey(Log record);
 
-    List<Log> findPage(int limit,int offset);
+    List<Log> findPage(@Param("limit") int limit,@Param("offset") int offset);
+
+    List<Log> findWithLimit(@Param("name")String name,@Param("limit") int limit,@Param("offset")int offset);
 }

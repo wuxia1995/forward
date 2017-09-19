@@ -209,8 +209,13 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+
   <select id="findPage" resultMap="BaseResultMap">
-    select * from  log limit #{offset},#{limit}
+    select * from log limit #{offset},#{limit}
+  </select>
+
+  <select id="findWithLimit" resultMap="BaseResultMap">
+    select * from  log where user_name=#{name} order by time desc limit #{offset},#{limit}
   </select>
 
 </mapper>

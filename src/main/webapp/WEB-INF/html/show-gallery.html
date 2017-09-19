@@ -15,7 +15,7 @@
 		<!--导航条-->
 		<div class="left_nav">
 			<div class="logo">
-				<img src="../img/information/logo.png">
+				<a href="../"><img src="../img/information/logo.png"></a>
 			</div>
 			<ul class="nav_ul">
 				<li>
@@ -91,7 +91,7 @@
 						<div  class="results_centent" id="searchResult"></div>
 					</div>
                     <div class="rightbottom_box">
-                        <div class="results_box">搜索结果</div>
+                        <!--<div class="results_box">搜索结果</div>-->
                         <div id="resultShow" class="results_centent">
                         </div>
                     </div>
@@ -101,7 +101,8 @@
 						<div class="administer_box">
 							<div class="administer_top">
 								<div class="toptitle_box">
-									<div @click="getMyGallery" class="top_font">管理我的图库</div>
+									<!--<div @click="getMyGallery" class="top_font">管理我的图库</div>-->
+									<div class="top_font">管理我的图库</div>
 								</div>
 							</div>
 							<div class="administer_middle">
@@ -109,18 +110,22 @@
                                     <#if galleryDemo??>
                                         <#list galleryDemo as item>
                                             <div class="administer_img" id="${item.id}par">
-                                                <img src="${item.normalized}" v-bind:alt="${item.id}" id="${item.id}"  v-on:click="deleteMyGallery($event.target)"/>
+                                                <img src="${item.normalized}" />
+												<div class="delete_icon"><img v-on:click="deleteMyGallery($event.target)" v-bind:alt="${item.id}" id="${item.id}" src="../img/information/delete.png"/></div>
                                             </div>
 
                                         </#list>
                                         <#else>no image
                                     </#if>
                                 </div>
+
                                 <template v-for="todo in todos">
-                                    <div class="administer_img">
-                                        <img v-bind:src="todo.normalized"  v-bind:alt="todo.id"  v-on:click="deleteMyGallery($event.target)"/>
-                                    </div>
+										<div class="administer_img">
+											<img v-bind:src="todo.normalized" />
+											<div class="delete_icon"><img v-on:click="deleteMyGallery($event.target)"   v-bind:alt="todo.id" src="../img/information/delete.png"  v-on:click="deleteMyGallery($event.target)"/></div>
+										</div>
                                 </template>
+
 							</div>
 							<div class="administer_bottom">
 								<div class="contrast_btn2">

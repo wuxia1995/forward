@@ -59,8 +59,8 @@ public class MailUtil {
 //        gc.add(2,2);
 //        System.out.println(gc.getTime());
 //        System.out.println(new Date());
-//        System.out.println(SHAencrypt.encryptSHA("123456"));
-        System.out.println("http://192.168.10.208"+"http://127.0.0.1:3333/uploads//20170904/15044886028807127.jpeg".substring(16));
+        System.out.println(SHAencrypt.encryptSHA("admin"));
+//        System.out.println("http://192.168.10.208"+"http://127.0.0.1:3333/uploads//20170904/15044886028807127.jpeg".substring(16));
 
     }
 }

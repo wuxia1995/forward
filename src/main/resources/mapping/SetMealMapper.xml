@@ -257,7 +257,7 @@
   </update>
 
   <select id="findPage"  resultMap="BaseResultMap">
-    select * from set_meal limit #{begin},#{limit}
+    select * from set_meal limit #{offset},#{limit}
   </select>
 
 </mapper>

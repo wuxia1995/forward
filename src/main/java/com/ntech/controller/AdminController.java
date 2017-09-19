@@ -65,13 +65,13 @@ public class AdminController {
         if(null!=name&&!"".equals(name)&&name.equals("sessionStatus")){
             return "admin/customerManager";
         }
-        return "error";
+        return "login";
     }
     //退出登录
     @RequestMapping("logout")
     public String logout(HttpSession session) {
         session.removeAttribute("admin");
-        return "admin/login-admin";
+        return "admin/login";
     }
     //跳转到首页
     @RequestMapping("logManager")
@@ -80,7 +80,7 @@ public class AdminController {
         if(null!=name&&!"".equals(name)&&name.equals("sessionStatus")){
             return "admin/logManager";
         }
-        return "error";
+        return "login";
     }
     //跳转到首页
     @RequestMapping("mealManager")
@@ -89,7 +89,7 @@ public class AdminController {
         if(null!=name&&!"".equals(name)&&name.equals("sessionStatus")){
             return "admin/mealManager";
         }
-        return "error";
+        return "login";
     }
 
     @RequestMapping("/checkName")
@@ -246,7 +246,7 @@ public class AdminController {
         JSONObject jsonObject=new JSONObject();
         if(name.equals("")){
 
-//            jsonObject.put("rows",customerService.findPage(limit,offset));
+            jsonObject.put("rows",customerService.findPage(limit,offset));
             jsonObject.put("total",customerService.totalCount());
         }else{
             List<Customer> list=new ArrayList<Customer>();
@@ -334,17 +334,15 @@ public class AdminController {
     public JSONObject findLogs(HttpSession session,int limit,int offset,String name){
         JSONObject jsonObject=new JSONObject();
         if(name.equals("")||name==null){
-//            jsonObject.put("rows",logService.findPage(limit,offset));
+            jsonObject.put("rows",logService.findPage(limit,offset));
             jsonObject.put("total",logService.totalCount());
         }else{
-            List<Log> list= logService.findByName(name);
-            jsonObject.put("rows",list);
-            jsonObject.put("total",list.size());
+            jsonObject.put("rows",logService.findByNameWithLimit(name,limit,offset));
+            jsonObject.put("total", logService.findByName(name).size());
         }
 
         return jsonObject;
     }
-
 
     //------------------------------订单------------------------------------------------//
     //查询所有订单
@@ -378,7 +376,7 @@ public class AdminController {
         // setMealService.findAll()
 
         if(name.equals("")||name==null){
-//            jsonObject.put("rows", setMealService.findByPage(limit,offset));
+            jsonObject.put("rows", setMealService.findByPage(limit,offset));
             jsonObject.put("total", setMealService.totalCount());
 
         }

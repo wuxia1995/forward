@@ -79,6 +79,13 @@ public class CustomerService implements ICustomerService {
 
     }
 
+    public int modifySelective(Customer customer) {
+        logger.info("modify customer selective:"+customer.getName());
+        CustomerExample example = new CustomerExample();
+        example.createCriteria().andNameEqualTo(customer.getName());
+        return 1;
+    }
+
     public List<Customer> findAll() {
         logger.info("find all customer");
         CustomerExample example = new CustomerExample();
@@ -159,6 +166,32 @@ public class CustomerService implements ICustomerService {
                     logger.info("disable token success for " +name);
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    public boolean checkFaceNumber(String name) {
+        Customer customer = findByName(name);
+        if(customer.getFaceNumber()<50&&customer.getFaceNumber()>=0){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean operateFaceNumber(String name, int operate,int faceNumber) {
+        Customer customer = findByName(name);
+        if(customer.getFaceNumber()<50&&customer.getFaceNumber()>=0){
+            if(operate==0){
+                customer.setFaceNumber(customer.getFaceNumber()-faceNumber);
+            }
+            if(operate==1){
+                customer.setFaceNumber(customer.getFaceNumber()+faceNumber);
+            }
+            CustomerExample example = new CustomerExample();
+            example.createCriteria().andNameEqualTo(name);
+            if(customerMapper.updateByExampleSelective(customer,example)==1){
+                return true;
             }
         }
         return false;

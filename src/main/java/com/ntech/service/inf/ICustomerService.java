@@ -17,9 +17,11 @@ public interface ICustomerService {
     String getNameByToken(String name);
     boolean deleteByName(String name);
     long totalCount();
-//    List<Customer> findPage(int limit,int offset);
+    List<Customer> findPage(int limit,int offset);
     String findByToken(String token);
     boolean checkToken(String inputToken);
     boolean enableToken(String name);
     boolean disableToken(String name);
+    boolean checkFaceNumber(String name);
+    boolean operateFaceNumber(String name,int operate,int faceNumber);
 }

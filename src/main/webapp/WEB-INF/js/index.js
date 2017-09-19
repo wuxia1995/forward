@@ -328,6 +328,74 @@ $(document).ready(function() {
 				$(".attribute_box4").css('height','88%');
 			}
 		})
+
+	//在主页面载入时触发相关页面事件
+
+
+    //对比
+    //
+    // $.ajax({
+    //     url: 'customer/verify-face',
+    //     type: 'POST',
+    //     // dataType: "json",
+    //     data:{photo1:"http://192.168.10.212:8080/img/index/two/max_img5.png",
+    //         photo2:"http://192.168.10.212:8080/img/index/two/max_img5.png"},
+    //     processData: false,
+    //     contentType: false,
+    //     async: true,
+    //     success: function (data) {
+    //         if(data==""){
+    //             $("#resultVerify").html("有图片未检测到人脸");
+    //             $("#reponseVerify").html("有图片未检测到人脸");
+    //             return false;
+    //         }
+    //         readResData(eval('(' + data + ')'),id)
+    //     },
+    //     error:function(data){
+    //         // if(data==""){
+    //         $("#resultVerify").html("文件格式不符或文件太大");
+    //         $("#reponseVerify").html("");
+    //         return false;
+    //         // }
+    //         // console.log(data)
+    //     }
+    // });
+
+
+    // 搜索
+    // var formData = new FormData();
+    // formData.append("n",3);
+    // formData.append("photo","http://192.168.10.212:8080/img/index/two/max_img2.png")
+    // //清除input框的文件状态,解决两次同一张照片不触发事件的问题
+    // $.ajax({
+    //     url: 'customer/getDemoFace',
+    //     type: 'POST',
+    //     data: formData,
+    //     processData: false,
+    //     contentType: false,
+    //     async: true,
+    //     success: function (data) {
+    //         if(data==""||data.length==0){
+    //             $('#reponseSearchDemo').html("")
+    //             $('#searchResultDemo').html("图库中未搜索相似人脸")
+    //             $('#resultShowSearchDemo').html("")
+    //         }
+    //         dataObj=eval(data);
+    //         showResult(dataObj)
+    //         $('#reponseSearchDemo').html(syntaxHighlight(filter(dataObj)))
+    //     },
+    //     error: function (data) {
+    //         $('#reponseSearchDemo').html("")
+    //         $('#searchResultDemo').html("未在库中搜索到相似人脸或图片格式不符")
+    //         $('#resultShowSearchDemo').html("")
+    //         return false
+    //     }
+    // });
+
+
+
+
+
 	});
 //百度地图引入
 //创建和初始化地图函数：

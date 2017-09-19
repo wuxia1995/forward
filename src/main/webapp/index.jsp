@@ -148,7 +148,7 @@
                         <div class="img_bgbox2" reveal_sign="width">
                             <div  class="detect_img2">
                                 <div id="imgShowDetectDiv" style="position: relative;height: 100%;width: 100%;">
-                                <img id="imgShowDetect" src="http://192.168.10.212:8080/images/1.jpg">
+                                <img id="imgShowDetect" src="http://192.168.10.212:8080/img/index/two/max_img1.png">
                                 </div>
                             </div>
                         </div>

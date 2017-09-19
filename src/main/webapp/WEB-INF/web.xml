@@ -86,10 +86,20 @@
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
 
-  <icon>
-    <small-icon>images/favicon.ico</small-icon>
-    <large-icon>images/favicon.ico</large-icon>
-  </icon>
+  <!--<icon>-->
+    <!--<small-icon>images/favicon.ico</small-icon>-->
+    <!--<large-icon>images/favicon.ico</large-icon>-->
+  <!--</icon>-->
+
+  <error-page>
+    <error-code>404</error-code>
+    <location>/404.html</location>
+  </error-page>
+
+  <error-page>
+    <error-code>500</error-code>
+    <location>/500.html</location>
+  </error-page>
 
   <!-- session配置 -->
   <session-config>

@@ -49,5 +49,5 @@ create table library
   primary key(user_name,library_name)
 )engine=innodb default charset=utf8;
 
-insert into customer values('admin','d033e22ae348aeb5660fc2140aec35850c4da997','',1,'admin@admin.com','','2017-08-23 15:58:07');
-insert into customer values('test','7c4a8d09ca3762af61e59520943dc26494f8941b','',1,'admin@admin.com','','2017-08-23 15:58:07');
+insert into customer values('admin','d033e22ae348aeb5660fc2140aec35850c4da997','',1,'admin@admin.com','','2017-08-23 15:58:07',0);
+insert into customer values('test','7c4a8d09ca3762af61e59520943dc26494f8941b','',1,'admin@admin.com','','2017-08-23 15:58:07',0);

@@ -1,6 +1,7 @@
 package com.ntech.service.inf;
 
 import com.ntech.model.Log;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,5 +13,8 @@ public interface ILogService {
     List<Log> findAll();
 
     long totalCount();
-//    List<Log> findPage(int limit,int offset);
+    List<Log> findPage(int limit,int offset);
+
+    public List<Log> findByNameWithLimit(String name,int limit,int offset);
+
 }

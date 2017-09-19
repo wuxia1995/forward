@@ -602,6 +602,10 @@ function verifyReq(imgUrl, id) {
 //记录上一次的搜索结果的数量
 var preSize=0;
 function searchUrlDemo(input) {
+    if($("#inputUrlSearchDemo").val()==""){
+        alert("url不能为空");
+        return false;
+    }
     $("#imgShowSearchDemo").attr("src",$("#inputUrlSearchDemo").val())
     var img = new Image();
     img.src = $("#inputUrlSearchDemo").val();
@@ -645,8 +649,8 @@ function searchReqDemo(img) {
         async: true,
         success: function (data) {
             if(data==""||data.length==0){
-                $('#reponseSearchDemo').html("图库中未搜索相似人脸")
-                $('#searchResultDemo').html("")
+                $('#reponseSearchDemo').html("")
+                $('#searchResultDemo').html("图库中未搜索相似人脸")
                 $('#resultShowSearchDemo').html("")
                 return false;
             }
@@ -658,8 +662,8 @@ function searchReqDemo(img) {
 
         },
         error: function (data) {
-            $('#reponseSearchDemo').html("文件格式不符或文件太大")
-            $('#resultShowSearchDemo').html("")
+            $('#reponseSearchDemo').html("")
+            $('#resultShowSearchDemo').html("未在库中搜索到相似人脸或图片格式不符")
             $('#searchResultDemo').html("")
             return false
         }
@@ -730,8 +734,8 @@ function uploadImgSearcheDemo(img) {
         async: true,
         success: function (data) {
             if(data==""||data.length==0){
-                $('#reponseSearchDemo').html("图库中未搜索相似人脸")
-                $('#searchResultDemo').html("")
+                $('#reponseSearchDemo').html("")
+                $('#searchResultDemo').html("图库中未搜索相似人脸")
                 $('#resultShowSearchDemo').html("")
             }
             dataObj=eval(data);
@@ -739,8 +743,8 @@ function uploadImgSearcheDemo(img) {
             $('#reponseSearchDemo').html(syntaxHighlight(filter(dataObj)))
         },
         error: function (data) {
-            $('#reponseSearchDemo').html("文件格式不符或文件太大")
-            $('#searchResultDemo').html("")
+            $('#reponseSearchDemo').html("")
+            $('#searchResultDemo').html("未在库中搜索到相似人脸或图片格式不符")
             $('#resultShowSearchDemo').html("")
             return false
         }
@@ -750,6 +754,10 @@ function uploadImgSearcheDemo(img) {
 
 //search showResult
 function showResult(dataObj) {
+    // $('#reponseSearchDemo').html("文件格式不符或文件太大")
+    // $('#reponse').html("")
+    $("#searchResultDemo").html("")
+    $("#resultShowSearchDemo").html("")
     removeBefore(preSize)
     preSize=0;
     for (var v in dataObj){

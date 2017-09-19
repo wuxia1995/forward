@@ -10,6 +10,8 @@ function width() {
 	$(".administer_img").css("height",administer_img);
 	var results_minimg=$(".results_minimg").width();
 	$(".results_minimg").css("height",results_minimg);
+    var administer_img=$(".administer_img").width();
+    $(".delete_icon").css({"width":administer_img/4,"height":administer_img/4})
 }
 $(document).ready(function() {
 	width();
@@ -73,5 +75,50 @@ $(document).ready(function() {
 		         $(this).parent().siblings(".select_down").children().attr("disabled",false);
 		    }
          });
-      
+
+    $('#buyMeal').click(function () {
+
+        var type=$('input:radio[name="type"]:checked').val();
+        // alert(type);
+        //console.log(type); $("select[name=items] option[selected]").text();
+
+        var value;
+        if(type=="date"){
+            value=$("#date").find("option:selected").val();
+        }else if(type=="times"){
+            value=$("#times").find("option:selected").val();
+        }
+        //console.log(value)
+        // alert(value);
+        var sure = confirm("确认购买?")
+        if(!sure){
+            return false
+        }
+        $.ajax({
+            url:'setMealBuy',
+            type: 'POST',
+            dataType: "json",
+            async:false,
+            data:{
+                "type":type,
+                "value":value
+            },
+            success:function (data) {
+                if(data){
+                    alert("购买成功！")
+                    $("#msg").text("购买成功");
+                }else{
+                    alert("你选择的套餐与之前购买的套餐不一样")
+                    $("#msg").text("购买失败");
+                }
+            },
+            error:function (data) {
+                alert(data)
+            }
+        })
+
+    });
+
+
+
 })
