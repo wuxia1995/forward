@@ -12,7 +12,7 @@ create table customer
   email varchar(64),
   token varchar(64),
   regtime datetime,
-  face_number int,
+  face_number int DEFAULT 0,
   primary key(name)
 )engine=innodb default charset=utf8 auto_increment=1;
 

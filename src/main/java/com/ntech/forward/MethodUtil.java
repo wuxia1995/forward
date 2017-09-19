@@ -50,7 +50,6 @@ public class MethodUtil {
 		return instance;
 	}
 
-	@SuppressWarnings("unchecked")
 	public String requestForword(HttpServletRequest request,
 								 HttpServletResponse response) {
 		logger.info("*************START***********");
@@ -68,10 +67,11 @@ public class MethodUtil {
 			if (galleries.size() != 0 && (inputGalleries == null || inputGalleries.equals("")))
 				param.put("galleries", userName);
 		}
-		if ("allGalleries".equals(API)) {
+		/*if ("allGalleries".equals(API)) {
 			String reply = JSONArray.toJSONString((List<String>) request.getAttribute("allGalleries"));
 			return reply.replaceAll("_anytec_"+userName,"");
-		}
+		}*/
+
 		//判断是否有文件输入
 		boolean isMultiPart = ServletFileUpload.isMultipartContent(request);
 		if (isMultiPart) {
@@ -181,7 +181,6 @@ public class MethodUtil {
 		if(HttpUploadFile.status==200&&request.getAttribute("chargeAPI")!=null) {
 			String chargeAPI = (String) request.getAttribute("chargeAPI");
 			String charge = (String) request.getAttribute("charge");
-
 			if (contype.equals("times")) {
 				int status = 0;
 				boolean result = check.mealTimesCount(userName);
@@ -198,8 +197,6 @@ public class MethodUtil {
 				logger.info("dateCheck： "+result);
 			}
 		}
-		if(contype.equals("date"))
-			check.mealDateCheck(userName);
 		if (localAPI == null || localAPI.equals("")) {
 			String string = ConfigManager.getInstance().getParameter("PICTURE") + "/" + Base64Encrypt.encryptUserName((String) request.getAttribute("userName"));
 			if (SDKreply != null && !"".equals(SDKreply)) {

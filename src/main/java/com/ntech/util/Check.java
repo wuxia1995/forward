@@ -2,6 +2,7 @@ package com.ntech.util;
 
 import java.util.*;
 
+import com.ntech.model.Customer;
 import com.ntech.model.LibraryKey;
 import com.ntech.model.Log;
 import com.ntech.model.SetMeal;
@@ -92,7 +93,7 @@ public class Check {
 		int result =  libraryService.create(libraryKey);
 		if(result==0)
 			try {
-				throw new Exception("delete failed");
+				throw new Exception("create failed");
 			} catch (Exception e) {
 				ErrorPrompt.addInfo("error",e.getMessage());
 				e.printStackTrace();
@@ -149,6 +150,18 @@ public class Check {
         log.setTime(new Date());
         logService.add(log);
     }
+    public void setFaceNum(String userName,int addFace){
+    	 Customer customer = customerService.findByName(userName);
+    	 customer.setFaceNumber(customer.getFaceNumber()+addFace);
+    	 int result = customerService.modify(customer);
+    	 if(result!=1)
+			 try {
+				 throw new Exception("setFaceNum failed");
+			 } catch (Exception e) {
+				 e.printStackTrace();
+			 }
+	}
+
     public String getContype(String userName) {
 	    return setMealService.findByName(userName).getContype();
     }

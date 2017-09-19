@@ -16,7 +16,8 @@ public class Constant {
 	//Spring上下文---依赖注入工具类
 	public static final ApplicationContext GSB = new ClassPathXmlApplicationContext("/spring-mybatis.xml");
 	//计费
-	public static final String Detect = sdk.getParameter("Detect");
+	public static final String Detect0 = sdk.getParameter("Detect0");
+	public static final String Detect1 = sdk.getParameter("Detect1");
 	public static final String Verify = sdk.getParameter("Verify");
 	public static final String Identify = sdk.getParameter("Identify");
 	public static final String Face = sdk.getParameter("Face");
