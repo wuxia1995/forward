@@ -1,28 +1,43 @@
 package com.ntech.controller;
 
+import com.ntech.exception.IllegalAPIException;
+import com.ntech.exception.IllegalGalleryException;
+import com.ntech.exception.IllegalIDException;
+import com.ntech.forward.Constant;
+import com.ntech.forward.HttpUploadFile;
 import com.ntech.forward.MethodUtil;
 import com.ntech.forward.PictureForward;
+import com.ntech.util.Check;
 import com.ntech.util.ErrorPrompt;
 import org.apache.log4j.Logger;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/n-tech")
 public class ForwardController {
 
     private final static Logger logger = Logger.getLogger(ForwardController.class);
+    private static Check check = (Check)Constant.GSB.getBean("check");
 
-    @RequestMapping("/n-tech/**")
+ /*   @RequestMapping("/n-tech/**")
     @ResponseBody
     public String methodHandler(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        logger.info("enter Controller");
+        logger.info("*****enter Controller*****");
         String reply;
         if(ErrorPrompt.size() != 0)
             return ErrorPrompt.getJSONInfo();
@@ -30,13 +45,456 @@ public class ForwardController {
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
         return reply;
+    }*/
+
+    @RequestMapping(method = RequestMethod.POST,value="/{version:[v][01]}/detect")
+    @ResponseBody
+    public String detect(@PathVariable("version")String version, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        String API = new StringBuilder("/").append(version).append("/detect").toString();
+        if(version.equals("v1")){
+            request.setAttribute("chargeAPI", "detect1");
+            request.setAttribute("charge", Constant.Detect1);
+        }else {
+            request.setAttribute("chargeAPI", "detect0");
+            request.setAttribute("charge", Constant.Detect0);
+        }
+        request.setAttribute("API",API);
+        logger.info("CHECK_API :" + API);
+        String reply = MethodUtil.getInstance().requestForword(request, response);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
     }
 
-    @RequestMapping("/n-tech/picture/**")
+    @RequestMapping(value = "/{version:[v][01]}/verify",method = RequestMethod.POST)
+    @ResponseBody
+    public String verify(@PathVariable("version")String version, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        String API = new StringBuilder("/").append(version).append("/verify").toString();
+        request.setAttribute("chargeAPI", "verify");
+        request.setAttribute("charge", Constant.Verify);
+        request.setAttribute("API",API);
+        logger.info("CHECK_API :" + API);
+        String reply = MethodUtil.getInstance().requestForword(request, response);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
+    }
+
+    @RequestMapping(value = "/{version:[v][01]}/identify",method = RequestMethod.POST)
+    @ResponseBody
+    public String identify(@PathVariable("version")String version, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        String userName = (String)request.getAttribute("userName");
+        String API = new StringBuilder("/").append(version).append("/faces/gallery/").append(userName).append("/identify").toString();
+        request.setAttribute("chargeAPI", "identify");
+        request.setAttribute("charge", Constant.Identify);
+        request.setAttribute("API",API);
+        logger.info("CHECK_API :" + API);
+        String reply = MethodUtil.getInstance().requestForword(request, response);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
+    }
+
+    @RequestMapping(method = RequestMethod.POST,value = "/{version:[v][01]}/identify/gallery/{gallery:\\w{1,48}}")
+    @ResponseBody
+    public String identifyGallery(@PathVariable("version")String version,@PathVariable("gallery")String gallery, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        String userName = (String)request.getAttribute("userName");
+        List<String> galleries = check.getGalleries(request.getHeader("Token"));
+        if(!gallery.equals(userName))
+            gallery = new StringBuilder(gallery).append("_anytec_" + userName).toString();
+        if (!galleries.contains(gallery))
+            try {
+                throw new IllegalGalleryException("bad_gallery");
+            } catch (IllegalGalleryException e) {
+                response.setStatus(403);
+                logger.error("*****BAD_GALLERY*****@"+userName);
+                ErrorPrompt.addInfo("error","bad_gallery");
+                e.printStackTrace();
+                return ErrorPrompt.getJSONInfo();
+            }
+        String API = new StringBuilder("/").append(version).append("/faces/gallery/").append(gallery).append("/identify").toString();
+        request.setAttribute("chargeAPI", "identify");
+        request.setAttribute("charge", Constant.Identify);
+        request.setAttribute("API",API);
+        logger.info("CHECK_API :" + API);
+        String reply = MethodUtil.getInstance().requestForword(request, response);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
+    }
+
+    @RequestMapping(value = "/{version:[v][01]}/face",method = RequestMethod.POST)
+    @ResponseBody
+    public String face(@PathVariable("version")String version, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, ParseException {
+        logger.info("*****enter Controller*****");
+        String userName = (String)request.getAttribute("userName");
+        request.setAttribute("chargeAPI", "face");
+        request.setAttribute("charge", Constant.Face);
+        String API = new StringBuilder("/").append(version).append("/face").toString();
+        logger.info("CHECK_API :" + API);
+        List<String> galleries = check.getGalleries(request.getHeader("Token"));
+        request.setAttribute("galleries", galleries);
+        request.setAttribute("api", "face/post");
+        request.setAttribute("API",API);
+        String reply = MethodUtil.getInstance().requestForword(request, response);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        JSONParser jsonParser = new JSONParser();
+        JSONArray results = (JSONArray) ((JSONObject)jsonParser.parse(reply)).get("results");
+        int addFace = results.size();
+        check.setFaceNum(userName,addFace);
+        return reply;
+    }
+
+    @RequestMapping(method = RequestMethod.GET,value = "/{version:[v][01]}/face/meta/{meta:\\S*}")
+    @ResponseBody
+    public String faceMeta(@PathVariable("version")String version,@PathVariable("meta")String meta, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        String userName = (String)request.getAttribute("userName");
+        StringBuilder API = new StringBuilder("/").append(version).append("/face/gallery/").append(userName).append("/meta/").append(meta);
+        String nextPage = request.getParameter("max_id");
+        String prePage = request.getParameter("min_id");
+        if (nextPage != null && !nextPage.equals(""))
+            API.append("?max_id=").append(nextPage);
+        if (prePage != null && !prePage.equals(""))
+            API.append("?min_id=").append(prePage);
+        logger.info("CHECK_API :" + API.toString());
+        request.setAttribute("API",API.toString());
+        String reply = MethodUtil.getInstance().requestForword(request, response);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
+    }
+    @RequestMapping(method = RequestMethod.GET,value = "/{version:[v][01]}/face/meta/")
+    @ResponseBody
+    public String faceMetaS(@PathVariable("version")String version,HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        String userName = (String)request.getAttribute("userName");
+        StringBuilder API = new StringBuilder("/").append(version).append("/face/gallery/").append(userName).append("/meta/");
+        String nextPage = request.getParameter("max_id");
+        String prePage = request.getParameter("min_id");
+        if (nextPage != null && !nextPage.equals(""))
+            API.append("?max_id=").append(nextPage);
+        if (prePage != null && !prePage.equals(""))
+            API.append("?min_id=").append(prePage);
+        logger.info("CHECK_API :" + API.toString());
+        request.setAttribute("API",API.toString());
+        String reply = MethodUtil.getInstance().requestForword(request, response);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
+    }
+
+    @RequestMapping(method = RequestMethod.GET,value = "/{version:[v][01]}/face/gallery/{gallery:\\w+}/meta/{meta:\\S*}")
+    @ResponseBody
+    public String faceMetaGallery(@PathVariable("version")String version,@PathVariable("gallery")String galleryName,@PathVariable("meta")String meta, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        String userName = (String)request.getAttribute("userName");
+        if(!galleryName.equals(userName))
+            galleryName = new StringBuilder(galleryName).append("_anytec_" + userName).toString();
+        List<String> galleries = check.getGalleries((String)request.getAttribute("inputToken"));
+        if (!galleries.contains(galleryName))
+            try {
+                throw new IllegalGalleryException("bad_gallery");
+            } catch (IllegalGalleryException e) {
+                response.setStatus(403);
+                logger.error("*****BAD_GALLERY*****@"+userName);
+                ErrorPrompt.addInfo("error","bad_gallery");
+                e.printStackTrace();
+                return ErrorPrompt.getJSONInfo();
+            }
+        StringBuilder API = new StringBuilder("/").append(version).append("/face/gallery/").append(galleryName).append("/meta/").append(meta);
+        String nextPage = request.getParameter("max_id");
+        String prePage = request.getParameter("min_id");
+        if (nextPage != null && !nextPage.equals(""))
+            API.append("?max_id=").append(nextPage);
+        if (prePage != null && !prePage.equals(""))
+            API.append("?min_id=").append(prePage);
+        logger.info("CHECK_API:" + API.toString());
+        request.setAttribute("API",API.toString());
+        String reply = MethodUtil.getInstance().requestForword(request, response);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
+    }
+    @RequestMapping(method = RequestMethod.GET,value = "/{version:[v][01]}/face/gallery/{gallery:\\w+}/meta/")
+    @ResponseBody
+    public String faceMetaGalleryS(@PathVariable("version")String version,@PathVariable("gallery")String galleryName, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        String userName = (String)request.getAttribute("userName");
+        if(!galleryName.equals(userName))
+            galleryName = new StringBuilder(galleryName).append("_anytec_" + userName).toString();
+        List<String> galleries = check.getGalleries((String)request.getAttribute("inputToken"));
+        if (!galleries.contains(galleryName))
+            try {
+                throw new IllegalGalleryException("bad_gallery");
+            } catch (IllegalGalleryException e) {
+                response.setStatus(403);
+                logger.error("*****BAD_GALLERY*****@"+userName);
+                ErrorPrompt.addInfo("error","bad_gallery");
+                e.printStackTrace();
+                return ErrorPrompt.getJSONInfo();
+            }
+        StringBuilder API = new StringBuilder("/").append(version).append("/face/gallery/").append(galleryName).append("/meta/");
+        String nextPage = request.getParameter("max_id");
+        String prePage = request.getParameter("min_id");
+        if (nextPage != null && !nextPage.equals(""))
+            API.append("?max_id=").append(nextPage);
+        if (prePage != null && !prePage.equals(""))
+            API.append("?min_id=").append(prePage);
+        logger.info("CHECK_API:" + API.toString());
+        request.setAttribute("API",API.toString());
+        String reply = MethodUtil.getInstance().requestForword(request, response);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
+    }
+
+
+    @RequestMapping(method = RequestMethod.GET,value = "/{version:[v][01]}/meta/gallery/{gallery:\\w+}")
+    @ResponseBody
+    public String metaGallery(@PathVariable("version")String version,@PathVariable("gallery")String galleryName, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        String userName = (String)request.getAttribute("userName");
+        List<String> galleries = check.getGalleries((String)request.getAttribute("inputToken"));
+        if(!galleryName.equals(userName))
+            galleryName = new StringBuilder(galleryName).append("_anytec_" + userName).toString();
+        if (!galleries.contains(galleryName))
+            try {
+                throw new IllegalGalleryException("bad-gallery");
+            } catch (IllegalGalleryException e) {
+                response.setStatus(403);
+                logger.error("*****BAD_GALLERY*****@"+userName);
+                ErrorPrompt.addInfo("error","bad_gallery");
+                e.printStackTrace();
+                response.getWriter().println(ErrorPrompt.getJSONInfo());
+                return ErrorPrompt.getJSONInfo();
+            }
+        String API = new StringBuilder("/").append(version).append("/meta/gallery/").append(galleryName).toString();
+        logger.info("CHECK_API :" + API);
+        request.setAttribute("API",API);
+        String reply = MethodUtil.getInstance().requestForword(request, response);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
+    }
+
+    @RequestMapping(method = RequestMethod.GET,value = "/{version:[v][01]}/meta")
+    @ResponseBody
+    public String meta(@PathVariable("version")String version, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        String userName = (String)request.getAttribute("userName");
+        String API = new StringBuilder("/").append(version).append("/meta/gallery/").append(userName).toString();
+        logger.info("CHECK_API :" + API);
+        request.setAttribute("API",API);
+        String reply = MethodUtil.getInstance().requestForword(request, response);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
+    }
+
+    @RequestMapping("/{version:[v][01]}/face/id/{id:\\d{1,24}}")
+    @ResponseBody
+    public String faceId(@PathVariable("version")String version,@PathVariable("id")String id,HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        String userName = (String)request.getAttribute("userName");
+        boolean isMaster = false;
+        List<String> galleries = check.getGalleries((String)request.getAttribute("inputToken"));
+        List<String> list = check.checkId(id);
+        if(list==null)
+            return ErrorPrompt.getJSONInfo();
+        Iterator<String> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            if (galleries.contains(iterator.next())) {
+                isMaster = true;
+                break;
+            }
+        }
+        if (!isMaster)
+            try {
+                throw new IllegalIDException("bad_id");
+            } catch (IllegalIDException e) {
+                response.setStatus(403);
+                logger.error("*****BAD_ID*****@"+userName);
+                ErrorPrompt.addInfo("error","bad_id");
+                e.printStackTrace();
+                return ErrorPrompt.getJSONInfo();
+            }
+        String API = new StringBuilder("/").append(version).append("/face/id/").append(id).toString().toString();
+        logger.info("CHECK_API :" + API);
+        request.setAttribute("API",API);
+        String reply = MethodUtil.getInstance().requestForword(request, response);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
+    }
+
+    @RequestMapping(method = RequestMethod.GET,value = "/{version:[v][01]}/faces/gallery/{gallery:\\w{1,48}}")
+    @ResponseBody
+    public String facesGallery(@PathVariable("version")String version,@PathVariable("gallery")String inputGallery, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        String userName = (String)request.getAttribute("userName");
+        List<String> galleries = check.getGalleries((String)request.getAttribute("inputToken"));
+        if(!inputGallery.equals(userName))
+            inputGallery = new StringBuilder(inputGallery).append("_anytec_" + userName).toString();
+        boolean existGallery = galleries.contains(inputGallery);
+        if (!existGallery)
+            try {
+                throw new IllegalGalleryException("bad_gallery");
+            }catch (IllegalGalleryException e) {
+                response.setStatus(403);
+                logger.error("*****BAD_GALLERY*****@"+userName);
+                ErrorPrompt.addInfo("error","bad_gallery");
+                e.printStackTrace();
+                response.getWriter().println(ErrorPrompt.getJSONInfo());
+                return ErrorPrompt.getJSONInfo();
+            }
+        StringBuilder API = new StringBuilder("/").append(version).append("/faces/gallery/").append(inputGallery);
+        String nextPage = request.getParameter("max_id");
+        String prePage = request.getParameter("min_id");
+        if (nextPage != null && !nextPage.equals(""))
+            API.append("?max_id=").append(nextPage);
+        if (prePage != null && !prePage.equals(""))
+            API.append("?min_id=").append(prePage);
+        logger.info("CHECK_API :" + API.toString());
+        request.setAttribute("API",API.toString());
+        String reply = MethodUtil.getInstance().requestForword(request, response);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
+    }
+
+    @RequestMapping(method = RequestMethod.GET,value = "/{version:[v][01]}/faces")
+    @ResponseBody
+    public String faces(@PathVariable("version")String version, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        String userName = (String)request.getAttribute("userName");
+        StringBuilder API = new StringBuilder("/").append(version).append("/faces/gallery/").append(userName);
+        String nextPage = request.getParameter("max_id");
+        String prePage = request.getParameter("min_id");
+        if (nextPage != null && !nextPage.equals(""))
+            API.append("?max_id=").append(nextPage);
+        if (prePage != null && !prePage.equals(""))
+            API.append("?min_id=").append(prePage);
+        logger.info("CHECK_API :" + API.toString());
+        request.setAttribute("API",API.toString());
+        String reply = MethodUtil.getInstance().requestForword(request, response);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
+    }
+
+
+    @RequestMapping(value= "v0/galleries",method = RequestMethod.GET)
+    @ResponseBody
+    public String getGalleries(HttpServletRequest request)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        String userName = (String)request.getAttribute("userName");
+        String API = "allGalleries";
+        List<String> galleries = check.getGalleries((String)request.getAttribute("inputToken"));
+        logger.info("CHECK_API :" + API);
+        String reply = JSONArray.toJSONString(galleries);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply.replaceAll("_anytec_"+userName,"");
+    }
+
+   /* @RequestMapping(value = "/{version:[v][01]}/galleries/{gallery:\\w{1,48}}",method = RequestMethod.POST)
+    @ResponseBody
+    public String postGallery(@PathVariable("version")String version,@PathVariable("gallery")String createGallery, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        String userName = (String)request.getAttribute("userName");
+        List<String> galleries = check.getGalleries((String)request.getAttribute("inputToken"));
+        try {
+            if (galleries.size() > 10)
+                throw new IllegalAPIException("too many galleries");
+            createGallery = new StringBuilder(createGallery).append("_anytec_" + userName).toString();
+            if (galleries.contains(createGallery))
+                throw new IllegalAPIException("already exist");
+        } catch (IllegalAPIException e) {
+            response.setStatus(400);
+            logger.error("*****BAD_API*****@"+userName);
+            ErrorPrompt.addInfo("error",e.getMessage());
+            e.printStackTrace();
+            return ErrorPrompt.getJSONInfo();
+        }
+        request.setAttribute("charge", Constant.Gallery);
+        String API = new StringBuilder("/").append(version).append("/galleries/").append(createGallery).toString();
+        logger.info("CHECK_API :" + API);
+        request.setAttribute("API",API);
+        String reply = MethodUtil.getInstance().requestForword(request, response);
+        if(HttpUploadFile.status==200) {
+            boolean result = check.createGallery(userName, createGallery);
+            logger.info("createResult: " + result);
+            if (!result)
+                return ErrorPrompt.getJSONInfo();
+        }
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
+    }*/
+
+    @RequestMapping(value= "/{version:[v][01]}/galleries/{gallery:\\w{1,48}}",method = RequestMethod.DELETE)
+    @ResponseBody
+    public String deleteGallery(@PathVariable("version")String version,@PathVariable("gallery")String deleteGallery, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        String userName = (String)request.getAttribute("userName");
+        deleteGallery = new StringBuilder(deleteGallery).append("_anytec_" + userName).toString();
+        List<String> galleries = check.getGalleries((String)request.getAttribute("inputToken"));
+        if (!galleries.contains(deleteGallery))
+            try {
+                throw new IllegalGalleryException("bad_gallery");
+            }catch (IllegalGalleryException e) {
+                response.setStatus(403);
+                logger.error("*****BAD_GALLERY*****@"+userName);
+                ErrorPrompt.addInfo("error","bad_gallery");
+                e.printStackTrace();
+                response.getWriter().println(ErrorPrompt.getJSONInfo());
+                return ErrorPrompt.getJSONInfo();
+            }
+        String API = new StringBuilder("/").append(version).append("/galleries/").append(deleteGallery).toString();
+        logger.info("CHECK_API :" + API);
+        request.setAttribute("API",API);
+        String reply = MethodUtil.getInstance().requestForword(request, response);
+        if(HttpUploadFile.status==200) {
+            logger.info("deleteGallerySQL");
+            boolean result = check.deleteGallery(userName, deleteGallery);
+            logger.info("deleteResult: " + result);
+            if (!result)
+                return ErrorPrompt.getJSONInfo();
+        }
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
+    }
+
+
+    @RequestMapping("/picture/**")
     @ResponseBody
     public void pictureHandler(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        logger.info("enter Controller");
+        logger.info("*****enter Controller*****");
         PictureForward.getInstance().requestForward(request,response);
 
     }

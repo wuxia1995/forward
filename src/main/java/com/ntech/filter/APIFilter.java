@@ -58,22 +58,10 @@ public class APIFilter implements Filter {
 			e.printStackTrace();
 			response.getWriter().println(ErrorPrompt.getJSONInfo());
 			
-		} catch (IllegalIDException e) {
-			response.setStatus(403);
-			logger.error("*****BAD_ID*****@"+req.getAttribute("userName"));
-			ErrorPrompt.addInfo("error","bad_id");
-			e.printStackTrace();
-			response.getWriter().println(ErrorPrompt.getJSONInfo());
 		} catch (IllegalAPIException e) {
 			response.setStatus(400);
 			logger.error("*****BAD_API*****@"+req.getAttribute("userName"));
 			ErrorPrompt.addInfo("error",e.getMessage());
-			e.printStackTrace();
-			response.getWriter().println(ErrorPrompt.getJSONInfo());
-		} catch (IllegalGalleryException e) {
-			response.setStatus(403);
-			logger.error("*****BAD_GALLERY*****@"+req.getAttribute("userName"));
-			ErrorPrompt.addInfo("error","bad_gallery");
 			e.printStackTrace();
 			response.getWriter().println(ErrorPrompt.getJSONInfo());
 		}

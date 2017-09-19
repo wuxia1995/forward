@@ -21,43 +21,45 @@ public class ForwardRequestWrapper extends HttpServletRequestWrapper {
 	
 	private static Logger logger = Logger.getLogger(ForwardRequestWrapper.class);
 
-	public ForwardRequestWrapper(HttpServletRequest request) throws ErrorTokenException, IllegalAPIException, IllegalIDException, IllegalGalleryException {
+	public ForwardRequestWrapper(HttpServletRequest request) throws ErrorTokenException, IllegalAPIException {
 		
 		super(request);
-		List<String> galleries ;
 		String userName ;
-		String API = request.getRequestURI().split(Constant.PATH)[1];
-		if(API.equals("/test")) {
-			return;
+		if(request.getRequestURI().length()<9){
+			throw new IllegalAPIException("bad_api");
 		}
+		String API = request.getRequestURI().split(Constant.PATH)[1];
 		String inputToken = request.getHeader("Token");
 		if(inputToken==null||inputToken.equals(""))
 			throw new ErrorTokenException("bad_token");
-		String requestIP = request.getRemoteHost();
-		logger.info("requestIP :"+requestIP);
+		/*String requestIP = request.getRemoteHost();
+		logger.info("requestIP :"+requestIP);*/
 		boolean isToken = check.checkToken(inputToken);
-		//Retrieve token from database
 		if(!isToken)
 			throw new ErrorTokenException("bad_token");
+		request.setAttribute("inputToken",inputToken);
+		logger.info("InputToken :"+inputToken);
 		userName = check.getUserName(inputToken);
 		logger.info("UserName: "+userName);
 		request.setAttribute("userName",userName);
 		if(API.startsWith("/picture")) {
 			return;
 		}
-		logger.info("InputToken :"+inputToken);
-		galleries = check.getGalleries(inputToken);
-		
+
+		/*galleries = check.getGalleries(inputToken);*/
+
+
 		//Retrieve userName and galleriesList from database
-	
-		if(galleries==null||galleries.size()==0)
-			throw new IllegalGalleryException("isToken_ButNoGalleries!!!");
-		String method = request.getMethod();
-		String version = API.split("/")[1];
+
+	/*	if(galleries==null||galleries.size()==0)
+			throw new IllegalGalleryException("isToken_ButNoGalleries!!!");*/
+		/*String method = request.getMethod();*/
+		/*String version = API.split("/")[1];
 		logger.info("version: "+version);
 		if(!version.equals("v0")&&!version.equals("v1"))
 			throw new IllegalAPIException("bad_version");
-		API = API.substring(3);
+		request.setAttribute("version",version);*/
+	/*	API = API.substring(3);
 		while(true) {
 		try {
 			if (API.equals("/detect")) {
@@ -246,6 +248,6 @@ public class ForwardRequestWrapper extends HttpServletRequestWrapper {
 		}
 			throw new IllegalAPIException("bad_api");
 		}
-		request.setAttribute("API", API);
+		request.setAttribute("API", API);*/
 	}
 }
