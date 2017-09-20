@@ -5,6 +5,9 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
+/**
+ * 错误提示记录工具类
+ */
 public class ErrorPrompt {
 	
 	private static final Map<String,String> map = new HashMap<String,String>();

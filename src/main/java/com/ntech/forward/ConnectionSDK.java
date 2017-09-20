@@ -8,10 +8,13 @@ import java.net.URL;
 import java.util.Map;
 import org.apache.log4j.Logger;
 
+/**
+ * 用于不带参数的http请求转发
+ */
 public class ConnectionSDK {
 	
 	private final Logger logger = Logger.getLogger(ConnectionSDK.class);
-
+	//单例模式
 	private static ConnectionSDK instance;
 	private ConnectionSDK() {}
 	  public static ConnectionSDK getInstance(){    //对获取实例的方法进行同步

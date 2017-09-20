@@ -43,27 +43,22 @@ public class APIFilter implements Filter {
 
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
-		
+		//编码设置
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 		ErrorPrompt.clear();
 		try {
+			//用户request包装
 			ForwardRequestWrapper forwardRequestWrapper = new ForwardRequestWrapper(request);
 			chain.doFilter(forwardRequestWrapper, response);
 		} catch (ErrorTokenException e) {
 			response.setStatus(401);
 			response.setContentType("application/json");
 			logger.error("*****Bad_Token*****@"+req.getAttribute("userName"));
-			ErrorPrompt.addInfo("error","bad_token");
-			e.printStackTrace();
-			response.getWriter().println(ErrorPrompt.getJSONInfo());
-			
-		} catch (IllegalAPIException e) {
-			response.setStatus(400);
-			logger.error("*****BAD_API*****@"+req.getAttribute("userName"));
 			ErrorPrompt.addInfo("error",e.getMessage());
 			e.printStackTrace();
 			response.getWriter().println(ErrorPrompt.getJSONInfo());
+			
 		}
 	
 	}

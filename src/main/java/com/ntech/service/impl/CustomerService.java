@@ -105,8 +105,8 @@ public class CustomerService implements ICustomerService {
         return customer;
     }
 
-    public String findByToken(String token) {
-        logger.info("for getting user name");
+    public Customer findByToken(String token) {
+        logger.info("get user");
         Customer customer = null;
         CustomerExample example = new CustomerExample();
         example.createCriteria().andTokenEqualTo(token);
@@ -114,7 +114,7 @@ public class CustomerService implements ICustomerService {
         if (list.size() > 0) {
             customer = list.get(0);
         }
-        return customer.getName();
+        return customer;
     }
 
     public boolean checkUserName(String userName) {

@@ -37,7 +37,7 @@
   </filter>
   <filter-mapping>
     <filter-name>APIFilter</filter-name>
-    <url-pattern>/n-tech/*</url-pattern>
+    <url-pattern>/anytec/*</url-pattern>
   </filter-mapping>
 
   <context-param>

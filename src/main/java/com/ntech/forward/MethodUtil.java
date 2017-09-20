@@ -24,6 +24,9 @@ import com.ntech.util.ConfigManager;
 import com.ntech.util.Base64Encrypt;
 import com.ntech.util.ErrorPrompt;
 
+/**
+ * 接收用户请求并解析
+ */
 public class MethodUtil {
 	private static MethodUtil instance;
 	private final Logger logger = Logger.getLogger(MethodUtil.class);
@@ -56,12 +59,12 @@ public class MethodUtil {
 		String SDKreply;
 		String meta = "no";
 		String API = (String) request.getAttribute("API");
-		String api = (String) request.getAttribute("api");
+		String api = (String) request.getAttribute("chargeAPI");
 		header.clear();
 		param.clear();
 		file.clear();
 		String userName = (String)request.getAttribute("userName");
-		if (api != null && api.equals("face/post")) {
+		if (api != null && api.equals("face")) {
 			galleries = (List<String>) request.getAttribute("galleries");
 			String inputGalleries = request.getParameter("galleries");
 			if (galleries.size() != 0 && (inputGalleries == null || inputGalleries.equals("")))
@@ -181,21 +184,20 @@ public class MethodUtil {
 		if(HttpUploadFile.status==200&&request.getAttribute("chargeAPI")!=null) {
 			String chargeAPI = (String) request.getAttribute("chargeAPI");
 			String charge = (String) request.getAttribute("charge");
+			int status = 0;
 			if (contype.equals("times")) {
-				int status = 0;
 				boolean result = check.mealTimesCount(userName);
 				if (result)
 					status = 1;
-				check.setLog(userName, chargeAPI + " ￥" + charge, status);
 				logger.info("timesCount: " + result);
 			} else {
-				int status = 0;
 				boolean result = check.mealDateCheck(userName);
 				if (result)
 					status = 1;
-				check.setLog(userName, chargeAPI + " ￥" + charge, status);
 				logger.info("dateCheck： "+result);
 			}
+			if(!chargeAPI.equals("face"))
+				check.setLog(userName, chargeAPI + " ￥" + charge, status);
 		}
 		if (localAPI == null || localAPI.equals("")) {
 			String string = ConfigManager.getInstance().getParameter("PICTURE") + "/" + Base64Encrypt.encryptUserName((String) request.getAttribute("userName"));

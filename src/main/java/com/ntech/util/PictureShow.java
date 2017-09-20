@@ -40,20 +40,20 @@ public class PictureShow {
 	           if(connection.getResponseCode()==200) {
 	        	   inputStream =connection.getInputStream();
 	        	   byte[] b=streamToByte(inputStream);
-//	        	   dataInputStream = new DataInputStream(inputStream);
-//	        	   bufferedInputStream = new BufferedInputStream(dataInputStream);
-//
-//	        	   byte[] b = new byte[connection.getContentLength()];
-//	        	   logger.info("ContentLength: "+connection.getContentLength());
-//	        	   bufferedInputStream.read(b);
-//
-//				   byte[] bytes = new byte[1024];
-//
-//				   while ((byteCount = inputStream.read(bytes)) != -1)
-//				   {
-//					   outputStream.write(bytes, bytesWritten, byteCount);
-//					   bytesWritten += byteCount;
-//				   }
+	        	   /*dataInputStream = new DataInputStream(inputStream);
+	        	   bufferedInputStream = new BufferedInputStream(dataInputStream);
+
+	        	   byte[] b = new byte[connection.getContentLength()];
+	        	   logger.info("ContentLength: "+connection.getContentLength());
+	        	   bufferedInputStream.read(b);
+
+				   byte[] bytes = new byte[1024];
+
+				   while ((byteCount = inputStream.read(bytes)) != -1)
+				   {
+				   outputStream.write(bytes, bytesWritten, byteCount);
+					   bytesWritten += byteCount;
+				   }*/
 	        	   return "data:image/jpeg;base64,"+Base64Encrypt.byteArrayToString(b);
 	           }
 		} catch (MalformedURLException e) {

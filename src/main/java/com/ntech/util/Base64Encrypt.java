@@ -4,11 +4,14 @@ import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
 
+/**
+ * base64加密类
+ */
 public class Base64Encrypt {
 	
 	private static final Encoder encoder =  Base64.getEncoder();
 	private static final Decoder decoder =  Base64.getDecoder();
-	
+
 	public static String  encryptUserName(String userName) {
 		byte[] b = userName.getBytes();
 		for(int i=0;i<b.length;i++) {
