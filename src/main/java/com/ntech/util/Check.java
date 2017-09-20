@@ -73,8 +73,7 @@ public class Check {
 	public  boolean checkToken(String inputToken)  {
 		return customerService.checkToken(inputToken);
 	}
-	public  String getUserName(String inputToken)  {
-
+	public  Customer getCustomerByToken(String inputToken)  {
 		return customerService.findByToken(inputToken);
 	}
 	public  List<String> getGalleries(String inputToken){
@@ -150,16 +149,18 @@ public class Check {
         log.setTime(new Date());
         logService.add(log);
     }
-    public void setFaceNum(String userName,int addFace){
-    	 Customer customer = customerService.findByName(userName);
-    	 customer.setFaceNumber(customer.getFaceNumber()+addFace);
+    public boolean setFaceNum(Customer customer,int addFace){
+ 		 customer.setFaceNumber(customer.getFaceNumber()+addFace);
     	 int result = customerService.modify(customer);
     	 if(result!=1)
 			 try {
 				 throw new Exception("setFaceNum failed");
 			 } catch (Exception e) {
+    	 		 ErrorPrompt.addInfo("code","sql failed");
 				 e.printStackTrace();
+				 return  false;
 			 }
+		return true;
 	}
 
     public String getContype(String userName) {

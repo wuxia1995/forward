@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+import com.ntech.model.Customer;
 import org.apache.log4j.Logger;
 
 import com.ntech.exception.ErrorTokenException;
@@ -24,7 +25,6 @@ public class ForwardRequestWrapper extends HttpServletRequestWrapper {
 	public ForwardRequestWrapper(HttpServletRequest request) throws ErrorTokenException, IllegalAPIException {
 		
 		super(request);
-		String userName ;
 		if(request.getRequestURI().length()<9){
 			throw new IllegalAPIException("bad_api");
 		}
@@ -39,9 +39,10 @@ public class ForwardRequestWrapper extends HttpServletRequestWrapper {
 			throw new ErrorTokenException("bad_token");
 		request.setAttribute("inputToken",inputToken);
 		logger.info("InputToken :"+inputToken);
-		userName = check.getUserName(inputToken);
-		logger.info("UserName: "+userName);
-		request.setAttribute("userName",userName);
+		Customer customer = check.getCustomerByToken(inputToken);
+		logger.info("UserName: "+customer.getName());
+		request.setAttribute("userName",customer.getName());
+		request.setAttribute("customer",customer);
 		if(API.startsWith("/picture")) {
 			return;
 		}

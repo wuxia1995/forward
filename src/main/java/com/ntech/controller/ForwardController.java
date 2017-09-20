@@ -7,6 +7,7 @@ import com.ntech.forward.Constant;
 import com.ntech.forward.HttpUploadFile;
 import com.ntech.forward.MethodUtil;
 import com.ntech.forward.PictureForward;
+import com.ntech.model.Customer;
 import com.ntech.util.Check;
 import com.ntech.util.ErrorPrompt;
 import org.apache.log4j.Logger;
@@ -137,6 +138,11 @@ public class ForwardController {
             throws ServletException, IOException, ParseException {
         logger.info("*****enter Controller*****");
         String userName = (String)request.getAttribute("userName");
+        Customer customer =(Customer) request.getAttribute("customer");
+        if(!(customer.getFaceNumber()<200)){
+            ErrorPrompt.addInfo("error","more than 200 faces in your galleries");
+            return ErrorPrompt.getJSONInfo();
+        }
         request.setAttribute("chargeAPI", "face");
         request.setAttribute("charge", Constant.Face);
         String API = new StringBuilder("/").append(version).append("/face").toString();
@@ -151,7 +157,9 @@ public class ForwardController {
         JSONParser jsonParser = new JSONParser();
         JSONArray results = (JSONArray) ((JSONObject)jsonParser.parse(reply)).get("results");
         int addFace = results.size();
-        check.setFaceNum(userName,addFace);
+        boolean result = check.setFaceNum(customer,addFace);
+        if(!result)
+            return ErrorPrompt.getJSONInfo();
         return reply;
     }
 
