@@ -5,6 +5,7 @@
 
 <head>
     <meta charset="utf-8" />
+    <!--[if lte IE 10]><script>window.location.href='/html/browser.html'</script><![endif]-->
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <title>恩钛智能</title>
     <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
@@ -57,13 +58,10 @@
                                 <li>
                                     <a class="click_css" href="#page4">人脸搜索</a>
                                 </li>
-                                <li>
-                                    <a class="click_css" href="#page5">人脸属性</a>
-                                </li>
                             </ul>
                         </li>
                         <li>
-                            <a class="click_css" href="#page6">联系我们</a>
+                            <a class="click_css" href="#page5">联系我们</a>
                         </li>
                         <c:choose>
                             <c:when test="${! empty name}">
@@ -381,7 +379,7 @@
 
                                 <c:choose>
                                     <c:when test="${! empty name}">
-                                        <a href="/customer/personInfo">点击跳转至个人中心</a>
+                                        <a href="/customer/gallery-demo">点击跳转至个人中心</a>
                                     </c:when>
                                     <c:otherwise>
                                         请先<a href="/customer/login">登录</a>
@@ -453,7 +451,7 @@
 </body>
 <script type="text/javascript" src="js/lib/jquery.min.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
-<script type="text/javascript" src="js/index-function.js"></script>
+<script type="text/javascript" src="js/index-function.min.js"></script>
 <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/lib/jquery.fullPage.js"></script>
 </div>

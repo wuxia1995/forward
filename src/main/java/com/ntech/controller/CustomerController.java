@@ -66,6 +66,26 @@ public class CustomerController {
         return customerService.checkUserName(userName);
     }
 
+    @RequestMapping("/appCommitReg")
+    @ResponseBody
+    public boolean appRegister(@RequestParam("name") String name, String password, String email) {
+        if (null == name || "".equals(name) || null == password || "".equals(password) || null == email || "".equals(email)) {
+            return false;
+        }
+        logger.info("commit appregister");
+        Customer customer = new Customer();
+        customer.setName(name);
+        customer.setPassword(SHAencrypt.encryptSHA(password));
+        customer.setEmail(email);
+        try {
+            customerService.add(customer);
+        } catch (MessagingException e) {
+            logger.error(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
     @RequestMapping("/commitReg")
     public ModelAndView register(@RequestParam("name") String name, String password, String email) {
         ModelAndView mav = new ModelAndView("msg");
@@ -438,23 +458,23 @@ public class CustomerController {
         return wrapResponse(result).toJSONString();
     }
 
-    @RequestMapping("addGallery")
-    @ResponseBody
-    public boolean addGallery(String libraryName, HttpSession session) {
-        if (null == libraryName || "".equals(libraryName)) {
-            return false;
-        }
-        String name = (String) session.getAttribute("name");
-        if (null != name) {
-            if (!libraryService.checkLibrary(name, libraryName)) {
-                LibraryKey libraryKey = new LibraryKey();
-                libraryKey.setUserName(name);
-                libraryKey.setLibraryName(libraryName);
-                libraryService.insert(libraryKey);
-            }
-        }
-        return false;
-    }
+//    @RequestMapping("addGallery")
+//    @ResponseBody
+//    public boolean addGallery(String libraryName, HttpSession session) {
+//        if (null == libraryName || "".equals(libraryName)) {
+//            return false;
+//        }
+//        String name = (String) session.getAttribute("name");
+//        if (null != name) {
+//            if (!libraryService.checkLibrary(name, libraryName)) {
+//                LibraryKey libraryKey = new LibraryKey();
+//                libraryKey.setUserName(name);
+//                libraryKey.setLibraryName(libraryName);
+//                libraryService.insert(libraryKey);
+//            }
+//        }
+//        return false;
+//    }
 
 //    //删除图库
 //    @RequestMapping("deleteGallery")
@@ -525,7 +545,6 @@ public class CustomerController {
     @ResponseBody
     public String forwardDetect(HttpServletRequest request, HttpServletResponse response) {
         String result = null;
-//        request.getRequestDispatcher("/n-tech/v0/detect").forward(request,response);
         try {
             logger.info(request.getRequestURI());
             if (request.getRequestURI().equals("/customer/detect-face")) {
