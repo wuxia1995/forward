@@ -27,33 +27,25 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * API转发Controller
+ */
 @Controller
-@RequestMapping("/n-tech")
+@RequestMapping("/anytec")
 public class ForwardController {
 
+    //日志
     private final static Logger logger = Logger.getLogger(ForwardController.class);
+    //获取用于与持久化层做数据交互的工具类实例
     private static Check check = (Check)Constant.GSB.getBean("check");
-
- /*   @RequestMapping("/n-tech/**")
-    @ResponseBody
-    public String methodHandler(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        logger.info("*****enter Controller*****");
-        String reply;
-        if(ErrorPrompt.size() != 0)
-            return ErrorPrompt.getJSONInfo();
-        reply = MethodUtil.getInstance().requestForword(request, response);
-        if (ErrorPrompt.size() != 0)
-            reply = ErrorPrompt.getJSONInfo();
-        return reply;
-    }*/
-
+    //人脸探测API
     @RequestMapping(method = RequestMethod.POST,value="/{version:[v][01]}/detect")
     @ResponseBody
     public String detect(@PathVariable("version")String version, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.info("*****enter Controller*****");
         String API = new StringBuilder("/").append(version).append("/detect").toString();
+        //判断探测API的venison是v1还是v0并对需要计费的API做记录
         if(version.equals("v1")){
             request.setAttribute("chargeAPI", "detect1");
             request.setAttribute("charge", Constant.Detect1);
@@ -61,30 +53,37 @@ public class ForwardController {
             request.setAttribute("chargeAPI", "detect0");
             request.setAttribute("charge", Constant.Detect0);
         }
+        //将API放到request作用域中，用于MethodUtil调用
         request.setAttribute("API",API);
         logger.info("CHECK_API :" + API);
+        //获取FindFaceSDK响应
         String reply = MethodUtil.getInstance().requestForword(request, response);
+        //程序是否正常执行，若有异常则返回错误提示
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
         return reply;
     }
-
+    //人脸对比API
     @RequestMapping(value = "/{version:[v][01]}/verify",method = RequestMethod.POST)
     @ResponseBody
     public String verify(@PathVariable("version")String version, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.info("*****enter Controller*****");
         String API = new StringBuilder("/").append(version).append("/verify").toString();
+        //计费API记录
         request.setAttribute("chargeAPI", "verify");
         request.setAttribute("charge", Constant.Verify);
+        //将API放到request作用域中，用于MethodUtil调用
         request.setAttribute("API",API);
         logger.info("CHECK_API :" + API);
+        //获取FindFaceSDK响应
         String reply = MethodUtil.getInstance().requestForword(request, response);
+        //异常检查
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
         return reply;
     }
-
+    //人脸搜索匹配API
     @RequestMapping(value = "/{version:[v][01]}/identify",method = RequestMethod.POST)
     @ResponseBody
     public String identify(@PathVariable("version")String version, HttpServletRequest request, HttpServletResponse response)
@@ -92,25 +91,32 @@ public class ForwardController {
         logger.info("*****enter Controller*****");
         String userName = (String)request.getAttribute("userName");
         String API = new StringBuilder("/").append(version).append("/faces/gallery/").append(userName).append("/identify").toString();
+        //计费API记录
         request.setAttribute("chargeAPI", "identify");
         request.setAttribute("charge", Constant.Identify);
+        //将API放到request作用域中，用于MethodUtil调用
         request.setAttribute("API",API);
         logger.info("CHECK_API :" + API);
+        //获取FindFaceSDK响应
         String reply = MethodUtil.getInstance().requestForword(request, response);
+        //异常检查
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
         return reply;
     }
-
+    //指定库人脸搜索匹配
     @RequestMapping(method = RequestMethod.POST,value = "/{version:[v][01]}/identify/gallery/{gallery:\\w{1,48}}")
     @ResponseBody
     public String identifyGallery(@PathVariable("version")String version,@PathVariable("gallery")String gallery, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.info("*****enter Controller*****");
         String userName = (String)request.getAttribute("userName");
+        //根据从token，检查并返回用户所有库列表
         List<String> galleries = check.getGalleries(request.getHeader("Token"));
+        //用户库名包装
         if(!gallery.equals(userName))
             gallery = new StringBuilder(gallery).append("_anytec_" + userName).toString();
+        //用户指定搜索库权限检测，用户是否拥有该库
         if (!galleries.contains(gallery))
             try {
                 throw new IllegalGalleryException("bad_gallery");
@@ -122,44 +128,53 @@ public class ForwardController {
                 return ErrorPrompt.getJSONInfo();
             }
         String API = new StringBuilder("/").append(version).append("/faces/gallery/").append(gallery).append("/identify").toString();
+        //计费API
         request.setAttribute("chargeAPI", "identify");
         request.setAttribute("charge", Constant.Identify);
+        //将API放到request作用域中，用于MethodUtil调用
         request.setAttribute("API",API);
         logger.info("CHECK_API :" + API);
+        //获取FindFaceSDK响应
         String reply = MethodUtil.getInstance().requestForword(request, response);
+        //异常检查
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
         return reply;
     }
-
+    //人脸探测并入库
     @RequestMapping(value = "/{version:[v][01]}/face",method = RequestMethod.POST)
     @ResponseBody
     public String face(@PathVariable("version")String version, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ParseException {
         logger.info("*****enter Controller*****");
-        String userName = (String)request.getAttribute("userName");
+        //获取用户model
         Customer customer =(Customer) request.getAttribute("customer");
+        //用户已添加的人脸数检查
         if(!(customer.getFaceNumber()<200)){
             ErrorPrompt.addInfo("error","more than 200 faces in your galleries");
             return ErrorPrompt.getJSONInfo();
         }
+        //计费API
         request.setAttribute("chargeAPI", "face");
         request.setAttribute("charge", Constant.Face);
         String API = new StringBuilder("/").append(version).append("/face").toString();
         logger.info("CHECK_API :" + API);
+        //获取用户拥有库列表，用于MethodUtil类的galleries参数检查
         List<String> galleries = check.getGalleries(request.getHeader("Token"));
         request.setAttribute("galleries", galleries);
-        request.setAttribute("api", "face/post");
+        //将API放到request作用域中，用于MethodUtil调用
         request.setAttribute("API",API);
         String reply = MethodUtil.getInstance().requestForword(request, response);
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
+        // 解析响应，获取用户添加的人脸数并记录日志
         JSONParser jsonParser = new JSONParser();
         JSONArray results = (JSONArray) ((JSONObject)jsonParser.parse(reply)).get("results");
         int addFace = results.size();
         boolean result = check.setFaceNum(customer,addFace);
         if(!result)
             return ErrorPrompt.getJSONInfo();
+        check.setLog(customer.getName(),new StringBuilder("face ￥").append(Constant.Face).append(" * ").append(addFace).toString(),1);
         return reply;
     }
 
@@ -294,6 +309,7 @@ public class ForwardController {
             }
         String API = new StringBuilder("/").append(version).append("/meta/gallery/").append(galleryName).toString();
         logger.info("CHECK_API :" + API);
+        //将API放到request作用域中，用于MethodUtil调用
         request.setAttribute("API",API);
         String reply = MethodUtil.getInstance().requestForword(request, response);
         if (ErrorPrompt.size() != 0)
@@ -496,6 +512,7 @@ public class ForwardController {
             reply = ErrorPrompt.getJSONInfo();
         return reply;
     }
+
 
 
     @RequestMapping("/picture/**")

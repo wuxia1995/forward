@@ -20,6 +20,9 @@ import com.ntech.exception.ErrorTokenException;
 import com.ntech.util.Base64Encrypt;
 import com.ntech.util.ErrorPrompt;
 
+/**
+ * 从FindFaceSDK获取图片并转发给用户
+ */
 
 public class PictureForward {
 	

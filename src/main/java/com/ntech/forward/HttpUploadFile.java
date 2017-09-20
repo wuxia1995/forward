@@ -18,16 +18,16 @@ import org.json.simple.JSONObject;
 import com.ntech.util.ErrorPrompt;
 
 /**
- * java通过模拟post方式提交表单实现图片上传功能
+ * 模拟表单转发http请求类
  */
 public class HttpUploadFile {
-	
+	//response code
 	public static int status = 0;
 	
 	private final Logger logger = Logger.getLogger(HttpUploadFile.class);
 	private static final String POST_URL = Constant.SDK_IP;
 	private static HttpUploadFile instance;
-	
+	//单例模式
 	private HttpUploadFile() {}
 	  public static HttpUploadFile getInstance(){    //对获取实例的方法进行同步
 	         if (instance == null){
@@ -38,31 +38,10 @@ public class HttpUploadFile {
 	         }
 	       return instance;
 	       }
-	
+	//同步锁
     public synchronized String httpURLConnectionSDK( Map<String,String> header,Map<String, String> param,
             Map<String, Object> file,String meta) throws IOException {
-    	//测试×××××××××××××××××××××××××××××××
-    	logger.info("META: "+meta);
-    		Iterator<Entry<String,String>>iterator1 = header.entrySet().iterator();
-    		while(iterator1.hasNext()) {
-    			Entry<String, String> entry = iterator1.next();
-    			logger.info(entry.getKey()+":"+entry.getValue());
-    		}
-    	if(param!=null) {
-    		Iterator<Entry<String,String>>iterator2 = param.entrySet().iterator();
-    		while(iterator2.hasNext()) {
-    			Entry<String, String> entry = iterator2.next();
-    			logger.info(entry.getKey()+":"+entry.getValue());
-    		}
-    	}
-     	if(file!=null) {
-    		Iterator<Entry<String,Object>>iterator3 = file.entrySet().iterator();
-    		while(iterator3.hasNext()) {
-    			Entry<String, Object> entry = iterator3.next();
-    			logger.info(entry.getKey()+":"+entry.getValue());
-    		}
-    	}
-		//×××××××××××××××××××××××××××××××××××		
+
         String reply;
         String BOUNDARY = "-------------------------"+System.currentTimeMillis();
 		OutputStream out;
@@ -89,7 +68,7 @@ public class HttpUploadFile {
 	        	logger.info("META=ISFILE");
 	            connection.setRequestProperty("Content-Type","multipart/form-data; boundary=" + BOUNDARY);
 	            out = new DataOutputStream(connection.getOutputStream());
-	            // text
+	            // 文本参数
 	            if (null!=param&&param.size()!=0) {
 	            	logger.info("******** FILE-TEXT ********");
 	                StringBuilder stringBuilder = new StringBuilder();
@@ -110,7 +89,7 @@ public class HttpUploadFile {
 	                }
 	                out.write(stringBuilder.toString().getBytes());
 	            }
-	            // file
+	            // 文件参数
 	            if (null!=file&&file.size()!=0) {
 	            	logger.info("******** FILE-PICTURE *******");
 	                Iterator<Entry<String,Object>> iter = file.entrySet().iterator();

@@ -23,6 +23,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
+/**
+ * 持久化层数据交互业务类
+ */
 @Component
 public class Check {
 	
@@ -37,7 +40,7 @@ public class Check {
 	 private ISetMealService setMealService;
 	@Resource
 	 private ILogService logService;
-
+	//检查用户是否持有对该id的操作权限
 	public List<String> checkId(String id) {
 		List<String> galleries = new ArrayList<String>();
 		Map<String, String> header = new HashMap<String,String>();
@@ -69,13 +72,15 @@ public class Check {
 		}
 		return null;
 	}
-	
+	//检查用户token是否有效
 	public  boolean checkToken(String inputToken)  {
 		return customerService.checkToken(inputToken);
 	}
+	//获取用户model
 	public  Customer getCustomerByToken(String inputToken)  {
 		return customerService.findByToken(inputToken);
 	}
+	//获取用户持有的库列表
 	public  List<String> getGalleries(String inputToken){
 		List<String> galleryList = new ArrayList<String>();
 		List<LibraryKey> list = libraryService.findByToken(inputToken);
@@ -85,6 +90,7 @@ public class Check {
 		}
 		return galleryList;
 	}
+	//创建库
 	public  boolean createGallery(String userName,String galleryName){
 		LibraryKey libraryKey = new LibraryKey();
 		libraryKey.setLibraryName(galleryName);
@@ -100,6 +106,7 @@ public class Check {
 			}
 		return true;
 	}
+	//删除库
 	public boolean deleteGallery(String userName,String galleryName){
 		LibraryKey libraryKey = new LibraryKey();
 		libraryKey.setLibraryName(galleryName);
@@ -115,6 +122,7 @@ public class Check {
 			}
 		return true;
 	}
+	//计费API剩余次数检查并计数
 	public boolean mealTimesCount(String userName){
 		SetMeal setMeal = setMealService.findByName(userName);
 		if(!(setMeal.getLeftTimes()>0))
@@ -128,7 +136,7 @@ public class Check {
 		setMeal.setLeftTimes(setMeal.getLeftTimes()-1);
 		return setMealService.modify(setMeal);
 	}
-
+	//套餐到期时间检查
     public boolean mealDateCheck(String userName){
         SetMeal setMeal = setMealService.findByName(userName);
         boolean result = setMeal.getEndTime().after(new Date());
@@ -141,6 +149,7 @@ public class Check {
             }
         return result;
     }
+    //写入日志
     public void setLog(String userName,String content,int result) {
         Log log = new Log();
         log.setUserName(userName);
@@ -149,6 +158,7 @@ public class Check {
         log.setTime(new Date());
         logService.add(log);
     }
+    //用户人脸添加计数
     public boolean setFaceNum(Customer customer,int addFace){
  		 customer.setFaceNumber(customer.getFaceNumber()+addFace);
     	 int result = customerService.modify(customer);

@@ -6,6 +6,9 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+/**
+ * 配置文件读取工具类
+ */
 public class ConfigManager {
 	
 	private static Logger logger = Logger.getLogger(ConfigManager.class);
