@@ -47,7 +47,7 @@ public class HttpUploadFile {
 		OutputStream out;
 		BufferedWriter bufferedWriter;
 		BufferedReader bufferedReader;
-      
+
             URL url = new URL(POST_URL+header.get("API"));
             logger.info("URL :"+url);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -148,6 +148,7 @@ public class HttpUploadFile {
             reply = stringBuilder.toString();
             bufferedReader.close();
 			connection.disconnect();
+			logger.info(reply);
             return reply;
     }
 }

@@ -214,7 +214,7 @@ $(document).ready(function () {
                     }
                 });
             },
-            myLibSearchUpload(img) {
+            myLibSearchUpload: function(img) {
 
                 var imgShow = document.getElementById("imgShow")
                 // var imgShowDiv = document.getElementById("imgShowDiv")

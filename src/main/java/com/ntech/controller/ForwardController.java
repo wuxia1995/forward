@@ -150,7 +150,7 @@ public class ForwardController {
         //获取用户model
         Customer customer =(Customer) request.getAttribute("customer");
         //用户已添加的人脸数检查
-        if(!(customer.getFaceNumber()<200)){
+        if(!(customer.getFaceNumber()<51)){
             ErrorPrompt.addInfo("error","more than 200 faces in your galleries");
             return ErrorPrompt.getJSONInfo();
         }
@@ -166,12 +166,14 @@ public class ForwardController {
         request.setAttribute("API",API);
         String reply = MethodUtil.getInstance().requestForword(request, response);
         if (ErrorPrompt.size() != 0)
-            reply = ErrorPrompt.getJSONInfo();
+            return ErrorPrompt.getJSONInfo();
         // 解析响应，获取用户添加的人脸数并记录日志
+        if(HttpUploadFile.status!=200)
+            return reply;
         JSONParser jsonParser = new JSONParser();
         JSONArray results = (JSONArray) ((JSONObject)jsonParser.parse(reply)).get("results");
         int addFace = results.size();
-        boolean result = check.setFaceNum(customer,addFace);
+        boolean result = check.setFaceNum(customer,addFace,1);
         if(!result)
             return ErrorPrompt.getJSONInfo();
         check.setLog(customer.getName(),new StringBuilder("face ￥").append(Constant.Face).append(" * ").append(addFace).toString(),1);
@@ -304,7 +306,6 @@ public class ForwardController {
                 logger.error("*****BAD_GALLERY*****@"+userName);
                 ErrorPrompt.addInfo("error","bad_gallery");
                 e.printStackTrace();
-                response.getWriter().println(ErrorPrompt.getJSONInfo());
                 return ErrorPrompt.getJSONInfo();
             }
         String API = new StringBuilder("/").append(version).append("/meta/gallery/").append(galleryName).toString();
@@ -337,7 +338,8 @@ public class ForwardController {
     public String faceId(@PathVariable("version")String version,@PathVariable("id")String id,HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.info("*****enter Controller*****");
-        String userName = (String)request.getAttribute("userName");
+        Customer customer =(Customer) request.getAttribute("customer");
+        String userName = customer.getName();
         boolean isMaster = false;
         List<String> galleries = check.getGalleries((String)request.getAttribute("inputToken"));
         List<String> list = check.checkId(id);
@@ -364,6 +366,11 @@ public class ForwardController {
         logger.info("CHECK_API :" + API);
         request.setAttribute("API",API);
         String reply = MethodUtil.getInstance().requestForword(request, response);
+        if(HttpUploadFile.status==200&&request.getMethod().equals("DELETE")){
+            boolean result = check.setFaceNum(customer,1,0);
+            if(!result)
+                return ErrorPrompt.getJSONInfo();
+        }
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
         return reply;
@@ -387,7 +394,6 @@ public class ForwardController {
                 logger.error("*****BAD_GALLERY*****@"+userName);
                 ErrorPrompt.addInfo("error","bad_gallery");
                 e.printStackTrace();
-                response.getWriter().println(ErrorPrompt.getJSONInfo());
                 return ErrorPrompt.getJSONInfo();
             }
         StringBuilder API = new StringBuilder("/").append(version).append("/faces/gallery/").append(inputGallery);
@@ -494,7 +500,6 @@ public class ForwardController {
                 logger.error("*****BAD_GALLERY*****@"+userName);
                 ErrorPrompt.addInfo("error","bad_gallery");
                 e.printStackTrace();
-                response.getWriter().println(ErrorPrompt.getJSONInfo());
                 return ErrorPrompt.getJSONInfo();
             }
         String API = new StringBuilder("/").append(version).append("/galleries/").append(deleteGallery).toString();

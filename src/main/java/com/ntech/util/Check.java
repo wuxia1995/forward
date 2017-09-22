@@ -159,17 +159,23 @@ public class Check {
         logService.add(log);
     }
     //用户人脸添加计数
-    public boolean setFaceNum(Customer customer,int addFace){
- 		 customer.setFaceNumber(customer.getFaceNumber()+addFace);
-    	 int result = customerService.modify(customer);
-    	 if(result!=1)
-			 try {
+    public boolean setFaceNum(Customer customer,int alterNum,int meta){
+		if(meta==1){
+			customer.setFaceNumber(customer.getFaceNumber()+alterNum);
+		}else{
+			customer.setFaceNumber(customer.getFaceNumber()-1);
+		}
+		if(customer.getFaceNumber()<0)
+			return false;
+			int result = customerService.modify(customer);
+			if(result!=1)
+				try {
 				 throw new Exception("setFaceNum failed");
-			 } catch (Exception e) {
-    	 		 ErrorPrompt.addInfo("code","sql failed");
+				} catch (Exception e) {
+				 ErrorPrompt.addInfo("code","sql failed");
 				 e.printStackTrace();
 				 return  false;
-			 }
+				}
 		return true;
 	}
 
