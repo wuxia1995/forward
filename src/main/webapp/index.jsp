@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <!--[if lte IE 10]><script>window.location.href='/html/browser.html'</script><![endif]-->
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-    <title>恩钛智能</title>
+    <title>恩钛</title>
     <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
     <link rel="stylesheet" href="css/bootstrap.min.css" />
@@ -98,7 +98,7 @@
             <div class="title_bg2">
                 <img class="img-responsive center-block" src="img/index/two/title_img1.png" />
                 <div class="title_text2">人脸检测</div>
-                <div class="introduce_text2">检测并定位图片中的人脸，返回<br/>高精度的人脸<br/>框坐标。</div>
+                <div class="introduce_text2">检测并定位图片中的人脸，返回<br/>高精度的人脸框坐标。</div>
             </div>
             <div class="formal_box2">
                 <div class="left_formal2">
@@ -116,7 +116,7 @@
                     <!--左侧人脸属性框-->
                     <div class="attribute_box2">
                         <div class="attribute_title2">
-                            <span><img class="attribute_img2" src="http://192.168.10.212:8080/img/index/two/icon-right.png"></span>&nbsp;&nbsp;人脸属性
+                            <span><img class="attribute_img2" src="http://yun.anytec.cn:8080/img/index/two/icon-right.png"></span>&nbsp;&nbsp;人脸属性
                         </div>
                         <div id="faceProperties" class="attribute_text2"></div>
                     </div>
@@ -146,7 +146,7 @@
                         <div class="img_bgbox2" reveal_sign="width">
                             <div  class="detect_img2">
                                 <div id="imgShowDetectDiv" style="position: relative;height: 100%;width: 100%;">
-                                <img id="imgShowDetect" src="http://192.168.10.212:8080/img/index/two/max_img1.png">
+                                <img id="imgShowDetect" src="http://yun.anytec.cn:8080/img/index/two/max_img1.png">
                                 </div>
                             </div>
                         </div>
@@ -169,11 +169,11 @@
                         </div>
                         <div class="upload2-3">
                             <div class="upload2-3img">
-                                <div id="" class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" class="img_active" src="http://192.168.10.212:8080/img/index/two/max_img1.png"></div>
-                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)"src="http://192.168.10.212:8080/img/index/two/max_img2.png"></div>
-                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" src="http://192.168.10.212:8080/img/index/two/max_img3.png"></div>
-                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" src="http://192.168.10.212:8080/img/index/two/max_img4.png"></div>
-                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" src="http://192.168.10.212:8080/img/index/two/max_img5.png"></div>
+                                <div id="" class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" class="img_active" src="http://yun.anytec.cn:8080/img/index/two/max_img1.png"></div>
+                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)"src="http://yun.anytec.cn:8080/img/index/two/max_img2.png"></div>
+                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" src="http://yun.anytec.cn:8080/img/index/two/max_img3.png"></div>
+                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" src="http://yun.anytec.cn:8080/img/index/two/max_img4.png"></div>
+                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" src="http://yun.anytec.cn:8080/img/index/two/max_img5.png"></div>
                                 <br style="clear:both;"/><!--清除浮动-->
                             </div>
                         </div>
@@ -220,7 +220,7 @@
                         <div class="results_maxbox3" reveal_sign="width">
                             <div class="results_maximg3" reveal_sign="width">
                                 <div id="picDiv1" style="position: relative;height: 100%;width: 100%">
-                                    <img id="imgShow1" class="showcasing_img3" src="http://192.168.10.212:8080/img/index/two/max_img5.png">
+                                    <img id="imgShow1" class="showcasing_img3" src="http://yun.anytec.cn:8080/img/index/two/max_img5.png">
                                 </div>
                             </div>
                         </div>
@@ -235,11 +235,11 @@
                                 <div class="detect_btn3" onclick="verifyUrl(1)">检测</div>
                             </div>
                             <div class="detect_minimg3">
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://192.168.10.212:8080/img/index/two/max_img1.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://192.168.10.212:8080/img/index/two/max_img2.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://192.168.10.212:8080/img/index/two/max_img3.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://192.168.10.212:8080/img/index/two/max_img4.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" class="img_active"  src="http://192.168.10.212:8080/img/index/two/max_img5.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_2.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_3.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_4.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" class="img_active"  src="http://yun.anytec.cn:8080/img/index/two/max_img1_5.png"></div>
                             </div>
                         </div>
                     </div>
@@ -250,7 +250,7 @@
                         <div class="results_maxbox3" reveal_sign="width">
                             <div class="results_maximg3" reveal_sign="width">
                                 <div id="picDiv2" style="position: relative;height: 100%;width: 100%;">
-                                    <img id="imgShow2" class="showcasing_img3" src="http://192.168.10.212:8080/img/index/two/max_img5.png">
+                                    <img id="imgShow2" class="showcasing_img3" src="http://yun.anytec.cn:8080/img/index/two/max_img5.png">
                                 </div>
                                 <%--<img class="showcasing_img3" src="img/index/two/max_img5.png" />--%>
                             </div>
@@ -265,11 +265,11 @@
                                 <div class="detect_btn3"  onclick="verifyUrl(2)">检测</div>
                             </div>
                             <div class="detect_minimg3">
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://192.168.10.212:8080/img/index/two/max_img1.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://192.168.10.212:8080/img/index/two/max_img2.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://192.168.10.212:8080/img/index/two/max_img3.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://192.168.10.212:8080/img/index/two/max_img4.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" class="img_active" src="http://192.168.10.212:8080/img/index/two/max_img5.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/max_img1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/max_img2.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/max_img3.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/max_img4.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" class="img_active" src="http://yun.anytec.cn:8080/img/index/two/max_img5.png"></div>
                             </div>
                         </div>
                     </div>
@@ -304,11 +304,11 @@
                             <div onclick="searchUrlDemo(this)" class="detect_btn4">检测</div>
                         </div>
                         <div class="detect_minimg4">
-                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://192.168.10.212:8080/img/index/two/max_img1.png"></div>
-                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" class="img_active" src="http://192.168.10.212:8080/img/index/two/max_img2.png"></div>
-                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://192.168.10.212:8080/img/index/two/max_img3.png"></div>
-                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://192.168.10.212:8080/img/index/two/max_img4.png"></div>
-                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://192.168.10.212:8080/img/index/two/max_img5.png"></div>
+                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://yun.anytec.cn:8080/img/index/two/max_img1.png"></div>
+                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" class="img_active" src="http://yun.anytec.cn:8080/img/index/two/max_img2.png"></div>
+                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://yun.anytec.cn:8080/img/index/two/max_img3.png"></div>
+                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://yun.anytec.cn:8080/img/index/two/max_img4.png"></div>
+                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://yun.anytec.cn:8080/img/index/two/max_img5.png"></div>
                         </div>
                     </div>
                 </div>
@@ -441,7 +441,7 @@
             </div>
             <!--底部版权-->
             <div class="copyright6">
-                <div class="copyright6_1">Copyright 2017 All Right Reserved 恩钛智能技术有限公司  ICP:08118166 网站地图</div>
+                <div class="copyright6_1">Copyright 2017 All Right Reserved 深圳市恩钛控股有限公司  ICP:08118166 网站地图</div>
                 <div class="copyright6_2">地址：深圳市南山区粤海街道高新南七道高新工业村018号R3-A座四层</div>
             </div>
         </div>

@@ -57,16 +57,16 @@ function uploadPicDetect(obj) {
                     var dataObj=eval('(' + data + ')')
                     if (data == ""||dataObj['faces'].length==0) {
                         $('#responseDetect').html("未检查到人脸")
-                        $('#faceProperties').html("")
+                        $('#faceProperties').html("未检查到人脸")
                         return false
                     }
                     checkProperties(eval('(' + data + ')'));
                     handleData($('#imgShowDetect').attr("src"), eval('(' + data + ')'))
                 },
                 error: function (data) {
-                    $('#responseDetect').html("文件格式不符或文件太大")
+                    $('#responseDetect').html("文件格式不符或文件太大,支持png,jpeg,webp格式且像素小于1920*1080的图片")
 
-                    $('#faceProperties').html("")
+                    $('#faceProperties').html("文件格式不符或文件太大,支持png,jpeg,webp格式且像素小于1920*1080的图片")
                     // }
                     return false
                 }
@@ -442,8 +442,8 @@ function uploadPicVerify(obj, id) {
         error:function (data) {
             removeDiv()
             // if(data==""){
-            $("#resultVerify").html("图片未检查到人脸或文件格式不符或文件太大");
-            $("#reponseVerify").html("");
+            $("#resultVerify").html("文件格式不符或文件太大,支持png,jpeg,webp格式且像素小于1920*1080的图片");
+            $("#reponseVerify").html("文件格式不符或文件太大,支持png,jpeg,webp格式且像素小于1920*1080的图片");
             // }
             return false;
         }
@@ -588,7 +588,7 @@ function verifyReq(imgUrl, id) {
             error:function(data){
                 // if(data==""){
                 $("#resultVerify").html("文件格式不符或文件太大");
-                $("#reponseVerify").html("");
+                $("#reponseVerify").html("文件格式不符或文件太大");
                 return false;
                 // }
                 // console.log(data)

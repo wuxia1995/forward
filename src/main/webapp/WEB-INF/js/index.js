@@ -338,8 +338,8 @@ $(document).ready(function() {
     //     url: 'customer/verify-face',
     //     type: 'POST',
     //     // dataType: "json",
-    //     data:{photo1:"http://192.168.10.212:8080/img/index/two/max_img5.png",
-    //         photo2:"http://192.168.10.212:8080/img/index/two/max_img5.png"},
+    //     data:{photo1:"http://yun.anytec.cn:8080/img/index/two/max_img5.png",
+    //         photo2:"http://yun.anytec.cn:8080/img/index/two/max_img5.png"},
     //     processData: false,
     //     contentType: false,
     //     async: true,
@@ -365,7 +365,7 @@ $(document).ready(function() {
     // 搜索
     // var formData = new FormData();
     // formData.append("n",3);
-    // formData.append("photo","http://192.168.10.212:8080/img/index/two/max_img2.png")
+    // formData.append("photo","http://yun.anytec.cn:8080/img/index/two/max_img2.png")
     // //清除input框的文件状态,解决两次同一张照片不触发事件的问题
     // $.ajax({
     //     url: 'customer/getDemoFace',
