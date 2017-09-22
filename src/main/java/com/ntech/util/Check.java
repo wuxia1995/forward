@@ -159,8 +159,12 @@ public class Check {
         logService.add(log);
     }
     //用户人脸添加计数
-    public boolean setFaceNum(Customer customer,int addFace){
- 		 customer.setFaceNumber(customer.getFaceNumber()+addFace);
+    public boolean setFaceNum(Customer customer,int alterNum,int meta){
+		if(meta==1){
+			customer.setFaceNumber(customer.getFaceNumber()+alterNum);
+		}else{
+			customer.setFaceNumber(customer.getFaceNumber()-1);
+		}
     	 int result = customerService.modify(customer);
     	 if(result!=1)
 			 try {
