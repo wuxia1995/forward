@@ -165,15 +165,17 @@ public class Check {
 		}else{
 			customer.setFaceNumber(customer.getFaceNumber()-1);
 		}
-    	 int result = customerService.modify(customer);
-    	 if(result!=1)
-			 try {
+		if(customer.getFaceNumber()<0)
+			return false;
+			int result = customerService.modify(customer);
+			if(result!=1)
+				try {
 				 throw new Exception("setFaceNum failed");
-			 } catch (Exception e) {
-    	 		 ErrorPrompt.addInfo("code","sql failed");
+				} catch (Exception e) {
+				 ErrorPrompt.addInfo("code","sql failed");
 				 e.printStackTrace();
 				 return  false;
-			 }
+				}
 		return true;
 	}
 

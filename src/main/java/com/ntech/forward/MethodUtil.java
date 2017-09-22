@@ -90,7 +90,7 @@ public class MethodUtil {
 					if (item.isFormField()) {
 						//文本
 						String filedName = item.getFieldName();
-						String value = new String(item.getString().getBytes("iso-8859-1"));
+						String value = new String(item.getString().getBytes(Constant.CHARSET));
 						if (filedName.equals("galleries") || filedName.equals("gallery")) {
 							logger.info("inputGaleries :" + value);
 							filedName = "galleries";

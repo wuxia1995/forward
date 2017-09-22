@@ -14,6 +14,7 @@ public class Constant {
 	public static final String TOKEN = sdk.getParameter("TOKEN");
 	public static final String SDK_IP = sdk.getParameter("SDK_IP");
 	public static final String PIC = sdk.getParameter("PIC");
+	public static final String CHARSET = sdk.getParameter("CHARSET");
 	//Spring上下文---依赖注入工具类
 	public static final ApplicationContext GSB = new ClassPathXmlApplicationContext("/spring-mybatis.xml");
 	//计费数据

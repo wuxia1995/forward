@@ -367,7 +367,9 @@ public class ForwardController {
         request.setAttribute("API",API);
         String reply = MethodUtil.getInstance().requestForword(request, response);
         if(HttpUploadFile.status==200&&request.getMethod().equals("DELETE")){
-            check.setFaceNum(customer,1,0);
+            boolean result = check.setFaceNum(customer,1,0);
+            if(!result)
+                return ErrorPrompt.getJSONInfo();
         }
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();

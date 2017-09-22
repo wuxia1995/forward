@@ -148,6 +148,7 @@ public class HttpUploadFile {
             reply = stringBuilder.toString();
             bufferedReader.close();
 			connection.disconnect();
+			logger.info(reply);
             return reply;
     }
 }
