@@ -41,7 +41,7 @@ public class PutUtil {
 	         }
 	       return instance;
 	  }
-	public String requestForword(HttpServletRequest request,
+	public String requestForward(HttpServletRequest request,
 			HttpServletResponse response) {
 		logger.info("METHOD:"+request.getMethod());
 		StringBuffer stringBuffer = new StringBuffer();

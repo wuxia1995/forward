@@ -40,6 +40,7 @@ public class ForwardRequestWrapper extends HttpServletRequestWrapper {
 		//将用户对象和用户名放入request作用域
 		request.setAttribute("userName",customer.getName());
 		request.setAttribute("customer",customer);
+		request.setAttribute("Method",request.getMethod());
 
 	}
 }

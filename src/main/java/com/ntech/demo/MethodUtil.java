@@ -26,7 +26,7 @@ public class MethodUtil {
 	
 	private static FileItemFactory factory = new DiskFileItemFactory();
 	private static Map<String ,String> header = new HashMap<String,String>();
-	private static Map<String,String> param = new HashMap<String,String>();
+	private static Map<String,Object> param = new HashMap<String,Object>();
 	private static Map<String,Object> file = new HashMap<String,Object>(2);
 	
 	private List<String> galleries = null;
@@ -43,7 +43,7 @@ public class MethodUtil {
 	}
 	 
 	@SuppressWarnings("unchecked")
-	public String requestForword(HttpServletRequest request,
+	public String requestForward(HttpServletRequest request,
 			HttpServletResponse response)  {
 		logger.info("*************START***********");
 		logger.info(request.getParameter("test"));

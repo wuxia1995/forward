@@ -46,6 +46,7 @@ public class APIFilter implements Filter {
 		//编码设置
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
+		response.setContentType("application/json;charset=utf-8");
 		ErrorPrompt.clear();
 		try {
 			//用户request包装
