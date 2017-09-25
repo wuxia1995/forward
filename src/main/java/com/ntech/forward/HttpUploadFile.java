@@ -38,8 +38,8 @@ public class HttpUploadFile {
 	         }
 	       return instance;
 	       }
-	//同步锁
-    public synchronized String httpURLConnectionSDK( Map<String,String> header,Map<String, String> param,
+
+    public synchronized String httpURLConnectionSDK( Map<String,String> header,Map<String, Object> param,
             Map<String, Object> file,String meta) throws IOException {
 
         String reply;
@@ -72,11 +72,11 @@ public class HttpUploadFile {
 	            if (null!=param&&param.size()!=0) {
 	            	logger.info("******** FILE-TEXT ********");
 	                StringBuilder stringBuilder = new StringBuilder();
-	                Iterator<Entry<String, String>> iterator = param.entrySet().iterator();
+	                Iterator<Entry<String, Object>> iterator = param.entrySet().iterator();
 	                while (iterator.hasNext()) {
-	                    Entry<String, String> entry = iterator.next();
+	                    Entry<String, Object> entry = iterator.next();
 	                    String inputName = entry.getKey();
-	                    String inputValue = entry.getValue();
+	                    String inputValue = entry.getValue().toString();
 	                    logger.info(inputName+":"+inputValue);
 	                    if (inputValue == null) {
 	                        continue;

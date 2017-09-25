@@ -57,7 +57,7 @@ public class ForwardController {
         request.setAttribute("API",API);
         logger.info("CHECK_API :" + API);
         //获取FindFaceSDK响应
-        String reply = MethodUtil.getInstance().requestForword(request, response);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         //程序是否正常执行，若有异常则返回错误提示
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
@@ -77,7 +77,7 @@ public class ForwardController {
         request.setAttribute("API",API);
         logger.info("CHECK_API :" + API);
         //获取FindFaceSDK响应
-        String reply = MethodUtil.getInstance().requestForword(request, response);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         //异常检查
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
@@ -98,7 +98,7 @@ public class ForwardController {
         request.setAttribute("API",API);
         logger.info("CHECK_API :" + API);
         //获取FindFaceSDK响应
-        String reply = MethodUtil.getInstance().requestForword(request, response);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         //异常检查
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
@@ -135,7 +135,7 @@ public class ForwardController {
         request.setAttribute("API",API);
         logger.info("CHECK_API :" + API);
         //获取FindFaceSDK响应
-        String reply = MethodUtil.getInstance().requestForword(request, response);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         //异常检查
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
@@ -164,7 +164,7 @@ public class ForwardController {
         request.setAttribute("galleries", galleries);
         //将API放到request作用域中，用于MethodUtil调用
         request.setAttribute("API",API);
-        String reply = MethodUtil.getInstance().requestForword(request, response);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         if (ErrorPrompt.size() != 0)
             return ErrorPrompt.getJSONInfo();
         // 解析响应，获取用户添加的人脸数并记录日志
@@ -195,7 +195,7 @@ public class ForwardController {
             API.append("?min_id=").append(prePage);
         logger.info("CHECK_API :" + API.toString());
         request.setAttribute("API",API.toString());
-        String reply = MethodUtil.getInstance().requestForword(request, response);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
         return reply;
@@ -215,7 +215,7 @@ public class ForwardController {
             API.append("?min_id=").append(prePage);
         logger.info("CHECK_API :" + API.toString());
         request.setAttribute("API",API.toString());
-        String reply = MethodUtil.getInstance().requestForword(request, response);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
         return reply;
@@ -249,7 +249,7 @@ public class ForwardController {
             API.append("?min_id=").append(prePage);
         logger.info("CHECK_API:" + API.toString());
         request.setAttribute("API",API.toString());
-        String reply = MethodUtil.getInstance().requestForword(request, response);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
         return reply;
@@ -282,7 +282,7 @@ public class ForwardController {
             API.append("?min_id=").append(prePage);
         logger.info("CHECK_API:" + API.toString());
         request.setAttribute("API",API.toString());
-        String reply = MethodUtil.getInstance().requestForword(request, response);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
         return reply;
@@ -312,7 +312,7 @@ public class ForwardController {
         logger.info("CHECK_API :" + API);
         //将API放到request作用域中，用于MethodUtil调用
         request.setAttribute("API",API);
-        String reply = MethodUtil.getInstance().requestForword(request, response);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
         return reply;
@@ -327,15 +327,15 @@ public class ForwardController {
         String API = new StringBuilder("/").append(version).append("/meta/gallery/").append(userName).toString();
         logger.info("CHECK_API :" + API);
         request.setAttribute("API",API);
-        String reply = MethodUtil.getInstance().requestForword(request, response);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
         return reply;
     }
 
-    @RequestMapping("/{version:[v][01]}/face/id/{id:\\d{1,24}}")
+    @RequestMapping(value="/{version:[v][01]}/face/id/{id:\\d{1,24}}",method = RequestMethod.GET)
     @ResponseBody
-    public String faceId(@PathVariable("version")String version,@PathVariable("id")String id,HttpServletRequest request, HttpServletResponse response)
+    public String faceIdGET(@PathVariable("version")String version,@PathVariable("id")String id,HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.info("*****enter Controller*****");
         Customer customer =(Customer) request.getAttribute("customer");
@@ -362,15 +362,94 @@ public class ForwardController {
                 e.printStackTrace();
                 return ErrorPrompt.getJSONInfo();
             }
-        String API = new StringBuilder("/").append(version).append("/face/id/").append(id).toString().toString();
+        String API = new StringBuilder("/").append(version).append("/face/id/").append(id).toString();
         logger.info("CHECK_API :" + API);
         request.setAttribute("API",API);
-        String reply = MethodUtil.getInstance().requestForword(request, response);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
+    }
+
+    @RequestMapping(method=RequestMethod.DELETE,value="/{version:[v][01]}/face/id/{id:\\d{1,24}}")
+    @ResponseBody
+    public String faceIdDELETE(@PathVariable("version")String version,@PathVariable("id")String id,HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        Customer customer =(Customer) request.getAttribute("customer");
+        String userName = customer.getName();
+        boolean isMaster = false;
+        List<String> galleries = check.getGalleries((String)request.getAttribute("inputToken"));
+        List<String> list = check.checkId(id);
+        if(list==null)
+            return ErrorPrompt.getJSONInfo();
+        Iterator<String> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            if (galleries.contains(iterator.next())) {
+                isMaster = true;
+                break;
+            }
+        }
+        if (!isMaster)
+            try {
+                throw new IllegalIDException("bad_id");
+            } catch (IllegalIDException e) {
+                response.setStatus(403);
+                logger.error("*****BAD_ID*****@"+userName);
+                ErrorPrompt.addInfo("error","bad_id");
+                e.printStackTrace();
+                return ErrorPrompt.getJSONInfo();
+            }
+        String API = new StringBuilder("/").append(version).append("/face/id/").append(id).toString();
+        logger.info("CHECK_API :" + API);
+        request.setAttribute("API",API);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         if(HttpUploadFile.status==200&&request.getMethod().equals("DELETE")){
             boolean result = check.setFaceNum(customer,1,0);
             if(!result)
                 return ErrorPrompt.getJSONInfo();
         }
+        if (ErrorPrompt.size() != 0)
+            reply = ErrorPrompt.getJSONInfo();
+        return reply;
+    }
+
+    @RequestMapping(method=RequestMethod.POST,value = "/{version:[v][01]}/face/id/{id:\\d{1,24}}")
+    @ResponseBody
+    public String faceIdPUT(@PathVariable("version")String version,@PathVariable("id")String id,HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.info("*****enter Controller*****");
+        request.setAttribute("Method","PUT");
+        Customer customer =(Customer) request.getAttribute("customer");
+        String userName = customer.getName();
+        boolean isMaster = false;
+        List<String> galleries = check.getGalleries((String)request.getAttribute("inputToken"));
+        List<String> list = check.checkId(id);
+        if(list==null)
+            return ErrorPrompt.getJSONInfo();
+        Iterator<String> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            if (galleries.contains(iterator.next())) {
+                isMaster = true;
+                break;
+            }
+        }
+        if (!isMaster)
+            try {
+                throw new IllegalIDException("bad_id");
+            } catch (IllegalIDException e) {
+                response.setStatus(403);
+                logger.error("*****BAD_ID*****@"+userName);
+                ErrorPrompt.addInfo("error","bad_id");
+                e.printStackTrace();
+                return ErrorPrompt.getJSONInfo();
+            }
+        String API = new StringBuilder("/").append(version).append("/face/id/").append(id).toString();
+        logger.info("CHECK_API :" + API);
+        request.setAttribute("API",API);
+        request.setAttribute("galleries",galleries);
+        request.setAttribute("chargeAPI","facePut");
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
         return reply;
@@ -405,7 +484,7 @@ public class ForwardController {
             API.append("?min_id=").append(prePage);
         logger.info("CHECK_API :" + API.toString());
         request.setAttribute("API",API.toString());
-        String reply = MethodUtil.getInstance().requestForword(request, response);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
         return reply;
@@ -426,7 +505,7 @@ public class ForwardController {
             API.append("?min_id=").append(prePage);
         logger.info("CHECK_API :" + API.toString());
         request.setAttribute("API",API.toString());
-        String reply = MethodUtil.getInstance().requestForword(request, response);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
         return reply;
@@ -448,7 +527,7 @@ public class ForwardController {
         return reply.replaceAll("_anytec_"+userName,"");
     }
 
-   /* @RequestMapping(value = "/{version:[v][01]}/galleries/{gallery:\\w{1,48}}",method = RequestMethod.POST)
+    @RequestMapping(value = "/{version:[v][01]}/galleries/{gallery:\\w{1,48}}",method = RequestMethod.POST)
     @ResponseBody
     public String postGallery(@PathVariable("version")String version,@PathVariable("gallery")String createGallery, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -472,7 +551,7 @@ public class ForwardController {
         String API = new StringBuilder("/").append(version).append("/galleries/").append(createGallery).toString();
         logger.info("CHECK_API :" + API);
         request.setAttribute("API",API);
-        String reply = MethodUtil.getInstance().requestForword(request, response);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         if(HttpUploadFile.status==200) {
             boolean result = check.createGallery(userName, createGallery);
             logger.info("createResult: " + result);
@@ -482,7 +561,7 @@ public class ForwardController {
         if (ErrorPrompt.size() != 0)
             reply = ErrorPrompt.getJSONInfo();
         return reply;
-    }*/
+    }
 
     @RequestMapping(value= "/{version:[v][01]}/galleries/{gallery:\\w{1,48}}",method = RequestMethod.DELETE)
     @ResponseBody
@@ -505,7 +584,7 @@ public class ForwardController {
         String API = new StringBuilder("/").append(version).append("/galleries/").append(deleteGallery).toString();
         logger.info("CHECK_API :" + API);
         request.setAttribute("API",API);
-        String reply = MethodUtil.getInstance().requestForword(request, response);
+        String reply = MethodUtil.getInstance().requestForward(request, response);
         if(HttpUploadFile.status==200) {
             logger.info("deleteGallerySQL");
             boolean result = check.deleteGallery(userName, deleteGallery);

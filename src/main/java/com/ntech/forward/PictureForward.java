@@ -1,12 +1,6 @@
 package com.ntech.forward;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -48,6 +42,7 @@ public class PictureForward {
 		DataOutputStream dataOutputStream = null;
 		BufferedInputStream bufferedInputStream = null;
 		BufferedOutputStream bufferedOutputStream = null;
+		HttpURLConnection connection = null;
 		try {
 			outputStream = response.getOutputStream();
 			dataOutputStream = new DataOutputStream(outputStream);
@@ -73,7 +68,7 @@ public class PictureForward {
 				}
 			URL url = new URL(FORWARD_URL+pictureLocation.substring(encrypt.length()+1));
 			logger.info("URL: "+url);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			   connection = (HttpURLConnection) url.openConnection();
 	           connection.setDoInput(true); 
 	           connection.setConnectTimeout(10000);
 	           connection.setReadTimeout(30000);
@@ -82,15 +77,11 @@ public class PictureForward {
         	   logger.info("http_code:"+connection.getResponseCode());
 	           if(connection.getResponseCode()==200) {
 	        	   inputStream =connection.getInputStream();
-	        	   dataInputStream = new DataInputStream(inputStream);
-	        	   bufferedInputStream = new BufferedInputStream(dataInputStream);
+	        	   byte[] b = streamToByte(inputStream);
 	        	   bufferedOutputStream = new BufferedOutputStream(dataOutputStream);
-	        	   int n;
-	               while ((n = bufferedInputStream.read())!=-1) { 
-	            	   bufferedOutputStream.write(n);
-	               }
+	        	   bufferedOutputStream.write(b);
 	           }
-	           connection.disconnect();
+
 		} catch (MalformedURLException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
@@ -98,21 +89,34 @@ public class PictureForward {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		}finally {
-			if(bufferedInputStream!=null)
-				try {
-					dataInputStream.close();
-				} catch (IOException e) {
-					logger.error(e.getMessage());
-					e.printStackTrace();
-				}
 			if(bufferedOutputStream!=null)
 				try {
-					dataOutputStream.close();
+					bufferedOutputStream.close();
 				} catch (IOException e) {
-					logger.error(e.getMessage());
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			connection.disconnect();
 		}
+	}
+	private static byte[] streamToByte(InputStream is) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		int c = 0;
+		byte[] buffer = new byte[8 * 1024];
+		try {
+			while ((c = is.read(buffer)) != -1) {
+				baos.write(buffer, 0, c);
+				baos.flush();
+			}
+			return baos.toByteArray();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+					baos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 }

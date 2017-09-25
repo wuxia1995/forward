@@ -65,13 +65,7 @@ public class PictureShow {
 		}finally {
 			if(connection!=null)
 				connection.disconnect();
-			if(dataInputStream!=null)
-				try {
-					dataInputStream.close();
-				} catch (IOException e) {
-					logger.error(e.getMessage());
-					e.printStackTrace();
-				}
+
 		}
 		return null;
 	}

@@ -2,11 +2,7 @@ package com.ntech.forward;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,8 +30,11 @@ public class MethodUtil {
 
 	private static FileItemFactory factory = new DiskFileItemFactory();
 	private static Map<String, String> header = new HashMap<String, String>();
-	private static Map<String, String> param = new HashMap<String, String>();
+	private static Map<String, Object> param = new HashMap<String, Object>();
 	private static Map<String, Object> file = new HashMap<String, Object>(2);
+	private static List<String> list = new ArrayList<String>();
+	private static String meta;
+
 
 	private List<String> galleries = null;
 
@@ -53,27 +52,26 @@ public class MethodUtil {
 		return instance;
 	}
 
-	public String requestForword(HttpServletRequest request,
+	public String requestForward(HttpServletRequest request,
 								 HttpServletResponse response) {
 		logger.info("*************START***********");
 		String SDKreply;
-		String meta = "no";
 		String API = (String) request.getAttribute("API");
 		String api = (String) request.getAttribute("chargeAPI");
 		header.clear();
 		param.clear();
 		file.clear();
+		list.clear();
+		meta = "no";
 		String userName = (String)request.getAttribute("userName");
+		if(api != null && api.equals("facePut"))
+			galleries = (List<String>) request.getAttribute("galleries");
 		if (api != null && api.equals("face")) {
 			galleries = (List<String>) request.getAttribute("galleries");
 			String inputGalleries = request.getParameter("galleries");
 			if (galleries.size() != 0 && (inputGalleries == null || inputGalleries.equals("")))
 				param.put("galleries", userName);
 		}
-		/*if ("allGalleries".equals(API)) {
-			String reply = JSONArray.toJSONString((List<String>) request.getAttribute("allGalleries"));
-			return reply.replaceAll("_anytec_"+userName,"");
-		}*/
 
 		//判断是否有文件输入
 		boolean isMultiPart = ServletFileUpload.isMultipartContent(request);
@@ -91,12 +89,20 @@ public class MethodUtil {
 						//文本
 						String filedName = item.getFieldName();
 						String value = new String(item.getString().getBytes(Constant.CHARSET));
-						if (filedName.equals("galleries") || filedName.equals("gallery")) {
+						if (filedName.startsWith("galleries")) {
 							logger.info("inputGaleries :" + value);
-							filedName = "galleries";
 							StringBuilder galleryValue = new StringBuilder();
-							checkInputGalleries(value,userName,galleryValue);
-							param.put(filedName,galleryValue.toString());
+							boolean result = checkInputGalleries(value,userName,galleryValue);
+							if(!result)
+								return null;
+							if(filedName.equals("galleries")) {
+								filedName = "galleries";
+								param.put(filedName,galleryValue.toString());
+							}else{
+								boolean flag = putGalleries(filedName,userName);
+								if(!flag)
+									return null;
+							}
 						}else {
 							param.put(filedName, value);
 						}
@@ -145,7 +151,7 @@ public class MethodUtil {
 			logger.info("PARAM:" + name + "--" + "" + param.get(name));
 		}
 		//转发和设定报头信息
-		header.put("Method", request.getMethod());
+		header.put("Method",(String)request.getAttribute("Method"));
 
 		String localAPI = (String) request.getAttribute("localAPI");
 		if (localAPI == null || localAPI.equals("")) {
@@ -211,8 +217,8 @@ public class MethodUtil {
 
 
 	//对用户输入的galleries参数进行权限检查
-	private void checkInputGalleries(String value, String userName,StringBuilder galleryValue) {
-		boolean existGallery;
+	private boolean checkInputGalleries(String value, String userName,StringBuilder galleryValue) {
+		boolean existGallery=false;
 		if (galleries != null && galleries.size() != 0) {
 			logger.info("*******USER_HOLD_GALLERY*******");
 			try {
@@ -222,7 +228,10 @@ public class MethodUtil {
 					inputGalleries = value.split(",");
 					for (String inputGallery : inputGalleries) {
 						logger.info(inputGallery);
-						inputGallery = new StringBuilder(inputGallery).append("_anytec_" + userName).toString();
+						if(!inputGallery.equals(userName)) {
+							inputGallery = new StringBuilder(inputGallery).append("_anytec_" + userName).toString();
+							list.add(inputGallery);
+						}
 						existGallery = galleries.contains(inputGallery);
 						logger.info(inputGallery+" (CHECK_RESULT) :" + existGallery);
 						if (!existGallery)
@@ -231,17 +240,47 @@ public class MethodUtil {
 					}
 				} else {
 					logger.info("inputOneGallery");
-					existGallery = galleries.contains(value);
-					if (!value.equals(userName))
-						galleryValue.append(value).append("_anytec_" + userName).append(",");
-					galleryValue.append(userName);
+
+					if (!value.equals(userName)) {
+						galleryValue.append(value).append("_anytec_" + userName);
+						existGallery = galleries.contains(galleryValue.toString());
+						if (!existGallery)
+							throw new IllegalGalleryException("bad_galleries");
+						list.add(galleryValue.toString());
+						galleryValue.append(",").append(userName);
+					}
 					logger.info(value+" (CHECK_RESULT) :" + existGallery);
 				}
+				return true;
 			}catch (IllegalGalleryException e) {
 				logger.error("*****BAD_GALLERY*****@" + userName);
 				ErrorPrompt.addInfo("error", "bad_gallery");
 				e.printStackTrace();
+				return false;
 			}
 		}
+		return false;
+	}
+	private boolean putGalleries(String filedName,String userName){
+		meta = "yes";
+		Map<String,Object> map = new HashMap<String,Object>();
+		if(filedName.equals("galleries_add")){
+			map.put("add",list);
+			param.put("galleries",map);
+			return true;
+		}
+		if(filedName.equals("galleries_del")){
+			map.put("del",list);
+			param.put("galleries",map);
+			return true;
+		}
+		if(filedName.equals("galleries_set")){
+			list.add(userName);
+			map.put("set",list);
+			param.put("galleries",map);
+			return true;
+		}
+		ErrorPrompt.addInfo("put format","galleries_add,galleries_del,galleries_set");
+		return false;
 	}
 }
