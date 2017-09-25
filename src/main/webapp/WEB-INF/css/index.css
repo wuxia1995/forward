@@ -303,6 +303,7 @@
 	margin-top: 10px;
 	width: 80%;
 	display: none;
+	overflow: auto;
 }
 
 .maximg_box2 {

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<!--[if lte IE 10]><script>window.location.href='browser.html'</script><![endif]-->
+		<title>浏览器升级</title>
+	</head>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0
+		}
+		
+		a {
+			-webkit-tap-highlight-color: transparent;
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+		}
+		
+		li {
+			list-style: none
+		}
+		
+		img {
+			vertical-align: top;
+			border: none
+		}
+		
+		html {
+			width: 100%;
+			height: 100%;
+		}
+		
+		body {
+			width: 100%;
+			height: 100%;
+			background-color: #05d3c5;
+			position: relative;
+		}
+		
+		.contacts {
+			width: 60%;
+			height: 60%;
+			position: absolute;
+			top: 20%;
+			left: 20%;
+		}
+		.left_box{
+			width: 40%;
+			height: 100%;
+			float: left;
+			position: relative;
+		}
+		.left_box img{
+			width: 100%;
+		}
+		.left_text{
+			width: 80%;
+			height: 20%;
+			position: absolute;
+			top: 0;
+			left: 12%;
+			font-size: 20px;
+			text-align: center;
+			color: #16d5c8;
+			font-weight: bold;
+		}
+		.left_text .p1{
+			line-height: 1.5em;
+			margin-top: 13px;
+		}
+		p{
+		  margin-top: 5px;
+		}
+		.right_box{
+			width: 55%;
+			height: 100%;
+			float: right;
+		}
+		.right_title{
+			width: 100%;
+			height: 15%;
+			margin-top: 10%;
+			color: white;
+			font-size: 28px;
+		}
+		.upgrade_box{
+			width: 100%;
+			height: 10%;
+			position: relative;
+		}
+		.upgrade_box1{
+			margin-top: 5%;
+			height: 10%;
+			position: relative;
+		}
+		.upgrade_title{
+			width: 20%;
+			height: 100%;
+			color: white;
+			font-size: 22px;
+			text-align: right;
+			float: left;
+		}
+		.upgrade_icon{
+			width: 70%;
+			height: 100%;
+			float: left;
+			margin-left: 5%;
+		}
+		.upgrade_icon img{
+			height: 100%;
+			cursor: pointer;
+		}
+		.min_icon{
+			float: left;
+			height: 100%;
+			margin-right: 3%;
+			cursor: pointer;
+		}
+		.min_icon img{
+			height: 100%;
+		}
+		@media (max-width: 1380px) {
+		  .left_text{
+				font-size: 18px;
+			}
+		}
+		
+		@media (max-width: 1300px) {
+		  .left_text{
+				font-size: 16px;
+			}
+		}
+	</style>
+
+	<body>
+		<div class="contacts">
+            <div class="left_box">
+            	<img src="../img/browser/browser.png"/>
+            	<div class="left_text">
+            		<p class="p1">大兄弟，你的浏览器OUT啦！</p>
+            		<p>你怎么还无动于衷呢！</p>
+            	</div>
+            </div>
+            <div class="right_box">
+            	<div class="right_title">赶紧跟上时代的步伐吧！</div>
+            	<div class="upgrade_box">
+            		<div class="upgrade_title">升级</div>
+            		<div class="upgrade_icon">
+            			<a target="_blank" href="https://www.microsoft.com/zh-cn/download/details.aspx?id=43206"/>
+            				<img src="../img/browser/icon1.png"/>
+            		    </a>
+            		</div>
+            	</div>
+            	<div class="upgrade_box1">
+            		<div class="upgrade_title">更换</div>
+            		<div class="upgrade_icon">
+            			<div class="min_icon">
+            				<a target="_blank" href="http://www.google.cn/chrome/browser/desktop/">
+            				     <img src="../img/browser/icon2.png"/>
+            				</a>     
+            			</div>
+            			<div class="min_icon">
+            				<a target="_blank" href="http://www.firefox.com.cn/">
+            				     <img src="../img/browser/icon3.png"/>
+            				</a> 
+            			</div>
+            			<div class="min_icon">
+            				<a target="_blank" href="http://www.opera.com/zh-cn">
+            				     <img src="../img/browser/icon4.png"/>
+            				</a> 
+            			</div>
+            		</div>
+            	</div>
+            </div>
+		</div>
+	</body>
+
+</html>

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+    getOs();
 		//设置竖屏切换
 
 		$('#fullpage').fullpage({
@@ -338,8 +338,8 @@ $(document).ready(function() {
     //     url: 'customer/verify-face',
     //     type: 'POST',
     //     // dataType: "json",
-    //     data:{photo1:"http://192.168.10.212:8080/img/index/two/max_img5.png",
-    //         photo2:"http://192.168.10.212:8080/img/index/two/max_img5.png"},
+    //     data:{photo1:"http://yun.anytec.cn:8080/img/index/two/max_img5.png",
+    //         photo2:"http://yun.anytec.cn:8080/img/index/two/max_img5.png"},
     //     processData: false,
     //     contentType: false,
     //     async: true,
@@ -365,7 +365,7 @@ $(document).ready(function() {
     // 搜索
     // var formData = new FormData();
     // formData.append("n",3);
-    // formData.append("photo","http://192.168.10.212:8080/img/index/two/max_img2.png")
+    // formData.append("photo","http://yun.anytec.cn:8080/img/index/two/max_img2.png")
     // //清除input框的文件状态,解决两次同一张照片不触发事件的问题
     // $.ajax({
     //     url: 'customer/getDemoFace',
@@ -491,6 +491,16 @@ $(document).ready(function() {
         var icon = new BMap.Icon("http://app.baidu.com/map/images/us_mk_icon.png", new BMap.Size(json.w,json.h),{imageOffset: new BMap.Size(-json.l,-json.t),infoWindowOffset:new BMap.Size(json.lb+5,1),offset:new BMap.Size(json.x,json.h)})
         return icon;
     }
-    
+
+	//判断当前浏览器
+	function getOs()
+	{
+		var OsObject = "";
+		//Safari浏览器
+		if(isSafari=navigator.userAgent.indexOf("Safari")>0) {
+			$("body").addClass("safari_body");
+			$(".inputting").css("line-height","0px");
+		}
+	}
     initMap();//创建和初始化地图
 	
