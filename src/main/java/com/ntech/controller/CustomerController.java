@@ -342,7 +342,7 @@ public class CustomerController {
                 modelAndView.setViewName("show-gallery");
                 request.setAttribute("localAPI", "/v0/faces/gallery/" + name);
             }
-            result = MethodUtil.getInstance().requestForword(request, response);
+            result = MethodUtil.getInstance().requestForward(request, response);
             logger.info(result);
             modelAndView.addObject("galleryDemo", wrapResponse(result));
         } catch (Exception e) {
@@ -366,7 +366,7 @@ public class CustomerController {
         } else {
             request.setAttribute("localAPI", "/v0/faces/gallery/demo_default/identify");
         }
-        result = MethodUtil.getInstance().requestForword(request, response);
+        result = MethodUtil.getInstance().requestForward(request, response);
         if (null != result && !"".equals(result)) {
             //暂定方案是获取sdk服务器上的图片信息用于展示,后续再考虑优化方案.
 //            return result.replaceAll("http://127.0.0.1:3333/uploads", "http://192.168.10.208:3333/uploads");
@@ -390,7 +390,7 @@ public class CustomerController {
         } else {
             request.setAttribute("localAPI", "/v0/faces/gallery/demo_default");
         }
-        result = MethodUtil.getInstance().requestForword(request, response);
+        result = MethodUtil.getInstance().requestForward(request, response);
 
         logger.info(result);
 
@@ -413,7 +413,7 @@ public class CustomerController {
                 request.setAttribute("localAPI", "/v0/face/");
             }
             request.setAttribute("personFaceInsert", name);
-            result = MethodUtil.getInstance().requestForword(request, response);
+            result = MethodUtil.getInstance().requestForward(request, response);
             if (result != null) {
                 //添加后获取最新的图片列表
 
@@ -451,7 +451,7 @@ public class CustomerController {
             //检查图片id是否合法,检查方法待定,id合法后才能进    行下一步操作
 //            if(null!=picId&&!"".equals(picId)) {
 //                request.setAttribute("localApi","/v0/face/id/"+picId);
-//                MethodUtil.getInstance().requestForword(request, response);
+//                MethodUtil.getInstance().requestForward(request, response);
 //            }
         }
         result = getMyGalleryLocal(name);
@@ -553,7 +553,7 @@ public class CustomerController {
             if (request.getRequestURI().equals("/customer/verify-face")) {
                 request.setAttribute("localAPI", "/v0/verify");
             }
-            result = MethodUtil.getInstance().requestForword(request, response);
+            result = MethodUtil.getInstance().requestForward(request, response);
         } catch (Exception e) {
             logger.error("request error");
             return "request error";
