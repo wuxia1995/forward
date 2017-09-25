@@ -10,6 +10,7 @@ import com.ntech.model.SetMeal;
 import com.ntech.service.inf.ICustomerService;
 import com.ntech.service.inf.ILibraryService;
 import com.ntech.service.inf.ISetMealService;
+import com.ntech.util.CommonUtil;
 import com.ntech.util.PictureShow;
 import com.ntech.util.SHAencrypt;
 import org.apache.log4j.Logger;
@@ -150,6 +151,93 @@ public class CustomerController {
         return result;
     }
 
+    //修改密码
+    @RequestMapping("modify-password")
+    public String modifyPassword(){
+        return "modify-password";
+    }
+
+    @RequestMapping("validate-change")
+    @ResponseBody
+    public String validateAndChangePwd(HttpSession session,String oldPwd,String newPwd){
+        String name = (String) session.getAttribute("name");
+        if(name==null||"".equals(name)){
+            return "null";
+        }
+        if(null==newPwd||"".equals(newPwd)||null==oldPwd||"".equals(oldPwd)){
+            return "errorParam";
+        }
+        if(!CommonUtil.checkPassword(newPwd)){
+            return "errorNewPwd";
+        }
+        if(oldPwd.equals(newPwd)){
+            return "equals";
+        }
+        if(customerService.modifyPwd(name,oldPwd,newPwd)){
+            session.removeAttribute("name");
+            return "success";
+        }
+        return "errorInfo";
+    }
+
+    //忘记密码跳转
+    @RequestMapping("forget-password")
+    public String forgetPasswrod(){
+        return "forget-password";
+    }
+
+    @RequestMapping("handle-forget")
+    @ResponseBody
+    public String handleForgetPwd(String name,String email){
+        if(null==name||null==email||"".equals(name)||"".equals(email)){
+            return "null";
+        }
+        if(!CommonUtil.checkUserName(name)){
+            return "name";
+        }
+        if(!CommonUtil.checkEmail(email)){
+            return "email";
+        }
+        if(customerService.forgetPwd(name,email)){
+            return "success";
+        }
+        return "error";
+    }
+
+
+    @RequestMapping("forgetPwdPageCheck")
+    public ModelAndView forgetPwdPageCheck(HttpSession session,String name, String validateCode, String email) {
+        ModelAndView mav = new ModelAndView("error");
+        if (null == name || "".equals(name) || null == validateCode || "".equals(validateCode)) {
+            return mav;
+        }
+        Customer customer = customerService.findByName(name);
+        if (validateCode.equals(SHAencrypt.encryptSHA(customer.getEmail()))&&customer.getEmail().equals(email)) {
+            session.setAttribute("ForgetPwdFlag",name);
+            mav.setViewName("forget-change");
+        }
+        return mav;
+    }
+
+    @RequestMapping("change-newPwd")
+    @ResponseBody
+    public String changeToNewPwd(HttpSession session,String newPwd){
+        String name = (String) session.getAttribute("ForgetPwdFlag");
+        if(name==null||"".equals(name)){
+            return "errorPage";
+        }
+        if(null==newPwd||"".equals(newPwd)||!CommonUtil.checkPassword(newPwd)){
+            return "errorParam";
+        }
+        Customer customer = customerService.findByName(name);
+        if(customer!=null){
+            customer.setPassword(SHAencrypt.encryptSHA(newPwd));
+            if(customerService.modify(customer)==1){
+                return "success";
+            }
+        }
+        return "error";
+    }
 
     @RequestMapping("active")
     public ModelAndView activeEmail(String name, String validateCode, String email) {
@@ -603,7 +691,7 @@ public class CustomerController {
                 String tmpStrng = (String) tmpJson1.get("normalized");
 //                String photo = (String) tmpJson.get("photo");
 //                String thumbnail = (String) tmpJson.get("thumbnail");
-//                tmpStrng = "http://192.168.10.208" + tmpStrng.substring(16);
+                tmpStrng = "http://192.168.10.208" + tmpStrng.substring(16);
                 String picBase64=PictureShow.getInstance().getBase64Picture(tmpStrng);
 //                String picBase64 = "http://192.168.10.208" + tmpStrng.substring(16);
                 JSONObject objectTemp=(JSONObject) jsonArrayFace.get(i);
@@ -637,7 +725,7 @@ public class CustomerController {
                 String tmpStrng = (String) tmpJson.get("normalized");
 //                String photo = (String) tmpJson.get("photo");
 //                String thumbnail = (String) tmpJson.get("thumbnail");
-//                tmpStrng = "http://192.168.10.208" + tmpStrng.substring(16);
+                tmpStrng = "http://192.168.10.208" + tmpStrng.substring(16);
                 String picBase64=PictureShow.getInstance().getBase64Picture(tmpStrng);
 //                String picBase64 = "http://192.168.10.208" + tmpStrng.substring(16);
                 ((JSONObject) jsonArray.get(i)).put("normalized", picBase64);

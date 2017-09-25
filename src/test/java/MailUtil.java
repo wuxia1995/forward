@@ -1,3 +1,4 @@
+import com.ntech.util.CommonUtil;
 import com.ntech.util.SHAencrypt;
 
 import javax.mail.*;
@@ -6,6 +7,8 @@ import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 邮件工具类
@@ -59,8 +62,17 @@ public class MailUtil {
 //        gc.add(2,2);
 //        System.out.println(gc.getTime());
 //        System.out.println(new Date());
-        System.out.println(SHAencrypt.encryptSHA("admin"));
+//        System.out.println(SHAencrypt.encryptSHA("admin"));
 //        System.out.println("http://192.168.10.208"+"http://127.0.0.1:3333/uploads//20170904/15044886028807127.jpeg".substring(16));
+//        System.out.println("sss  s".indexOf(" "));
+//        Pattern p = null;
+//        Matcher m = null;
+//
+//        p = Pattern.compile("[\\S]{6,16}");
+//        m = p.matcher("asdfasd");
+//        System.out.println(m.matches());
+        System.out.println(CommonUtil.checkEmail("788741@qq.om"));
 
-    }
+
+}
 }

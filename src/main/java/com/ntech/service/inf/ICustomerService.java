@@ -12,6 +12,8 @@ public interface ICustomerService {
     List<Customer> findAll();
     Customer findByName(String name);
     boolean checkUserName(String userName);
+    boolean modifyPwd(String userName,String password,String newPassword);
+    boolean forgetPwd(String name,String email);
     boolean loginCheck(String name,String password);
     boolean setContype(String name,String contype);
     String getNameByToken(String name);

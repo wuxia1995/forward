@@ -5,12 +5,20 @@ $(function() {
         }
     });
     $('#submit').click(function () {
+        var name =$("#name").val();
         if($("#name").val()==''){
             $('#msg').text("用户名不能为空");
             return false;
         }
         if($("#password").val()==''){
             $('#msg').text("密码不能为空");
+            return false;
+        }
+        var regEn = /[`~!@#$%^&*()+<>?:"{},.\/;'[\]\s]/im,
+            regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]\s]/im;
+
+        if(regEn.test(name) || regCn.test(name)) {
+            $('#msg').text("用户名不能包含特殊字符");
             return false;
         }
         $.ajax({

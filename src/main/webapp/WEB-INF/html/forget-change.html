@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改密码</title>
+</head>
+<body>
+<input type="text" name="password" placeholder="密码"><br>
+<input type="email" name="surePassword" placeholder="确认密码"><br>
+<input type="submit" name="sureModify" value="确认提交">
+<span id="msg"></span>
+</body>
+<link href="../favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<script type="text/javascript" src="../js/lib/jquery.min.js" ></script>
+<script>
+    $("input[name='sureModify']").click(function () {
+        var password= $("input[name='password']").val();
+        var surePassword= $("input[name='surePassword']").val()
+        if(password.length<6||password.indexOf(" ")!=-1){
+            $("#msg").html("密码需要大于6位且不能有空格");
+            return false;
+        }
+        if(surePassword.length<6||surePassword.indexOf(" ")!=-1){
+            $("#msg").html("确认密码需要大于6位且不能有空格");
+            return false;
+        }
+        if(password!=surePassword){
+            $("#msg").html("两次输入密码密码不一样")
+            return false;
+        }
+        $.ajax({
+            url:"change-newPwd",
+            type:"post",
+            data:{"newPwd":password},
+            success:function (data) {
+               if(data=="errorPage"){
+                   $("#msg").html("无效的信息")
+                   return false;
+               }
+               if(data=="errorPage"){
+                   $("#msg").html("无效的参数")
+                   return false;
+               }
+               if(data=="success"){
+                   alert("修改成功")
+                   window.location.href="login";
+                   return true;
+               }
+               $("#msg").html("出现未知错误")
+            },
+            error:function (data) {
+                $("#msg").html("出现未知错误")
+                return false;
+            }
+        })
+    })
+</script>
+</html>

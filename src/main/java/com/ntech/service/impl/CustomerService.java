@@ -125,6 +125,39 @@ public class CustomerService implements ICustomerService {
         return result.size() > 0 ? true : false;
     }
 
+
+    public boolean modifyPwd(String userName, String password,String newPassword) {
+        if(loginCheck(userName,password)){
+            logger.info("check pass");
+            Customer customer = findByName(userName);
+            customer.setPassword(SHAencrypt.encryptSHA(newPassword));
+            synchronized (this) {
+                if (modify(customer) == 1) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+
+    public boolean forgetPwd(String name, String email) {
+        Customer customer = findByName(name);
+        if(customer!=null) {
+            if (customer.getEmail().equals(email)) {
+                try {
+                    sendEmailForPassword(customer);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean checkToken(String inputToken) {
         logger.info("check user token: " + inputToken);
 //        if(setMealService.findByName()){
@@ -233,7 +266,7 @@ public class CustomerService implements ICustomerService {
         return null;
     }
 
-    private void sendEmail(Customer customer) throws MessagingException {
+    private void sendEmailForActive(Customer customer) throws MessagingException {
         String validateCode = SHAencrypt.encryptSHA(customer.getEmail());
         StringBuffer content = new StringBuffer("点击下面链接激活账号，48小时生效，否则重新注册账号，链接只能使用一次，请尽快激活！</br>");
         content.append("<a href=\"http://localhost:8080/customer/active?email=");
@@ -243,6 +276,22 @@ public class CustomerService implements ICustomerService {
         content.append("&validateCode=");
         content.append(validateCode);
         content.append("\">http://localhost:8080/customer/active?action=activate&email=");
+        content.append(customer.getEmail());
+        content.append("&validateCode=");
+        content.append(validateCode);
+        content.append("</a>");
+        MailUtil.send_mail(customer.getEmail(), content.toString());
+    }
+    private void sendEmailForPassword(Customer customer) throws MessagingException {
+        String validateCode = SHAencrypt.encryptSHA(customer.getEmail());
+        StringBuffer content = new StringBuffer("点击下面链接激活账号，48小时生效，请尽快修改密码！</br>");
+        content.append("<a href=\"http://192.168.10.212:8080/customer/forgetPwdPageCheck?email=");
+        content.append(customer.getEmail());
+        content.append("&name=");
+        content.append(customer.getName());
+        content.append("&validateCode=");
+        content.append(validateCode);
+        content.append("\">http://192.168.10.212:8080/customer/forgetPwdPageCheck?action=activate&email=");
         content.append(customer.getEmail());
         content.append("&validateCode=");
         content.append(validateCode);
