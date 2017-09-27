@@ -1,10 +1,6 @@
 # Project ignore files
-/.settings
-/.classpath
-/.project
 /target
-/work
-/src/main/webapp/.#webclasspath
 /src/main/resources/rebel.xml
+/src/test/java/*
 .idea
 *.iml

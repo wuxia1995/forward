@@ -7,7 +7,7 @@ import java.util.Map;
 public class javaTest {
     public static void main(String[] args) {
         Map<String,String> header = new HashMap<String, String>();
-        Map<String,String> param = new HashMap<String, String>();
+        Map<String, Object> param = new HashMap<>();
         Map<String,Object> file = new HashMap<String, Object>();
         String reply="";
         header.put("Method","POST");

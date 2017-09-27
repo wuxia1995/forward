@@ -188,7 +188,7 @@ public class CustomerController {
 
     @RequestMapping("handle-forget")
     @ResponseBody
-    public String handleForgetPwd(String name,String email){
+    public String handleForgetPwd(HttpSession session,String name,String email){
         if(null==name||null==email||"".equals(name)||"".equals(email)){
             return "null";
         }
@@ -199,6 +199,7 @@ public class CustomerController {
             return "email";
         }
         if(customerService.forgetPwd(name,email)){
+            session.removeAttribute("name");
             return "success";
         }
         return "error";
@@ -233,6 +234,7 @@ public class CustomerController {
         if(customer!=null){
             customer.setPassword(SHAencrypt.encryptSHA(newPwd));
             if(customerService.modify(customer)==1){
+                session.removeAttribute("ForgetPwdFlag");
                 return "success";
             }
         }
