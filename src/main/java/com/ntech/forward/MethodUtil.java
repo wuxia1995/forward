@@ -88,7 +88,12 @@ public class MethodUtil {
 					if (item.isFormField()) {
 						//文本
 						String filedName = item.getFieldName();
-						String value = new String(item.getString().getBytes(Constant.CHARSET));
+						String value;
+						if(item.getString().equals(new String(item.getString().getBytes("iso-8859-1"), "iso-8859-1"))) {
+							value = new String(item.getString().getBytes("iso-8859-1"),"utf-8");
+						}else{
+							value = item.getString();
+						}
 						if (filedName.startsWith("galleries")) {
 							logger.info("inputGaleries :" + value);
 							StringBuilder galleryValue = new StringBuilder();

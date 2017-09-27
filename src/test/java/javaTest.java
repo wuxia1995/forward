@@ -1,4 +1,5 @@
 import com.ntech.forward.HttpUploadFile;
+import com.ntech.util.SHAencrypt;
 
 import java.io.*;
 import java.util.HashMap;
@@ -6,6 +7,7 @@ import java.util.Map;
 
 public class javaTest {
     public static void main(String[] args) {
+<<<<<<< HEAD
         Map<String,String> header = new HashMap<String, String>();
         Map<String, Object> param = new HashMap<>();
         Map<String,Object> file = new HashMap<String, Object>();
@@ -19,13 +21,8 @@ public class javaTest {
             byte[] buffer = new byte[inputStream.available()];
             inputStream.read(buffer);
             file.put("photo",buffer);
+=======
+>>>>>>> upstream/master
 
-            reply = HttpUploadFile.getInstance().httpURLConnectionSDK(header,param,file,"isFile");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(reply);
     }
 }

@@ -62,7 +62,12 @@ public class MailUtil {
 //        gc.add(2,2);
 //        System.out.println(gc.getTime());
 //        System.out.println(new Date());
+<<<<<<< HEAD
 //        System.out.println(SHAencrypt.encryptSHA("admin"));
+=======
+        System.out.println(SHAencrypt.encryptSHA("admin"));
+        System.out.println(SHAencrypt.encryptSHA("admin"));
+>>>>>>> upstream/master
 //        System.out.println("http://192.168.10.208"+"http://127.0.0.1:3333/uploads//20170904/15044886028807127.jpeg".substring(16));
 //        System.out.println("sss  s".indexOf(" "));
 //        Pattern p = null;
@@ -73,6 +78,11 @@ public class MailUtil {
 //        System.out.println(m.matches());
         System.out.println(CommonUtil.checkEmail("788741@qq.om"));
 
+<<<<<<< HEAD
 
 }
 }
+=======
+    }
+}
+>>>>>>> upstream/master
