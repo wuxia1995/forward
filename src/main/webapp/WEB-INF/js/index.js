@@ -1,4 +1,11 @@
 $(document).ready(function() {
+    $('#threshold').on('input propertychange',function(){
+        $('#confidence').val($("#threshold").val()/100);
+    })
+    $('#confidence').on('change',function(){
+        $('#threshold').val($("#confidence").val()*100);
+    })
+
     getOs();
 		//设置竖屏切换
 

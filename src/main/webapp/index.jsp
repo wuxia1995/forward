@@ -400,6 +400,11 @@
                             <input class="upload_mintext4" id="inputUrlSearchDemo" type="text" placeholder="请输入图片URL"/>
                             <div onclick="searchUrlDemo(this)" class="detect_btn4">检测</div>
                         </div>
+                        <div class="faBox">
+                        				<div class="fa_text">设置阀值：</div>
+                        				<div class="fa_input"><input min="0" max="100" type="range" id="threshold"></div>
+                        				<div class="fa_value"><input id="confidence" type="text" value="0.5"/></div>
+                        			</div>
                         <div class="detect_minimg4">
                             <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://yun.anytec.cn:8080/img/index/two/max_img1.png"></div>
                             <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" class="img_active" src="http://yun.anytec.cn:8080/img/index/two/max_img2.png"></div>
