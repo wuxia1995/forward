@@ -658,6 +658,30 @@ public class CustomerController {
 //        return result;
 //    }
 
+    //探测人脸个数
+
+    @RequestMapping("faceNumber")
+    @ResponseBody
+    public int getFaceNum(HttpServletRequest request, HttpServletResponse response){
+        request.setAttribute("localAPI", "/v1/detect");
+        String result = MethodUtil.getInstance().requestForward(request, response);
+        if(result!=null){
+            try {
+                JSONObject faceResult= (JSONObject) new JSONParser().parse(result);
+                JSONArray faceArray= (JSONArray) faceResult.get("faces");
+                if(faceArray==null){
+                    response.setStatus(200);
+                    return 0;
+                }
+                return faceArray.size();
+            } catch (Exception e) {
+                logger.error("parse error");
+                return 0;
+            }
+        }
+        return 0;
+    }
+
 
     //获取用户图库信息
     private String getMyGalleryLocal(String name) {
