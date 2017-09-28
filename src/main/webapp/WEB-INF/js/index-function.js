@@ -614,60 +614,69 @@ function searchUrlDemo(input) {
 }
 
 function searchReqDemo(img) {
-    document.getElementById("imgShowSearchDemo").style.height="100%";
-    document.getElementById("imgShowSearchDemo").style.width="100%";
-    getImageWidth(img.src,function (widthImg,heightImg) {
-        var imgShowDiv = document.getElementById("imgShowSearchDemoDiv");
-        var imgShow = document.getElementById("imgShowSearchDemo");
-        console.log("height:"+heightImg)
-        console.log("widht:"+widthImg)
-        console.log(imgShowDiv.offsetHeight)
-        if(heightImg!=widthImg){
-            if(heightImg>widthImg){
-                imgShow.style.width=widthImg/heightImg*100+"%"
+    var threshold =$("#confidence").val();
+    if(threshold>0&&threshold<=1){
+        document.getElementById("imgShowSearchDemo").style.height="100%";
+        document.getElementById("imgShowSearchDemo").style.width="100%";
+        getImageWidth(img.src,function (widthImg,heightImg) {
+            var imgShowDiv = document.getElementById("imgShowSearchDemoDiv");
+            var imgShow = document.getElementById("imgShowSearchDemo");
+            console.log("height:"+heightImg)
+            console.log("widht:"+widthImg)
+            console.log(imgShowDiv.offsetHeight)
+            if(heightImg!=widthImg){
+                if(heightImg>widthImg){
+                    imgShow.style.width=widthImg/heightImg*100+"%"
+                    imgShow.style.height="100%"
+                }
+                if(heightImg<widthImg){
+                    imgShow.style.height=heightImg/widthImg*100+"%"
+                    imgShow.style.width="100%"
+                }
+            }else{
                 imgShow.style.height="100%"
-            }
-            if(heightImg<widthImg){
-                imgShow.style.height=heightImg/widthImg*100+"%"
                 imgShow.style.width="100%"
             }
-        }else{
-            imgShow.style.height="100%"
-            imgShow.style.width="100%"
-        }
-    })
-    var formData = new FormData();
-    formData.append("n",4);
-    formData.append("photo",img.src)
-    $.ajax({
-        url: 'customer/getDemoFace',
-        type: 'POST',
-        // dataType: "json",
-        data: formData,
-        processData: false,
-        contentType: false,
-        async: true,
-        success: function (data) {
-            if(data==""||data.length==0){
-                $('#reponseSearchDemo').html("")
-                $('#searchResultDemo').html("图库中未搜索相似人脸")
-                $('#resultShowSearchDemo').html("")
-                return false;
-            }
-            $('#imgShowSearchDemo').attr("src",img.src);
-            // console.log(data)
-            dataObj=eval(data);
-            showResult(dataObj)
-            $('#reponseSearchDemo').html(syntaxHighlight(filter(dataObj)))
+        })
+        var formData = new FormData();
+        formData.append("n",4);
+        formData.append("photo",img.src)
+        formData.append("threshold",threshold);
+        $.ajax({
+            url: 'customer/getDemoFace',
+            type: 'POST',
+            // dataType: "json",
+            data: formData,
+            processData: false,
+            contentType: false,
+            async: true,
+            success: function (data) {
+                if(data==""||data.length==0){
+                    $('#reponseSearchDemo').html("")
+                    $('#searchResultDemo').html("图库中未搜索相似人脸")
+                    $('#resultShowSearchDemo').html("")
+                    return false;
+                }
+                $('#imgShowSearchDemo').attr("src",img.src);
+                // console.log(data)
+                dataObj=eval(data);
+                showResult(dataObj)
+                $('#reponseSearchDemo').html(syntaxHighlight(filter(dataObj)))
 
-        },
-        error: function (data) {
-            $('#reponseSearchDemo').html("")
-            $('#resultShowSearchDemo').html("未在库中搜索到相似人脸或图片格式不符")
-            $('#searchResultDemo').html("")
-            return false
-        }
-    });
+            },
+            error: function (data) {
+                $('#reponseSearchDemo').html("")
+                $('#resultShowSearchDemo').html("未在库中搜索到相似人脸或图片格式不符")
+                $('#searchResultDemo').html("")
+                return false
+            }
+        });
+    }else {
+        $('#reponseSearchDemo').html("");
+        $('#resultShowSearchDemo').html("请输入范围在0~1的阀值！");
+        $('#searchResultDemo').html("");
+    }
+
 }
 
 function removeBefore(size) {
