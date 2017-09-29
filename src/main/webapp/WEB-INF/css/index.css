@@ -225,16 +225,16 @@
 }
 
 .code_box2 {
-	border: 2px solid #68676c;
-	width: 80%;
-	height: 80%;
-	margin-left: 10%;
-	margin-top: 8%;
-	border-radius: 10px;
-	background-color: white;
-	box-shadow: -5px 5px 5px #03716c;
-	position: absolute;
-	bottom: 70px;
+    border: 2px solid #68676c;
+    width: 80%;
+    height: 55px;
+    margin-left: 10%;
+    margin-top: 8%;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: -5px 5px 5px #03716c;
+    position: absolute;
+    bottom: 82%;
 }
 
 .code_title2 {
@@ -252,6 +252,7 @@
 	margin-left: 10%;
 	margin-top: 10px;
 	width: 90%;
+	display: none;
 }
 
 .code_text2 textarea {
@@ -265,16 +266,16 @@
 }
 
 .attribute_box2 {
-	border: 2px solid #68676c;
-	width: 80%;
-	height: 55px;
-	margin-left: 10%;
-	margin-top: 2%;
-	border-radius: 10px;
-	background-color: white;
-	box-shadow: -5px 5px 5px #03716c;
-	position: absolute;
-	bottom: 5px;
+    border: 2px solid #68676c;
+    width: 80%;
+    height: 80%;
+    margin-left: 10%;
+    margin-top: 2%;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: -5px 5px 5px #03716c;
+    position: absolute;
+    bottom: 5px;
 }
 
 .attribute_title2 {
@@ -288,12 +289,11 @@
 }
 
 .attribute_text2 {
-	border: 1px solid #ccc;
-	height: 80%;
-	margin-left: 10%;
-	margin-top: 10px;
-	width: 80%;
-	display: none;
+ 	border: 1px solid #ccc;
+    height: 80%;
+    margin-left: 10%;
+    margin-top: 10px;
+    width: 80%;
 }
 
 .attribute_text2 {
@@ -303,7 +303,6 @@
 	margin-top: 10px;
 	width: 80%;
 	display: none;
-	overflow: auto;
 }
 
 .maximg_box2 {

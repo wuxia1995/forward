@@ -141,37 +141,9 @@ function resizePic(imgShow,imgShowDiv,widthImg,heightImg){
     }
 }
 
-
-$(document).ready(function () {
-
-}); //ready
-
-// function setPicSize(url) {
-//     getImageWidth(url,function (widthImg,heightImg) {
-//         var imgShowDiv = document.getElementById("imgShowDetectDiv");
-//         var imgShow = document.getElementById("imgShowDetect");
-//         console.log("height:"+heightImg)
-//         console.log("widht:"+widthImg)
-//         console.log(imgShowDiv.offsetHeight)
-//         if(heightImg>imgShowDiv.offsetHeight||widthImg>imgShowDiv.offsetWidth){
-//             if(heightImg>widthImg){
-//                 imgShow.style.width=widthImg/heightImg*100+"%"
-//                 imgShow.style.height="100%"
-//             }
-//             if(heightImg<widthImg){
-//                 imgShow.style.height=heightImg/widthImg*100+"%"
-//                 imgShow.style.width="100%"
-//             }
-//         } else{
-//             total=widthImg+heightImg
-//             imgShow.style.height=heightImg/total*100+"%"
-//             imgShow.style.width=widthImg/total*100+"%"
-//         }
-//         $("#imgShowDetect").attr("src", imgUrl)
-//     })
-// }
-
 //定义全局变量num记录图片中人脸的个数
+
+
 
 var num = 0;
 
@@ -350,6 +322,353 @@ function checkProperties(data) {
 }
 
 
+/********* detect end************************************/
+
+/***********单个与集合对比开始*****************************/
+//定义两个全局变量用于记录两个框的上传文件内容
+var leftUploadFileCol
+var rightUploadFileCol
+
+function verifyUrlCol(id) {
+    verifyReqCol($("#inputUrlCol" + id).val(), id);
+}
+
+function uploadPicVerifyCol(obj, id) {
+    document.getElementById("imgShowCol" + id).style.height="100%";
+    document.getElementById("imgShowCol" + id).style.width="100%";
+    removeDivCol()
+    var img = document.getElementById("imgShowCol" + id)
+    var file = obj.files[0];
+    if(!file){
+        return false;
+    }
+    var reader = new FileReader();
+    reader.onloadend = function (e) {
+        var imgUrl=e.target.result
+        getImageWidth(imgUrl,function (widthImg,heightImg) {
+            var imgShowDiv = document.getElementById("picDivCol"+id);
+            var imgShow = document.getElementById("imgShowCol" + id);
+            // console.log("height:"+heightImg)
+            // console.log("widht:"+widthImg)
+            // console.log(imgShowDiv.offsetHeight)
+            if(heightImg!=widthImg){
+                if(heightImg>widthImg){
+                    imgShow.style.width=widthImg/heightImg*100+"%"
+                    imgShow.style.height="100%"
+                }
+                if(heightImg<widthImg){
+                    imgShow.style.height=heightImg/widthImg*100+"%"
+                    imgShow.style.width="100%"
+                }
+            }else{
+                imgShow.style.height="100%"
+                imgShow.style.width="100%"
+            }
+            $("#imgShowCol" + id).attr("src", imgUrl)
+        })
+        img.src = e.target.result;
+        if(id==1){
+            leftUploadFileCol=file
+        }
+        if(id==2){
+            rightUploadFileCol=file
+        }
+        obj.value=""
+    }
+    reader.readAsDataURL(file)
+    //上传文件时当前的图片内容是文件,对比的对象可能时文件或者url
+    var checkFile=checkLeftFile()
+    $.ajax({
+        url:"customer/faceNumber",
+        type:"post",
+        processData: false,
+        contentType: false,
+        data:checkFile,
+        success:function (data) {
+            console.log(data);
+            if(data==1){
+                another=id==1?2:1
+                var imgAno = document.getElementById("imgShowCol" + another)
+                var formData = new FormData();
+                if(imgAno.src.indexOf("data:image")==0||imgAno.src.indexOf("data:;base64")==0){
+                    formData.append("photo1", file)
+                    if(id==1) {
+                        formData.append("photo2", rightUploadFile)
+                    }else if(id==2){
+                        formData.append("photo2", leftUploadFile)
+                    }else {
+                        return false
+                    }
+                }else {
+                    formData.append("photo1", file)
+                    formData.append("photo2", imgAno.src)
+                }
+                formData.append("mf_selector","all");
+                $.ajax({
+                    url: 'customer/verify-face',
+                    type: 'POST',
+                    // dataType: "json",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    success: function (data) {
+                        var dataObj=eval('(' + data + ')')
+                        if(data==""){
+                            $("#resultVerifyCol").html("有图片未检测到人脸");
+                            $("#reponseVerifyCol").html("有图片未检测到人脸");
+                            return false;
+                        }
+                        readResDataCol(dataObj,id)
+                    },
+                    error:function (data) {
+                        removeDivCol()
+                        $("#resultVerifyCol").html("文件格式不符或文件太大,支持png,jpeg,webp格式且像素小于1920*1080的图片");
+                        $("#reponseVerifyCol").html("文件格式不符或文件太大,支持png,jpeg,webp格式且像素小于1920*1080的图片");
+                        return false;
+                    }
+                });
+            }else{
+                $("#resultVerifyCol").html("");
+                $("#reponseVerifyCol").html("");
+                alert("左侧框的人脸数不是1,请确保左侧人脸数只有一张")
+            }
+        },
+        error:function (data) {
+            console.log(data);
+            alert("出现错误")
+        }
+    })
+
+
+
+}
+
+//读取返回的结果
+function readResDataCol(data,id) {
+    removeDivCol()
+    console.log(data);
+    //读取返回的json数据
+    var dataObj = eval(data);
+    $('#reponseVerifyCol').html(syntaxHighlight(data))
+
+    var rect1
+    var rect2
+    var maxConfident=0
+    var index
+    for(var conf in dataObj["results"]){
+        if(dataObj["results"][conf]["confidence"]>maxConfident){
+            maxConfident=dataObj["results"][conf]["confidence"]
+            index=conf
+        }
+    }
+
+    var confidence = dataObj["results"][index]["confidence"];
+    var val = dataObj["verified"];
+    //第一个正方形框
+    rect1 = dataObj["results"][index]["bbox1"];
+    //第二个正方形框
+    rect2 = dataObj["results"][index]["bbox2"];
+
+
+    console.log(rect1);
+    console.log(rect2);
+    var imgshow1=document.getElementById("imgShowCol1");
+    var imgshow2=document.getElementById("imgShowCol2");
+    if(id==1){
+        getImageWidth(imgshow1.src,function (w,h) {
+            drawDivCol(imgshow1,w,h,rect1,"picDivCol1")
+        })
+        getImageWidth(imgshow2.src,function (w,h) {
+            drawDivCol(imgshow2,w,h,rect2,'picDivCol2')
+        })
+
+
+    }else{
+        getImageWidth(imgshow1.src,function (w,h) {
+            drawDivCol(imgshow1,w,h,rect2,"picDivCol1")
+        })
+        getImageWidth(imgshow2.src,function (w,h) {
+            drawDivCol(imgshow2,w,h,rect1,'picDivCol2')
+        })
+    }
+
+    $("#resultVerifyCol").html("是同一张人脸的可信度是:<br>"+confidence);
+
+
+}
+
+//人脸对比画人脸div
+function drawDivCol(image,w,h,result,parentId){
+    var imgVerifyDiv = document.getElementById(parentId);
+    var widthRate = image.width / w
+    var heightRate = image.height / h
+    result.x1 = result.x1 * widthRate
+    result.x2 = result.x2 * widthRate
+    result.y1 = result.y1 * heightRate
+    result.y2 = result.y2 * heightRate
+
+    width = (result.x2 - result.x1) * 0.8
+    height = (result.y2 - result.y1) * 0.9
+    left = result.x1 + width * 0.15
+    divtop = result.y1 + 2
+    // var result = new Result(width, height, left, divtop);
+    picId=image.id+"1"
+    $('#'+parentId).prepend("<div id='"+picId + "'></div>");
+    // $('#picShow2').prepend("<div id=" + id + "></div>");
+    $('#' + picId).css({
+        "position": "absolute",
+        "outline": "rgb(70, 171, 232) solid 2px",
+        "width": width,
+        "height": height,
+        "left": left,
+        "top": divtop
+    })
+
+}
+
+function getFaceNum(){
+    console.log("customer/getFaceNum")
+    var formData= new FormData();
+    formData.append("photo","http://yun.anytec.cn:8080/img/index/two/max_img3.png")
+    $.ajax({
+        url:"customer/faceNumber",
+        type:"post",
+        processData: false,
+        contentType: false,
+        data:formData,
+        success:function (data) {
+            console.log(data);
+        },
+        error:function (data) {
+            console.log(data);
+
+        }
+    })
+}
+
+function checkLeftFile() {
+    var leftImg=document.getElementById("imgShowCol1")
+    var formDataCheck = new FormData();
+    if(leftImg.src.indexOf("data:image")==0||leftImg.src.indexOf("data:;base64")==0){
+        formDataCheck.append("photo",leftUploadFileCol)
+    }else{
+        formDataCheck.append("photo",leftImg.src)
+    }
+    return formDataCheck;
+}
+
+function verifyReqCol(imgUrl, id) {
+
+    document.getElementById("imgShowCol" + id).style.height="100%";
+    document.getElementById("imgShowCol" + id).style.width="100%";
+    removeDivCol()
+    getImageWidth(imgUrl,function (widthImg,heightImg) {
+        var imgShowDiv = document.getElementById("picDivCol"+id);
+        var imgShow = document.getElementById("imgShowCol" + id);
+        // console.log("height:"+heightImg)
+        // console.log("widht:"+widthImg)
+        // console.log(imgShowDiv.offsetHeight)
+        if(heightImg!=widthImg){
+            if(heightImg>widthImg){
+                imgShow.style.width=widthImg/heightImg*100+"%"
+                imgShow.style.height="100%"
+            }
+            if(heightImg<widthImg){
+                imgShow.style.height=heightImg/widthImg*100+"%"
+                imgShow.style.width="100%"
+            }
+        }else{
+            imgShow.style.height="100%"
+            imgShow.style.width="100%"
+        }
+        $("#imgShowCol" + id).attr("src",imgUrl);
+        var checkFile=checkLeftFile()
+        $.ajax({
+            url:"customer/faceNumber",
+            type:"post",
+            processData: false,
+            contentType: false,
+            data:checkFile,
+            success:function (data) {
+                console.log(data);
+                if(data==1){
+                    var notId=id==1?2:1
+                    var selfImg = document.getElementById("imgShowCol" + id)
+                    var anotherImg = document.getElementById("imgShowCol" + notId)
+                    var formData = new FormData();
+                    if(anotherImg.src.indexOf("data:image")==0||anotherImg.src.indexOf("data:;base64")==0){
+                        formData.append("photo1", selfImg.src)
+                        if(id==1) {
+                            formData.append("photo2", rightUploadFileCol)
+                        }else if(id==2){
+                            formData.append("photo2", leftUploadFileCol)
+                        }else {
+                            return false
+                        }
+                    }else {
+                        formData.append("photo1", selfImg.src)
+                        formData.append("photo2", anotherImg.src)
+                    }
+                    formData.append("mf_selector","all");
+                    $.ajax({
+                        url: 'customer/verify-face',
+                        type: 'POST',
+                        // dataType: "json",
+                        data:formData,
+                        processData: false,
+                        contentType: false,
+                        async: true,
+                        success: function (data) {
+                            if(data==""){
+                                $("#resultVerifyCol").html("有图片未检测到人脸");
+                                $("#reponseVerifyCol").html("有图片未检测到人脸");
+                                return false;
+                            }
+                            readResDataCol(eval('(' + data + ')'),id)
+                        },
+                        error:function(data){
+                            $("#resultVerifyCol").html("文件格式不符或文件太大");
+                            $("#reponseVerifyCol").html("文件格式不符或文件太大");
+                            return false;
+                        }
+                    });
+                }else{
+                    $("#resultVerifyCol").html("");
+                    $("#reponseVerifyCol").html("");
+                    alert("左侧框的人脸数不是1,请确保左侧人脸数只有一张")
+                }
+            },
+            error:function (data) {
+                console.log(data);
+                alert("出现错误")
+            }
+        })
+    })
+
+
+
+
+
+
+}
+function removeDivCol() {
+    if ($('#imgShowCol11')) {
+        $('#imgShowCol11').remove();
+    }
+    if ($('#imgShowCol21')) {
+        $('#imgShowCol21').remove();
+    }
+}
+
+
+
+/***********单个与集合对比结束*****************************/
+
+
+
+
+/*********************verify----begin**********************************/
 //定义两个全局变量用于记录两个框的上传文件内容
 var leftUploadFile
 var rightUploadFile
@@ -455,7 +774,6 @@ function uploadPicVerify(obj, id) {
 function readResData(data,id) {
     removeDiv()
     console.log(data);
-
     //读取返回的json数据
     var dataObj = eval(data);
     $('#reponseVerify').html(syntaxHighlight(data))
@@ -529,9 +847,7 @@ function drawDiv(image,w,h,result,parentId){
 function verifyReq(imgUrl, id) {
     document.getElementById("imgShow" + id).style.height="100%";
     document.getElementById("imgShow" + id).style.width="100%";
-
     removeDiv()
-
     getImageWidth(imgUrl,function (widthImg,heightImg) {
         var imgShowDiv = document.getElementById("picDiv"+id);
         var imgShow = document.getElementById("imgShow" + id);
@@ -586,18 +902,15 @@ function verifyReq(imgUrl, id) {
                 readResData(eval('(' + data + ')'),id)
             },
             error:function(data){
-                // if(data==""){
                 $("#resultVerify").html("文件格式不符或文件太大");
                 $("#reponseVerify").html("文件格式不符或文件太大");
                 return false;
-                // }
-                // console.log(data)
             }
         });
     })
-
-
 }
+
+/*********************verify----begin**********************************/
 
 //记录上一次的搜索结果的数量
 var preSize=0;
