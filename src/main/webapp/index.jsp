@@ -56,12 +56,15 @@
                                     <a class="click_css" href="#page3">人脸对比</a>
                                 </li>
                                 <li>
-                                    <a class="click_css" href="#page4">人脸搜索</a>
+                                    <a class="click_css" href="#page4">人脸集合搜索</a>
+                                </li>
+                                <li>
+                                    <a class="click_css" href="#page5">人脸搜索</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            <a class="click_css" href="#page5">联系我们</a>
+                            <a class="click_css" href="#page6">联系我们</a>
                         </li>
                         <c:choose>
                             <c:when test="${! empty name}">
@@ -105,7 +108,7 @@
                     <!--左侧代码框-->
                     <div class="code_box2">
                         <div class="code_title2">
-                            <span><img class="code_img2" src="img/index/two/icon-bottom.png"></span>&nbsp;&nbsp;Response JSON
+                            <span><img class="code_img2" src="img/index/two/icon-right.png"></span>&nbsp;&nbsp;Response JSON
                         </div>
                         <div class="code_text2">
 									<textarea id="responseDetect" disabled="disabled">
@@ -116,7 +119,7 @@
                     <!--左侧人脸属性框-->
                     <div class="attribute_box2">
                         <div class="attribute_title2">
-                            <span><img class="attribute_img2" src="http://yun.anytec.cn:8080/img/index/two/icon-right.png"></span>&nbsp;&nbsp;人脸属性
+                            <span><img class="attribute_img2" src="img/index/two/icon-bottom.png"></span>&nbsp;&nbsp;人脸属性
                         </div>
                         <div id="faceProperties" class="attribute_text2"></div>
                     </div>
@@ -236,11 +239,11 @@
                                 <div class="detect_btn3" onclick="verifyUrl(1)">检测</div>
                             </div>
                             <div class="detect_minimg3">
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_1.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_2.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_3.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_4.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" class="img_active"  src="http://yun.anytec.cn:8080/img/index/two/max_img1_5.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img2.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img3.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img4.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" class="img_active"  src="http://yun.anytec.cn:8080/img/index/two/max_img5.png"></div>
                             </div>
                         </div>
                     </div>
@@ -270,7 +273,7 @@
                                 <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/max_img2.png"></div>
                                 <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/max_img3.png"></div>
                                 <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/max_img4.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" class="img_active" src="http://yun.anytec.cn:8080/img/index/two/max_img5.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" class="img_active" src="http://192.168.10.212:8080/img/index/two/max_img5.png"></div>
                             </div>
                         </div>
                     </div>
@@ -542,9 +545,8 @@
                 </div>
             </div>
             <!--底部版权-->
-            <div class="copyright6">
-                <div class="copyright6_1">Copyright 2017 All Right Reserved 深圳市恩钛控股有限公司  ICP:08118166 网站地图</div>
-                <div class="copyright6_2">地址：深圳市南山区粤海街道高新南七道高新工业村018号R3-A座四层</div>
+            <div class="copyright6"><div class="copyright6_1">Copyright 2017 All Right Reserved 深圳市恩钛控股有限公司  ICP:08118166 网站地图</div>
+            <div class="copyright6_2">地址：深圳市南山区粤海街道高新南七道高新工业村018号R3-A座四层</div>
             </div>
         </div>
     </div>
