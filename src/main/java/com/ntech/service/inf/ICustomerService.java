@@ -26,4 +26,6 @@ public interface ICustomerService {
     boolean disableToken(String name);
     boolean checkFaceNumber(String name);
     boolean operateFaceNumber(String name,int operate,int faceNumber);
+
+    List<Customer> findLikeName(String name);
 }

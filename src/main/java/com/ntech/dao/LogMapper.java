@@ -2,6 +2,8 @@ package com.ntech.dao;
 
 import com.ntech.model.Log;
 import com.ntech.model.LogExample;
+
+import java.util.Date;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -31,4 +33,9 @@ public interface LogMapper {
     List<Log> findPage(@Param("limit") int limit,@Param("offset") int offset);
 
     List<Log> findWithLimit(@Param("name")String name,@Param("limit") int limit,@Param("offset")int offset);
+
+    List<Log> findWithConditions(@Param("name")String name, @Param("limit") int limit,
+                                 @Param("offset")int offset, @Param("type")String type,@Param("start")String start,@Param("end")String end);
+    long findCount(@Param("name")String name, @Param("limit") int limit,
+                   @Param("offset")int offset, @Param("type")String type,@Param("start")String start,@Param("end")String end);
 }

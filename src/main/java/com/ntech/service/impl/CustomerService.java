@@ -309,4 +309,10 @@ public class CustomerService implements ICustomerService {
     public List<Customer> findPage(int limit, int offset) {
         return customerMapper.findPage(limit, offset);
     }
+
+
+    public List<Customer> findLikeName(String name) {
+
+        return customerMapper.findLikeName(name);
+    }
 }
