@@ -285,13 +285,13 @@ public class CustomerService implements ICustomerService {
     private void sendEmailForPassword(Customer customer) throws MessagingException {
         String validateCode = SHAencrypt.encryptSHA(customer.getEmail());
         StringBuffer content = new StringBuffer("点击下面链接激活账号，48小时生效，请尽快修改密码！</br>");
-        content.append("<a href=\"http://192.168.10.212:8080/customer/forgetPwdPageCheck?email=");
+        content.append("<a href=\"http://yun.anytec.cn:8080/customer/forgetPwdPageCheck?email=");
         content.append(customer.getEmail());
         content.append("&name=");
         content.append(customer.getName());
         content.append("&validateCode=");
         content.append(validateCode);
-        content.append("\">http://192.168.10.212:8080/customer/forgetPwdPageCheck?action=activate&email=");
+        content.append("\">http://yun.anytec.cn:8080/customer/forgetPwdPageCheck?action=activate&email=");
         content.append(customer.getEmail());
         content.append("&validateCode=");
         content.append(validateCode);

@@ -658,6 +658,30 @@ public class CustomerController {
 //        return result;
 //    }
 
+    //探测人脸个数
+
+    @RequestMapping("faceNumber")
+    @ResponseBody
+    public int getFaceNum(HttpServletRequest request, HttpServletResponse response){
+        request.setAttribute("localAPI", "/v1/detect");
+        String result = MethodUtil.getInstance().requestForward(request, response);
+        if(result!=null){
+            try {
+                JSONObject faceResult= (JSONObject) new JSONParser().parse(result);
+                JSONArray faceArray= (JSONArray) faceResult.get("faces");
+                if(faceArray==null){
+                    response.setStatus(200);
+                    return 0;
+                }
+                return faceArray.size();
+            } catch (Exception e) {
+                logger.error("parse error");
+                return 0;
+            }
+        }
+        return 0;
+    }
+
 
     //获取用户图库信息
     private String getMyGalleryLocal(String name) {
@@ -693,7 +717,7 @@ public class CustomerController {
                 String tmpStrng = (String) tmpJson1.get("normalized");
 //                String photo = (String) tmpJson.get("photo");
 //                String thumbnail = (String) tmpJson.get("thumbnail");
-                tmpStrng = "http://192.168.10.208" + tmpStrng.substring(16);
+//                tmpStrng = "http://192.168.10.208" + tmpStrng.substring(16);
                 String picBase64=PictureShow.getInstance().getBase64Picture(tmpStrng);
 //                String picBase64 = "http://192.168.10.208" + tmpStrng.substring(16);
                 JSONObject objectTemp=(JSONObject) jsonArrayFace.get(i);
@@ -727,7 +751,7 @@ public class CustomerController {
                 String tmpStrng = (String) tmpJson.get("normalized");
 //                String photo = (String) tmpJson.get("photo");
 //                String thumbnail = (String) tmpJson.get("thumbnail");
-                tmpStrng = "http://192.168.10.208" + tmpStrng.substring(16);
+//                tmpStrng = "http://192.168.10.208" + tmpStrng.substring(16);
                 String picBase64=PictureShow.getInstance().getBase64Picture(tmpStrng);
 //                String picBase64 = "http://192.168.10.208" + tmpStrng.substring(16);
                 ((JSONObject) jsonArray.get(i)).put("normalized", picBase64);

@@ -56,12 +56,15 @@
                                     <a class="click_css" href="#page3">人脸对比</a>
                                 </li>
                                 <li>
-                                    <a class="click_css" href="#page4">人脸搜索</a>
+                                    <a class="click_css" href="#page4">人脸集合搜索</a>
+                                </li>
+                                <li>
+                                    <a class="click_css" href="#page5">人脸搜索</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            <a class="click_css" href="#page5">联系我们</a>
+                            <a class="click_css" href="#page6">联系我们</a>
                         </li>
                         <c:choose>
                             <c:when test="${! empty name}">
@@ -105,7 +108,7 @@
                     <!--左侧代码框-->
                     <div class="code_box2">
                         <div class="code_title2">
-                            <span><img class="code_img2" src="img/index/two/icon-bottom.png"></span>&nbsp;&nbsp;Response JSON
+                            <span><img class="code_img2" src="img/index/two/icon-right.png"></span>&nbsp;&nbsp;Response JSON
                         </div>
                         <div class="code_text2">
 									<textarea id="responseDetect" disabled="disabled">
@@ -116,7 +119,7 @@
                     <!--左侧人脸属性框-->
                     <div class="attribute_box2">
                         <div class="attribute_title2">
-                            <span><img class="attribute_img2" src="http://yun.anytec.cn:8080/img/index/two/icon-right.png"></span>&nbsp;&nbsp;人脸属性
+                            <span><img class="attribute_img2" src="img/index/two/icon-bottom.png"></span>&nbsp;&nbsp;人脸属性
                         </div>
                         <div id="faceProperties" class="attribute_text2"></div>
                     </div>
@@ -126,18 +129,18 @@
                         <div class="select_text2">请勾选您需要展示的属性:</div>
                         <form>
                             <label>
-                                <div class="checkbox_box2"><img class="checkbox_img2" src="img/index/two/no.png"/></div>
-                                <input name="attribute" value="age" class="attribute2" type="checkbox" />
+                                <div class="checkbox_box2"><img class="checkbox_img2" src="img/index/two/yes.png"/></div>
+                                <input name="attribute" checked="checked" value="age" class="attribute2" type="checkbox" />
                                 年龄
                             </label>
                             <label>
-                                <div class="checkbox_box2"><img class="checkbox_img2" src="img/index/two/no.png"/></div>
-                                <input name="attribute" value="gender" class="attribute2" type="checkbox" />
+                                <div class="checkbox_box2"><img class="checkbox_img2" src="img/index/two/yes.png"/></div>
+                                <input name="attribute" checked="checked" value="gender" class="attribute2" type="checkbox" />
                                 性别
                             </label>
                             <label>
-                                <div class="checkbox_box2"><img class="checkbox_img2" src="img/index/two/no.png"/></div>
-                                <input name="attribute" value="emotions" class="attribute2" type="checkbox" />
+                                <div class="checkbox_box2"><img class="checkbox_img2" src="img/index/two/yes.png"/></div>
+                                <input name="attribute" checked="checked" value="emotions" class="attribute2" type="checkbox" />
                                 情绪
                             </label>
                         </form>
@@ -189,7 +192,8 @@
             <div class="title_bg3">
                 <img class="img-responsive center-block" src="img/index/three/title_img2.png">
                 <div class="title_text3">人脸对比</div>
-                <div class="introduce_text3">分析两张人脸属<br/>于同一个人的<br/>可能性大小</div>
+                <div class="introduce_text3">分析两张人脸属<br/>于同一个人的<br/>可能性大小
+                </div>
             </div>
             <div class="formal_box3">
                 <div class="left_formal3">
@@ -220,7 +224,7 @@
                         <div class="results_maxbox3" reveal_sign="width">
                             <div class="results_maximg3" reveal_sign="width">
                                 <div id="picDiv1" style="position: relative;height: 100%;width: 100%">
-                                    <img id="imgShow1" class="showcasing_img3" src="http://yun.anytec.cn:8080/img/index/two/max_img5.png">
+                                    <img id="imgShow1" class="showcasing_img3" src="http://yun.anytec.cn:8080/img/index/two/max_img1.png">
                                 </div>
                             </div>
                         </div>
@@ -235,10 +239,10 @@
                                 <div class="detect_btn3" onclick="verifyUrl(1)">检测</div>
                             </div>
                             <div class="detect_minimg3">
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_1.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_2.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_3.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_4.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img2.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img3.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img4.png"></div>
                                 <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" class="img_active"  src="http://yun.anytec.cn:8080/img/index/two/max_img1_5.png"></div>
                             </div>
                         </div>
@@ -250,7 +254,7 @@
                         <div class="results_maxbox3" reveal_sign="width">
                             <div class="results_maximg3" reveal_sign="width">
                                 <div id="picDiv2" style="position: relative;height: 100%;width: 100%;">
-                                    <img id="imgShow2" class="showcasing_img3" src="http://yun.anytec.cn:8080/img/index/two/max_img5.png">
+                                    <img id="imgShow2" class="showcasing_img3" src="http://yun.anytec.cn:8080/img/index/three/max_img1_1.png">
                                 </div>
                                 <%--<img class="showcasing_img3" src="img/index/two/max_img5.png" />--%>
                             </div>
@@ -265,11 +269,11 @@
                                 <div class="detect_btn3"  onclick="verifyUrl(2)">检测</div>
                             </div>
                             <div class="detect_minimg3">
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/max_img1.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/max_img2.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/max_img3.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/max_img4.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" class="img_active" src="http://yun.anytec.cn:8080/img/index/two/max_img5.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/three/max_img1_1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/three/max_img2_1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/three/max_img3_1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/three/max_img4_1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" class="img_active" src="http://yun.anytec.cn:8080/img/index/two/max_img1_5.png"></div>
                             </div>
                         </div>
                     </div>
@@ -277,7 +281,111 @@
             </div>
         </div>
     </div>
-    <!--第四屏(人脸搜索)-->
+    <!--第四屏(人脸集合对比)-->
+    <div class="section">
+        <div class="container-fluid fluid_three_four">
+            <!--右侧倒三角背景以及文字-->
+            <div class="title_bg3_4">
+                <img class="img-responsive center-block" src="img/index/three/title_img3_4.png">
+                <div class="title_text3_4">人脸集合</div>
+                <div class="introduce_text3_4">在多张人脸中找到和<br/>当前人脸相似度<br/>最高的人脸
+                </div>
+            </div>
+            <div class="formal_box3_4">
+
+                <!--右侧人脸对比演示-->
+                <div class="middle_formal3_4">
+                    <!--左侧图片上传区-->
+                    <div class="results_gightimg3_4">
+                        <div class="results_maxbox3_4" reveal_sign="width">
+                            <div class="results_maximg3_4" reveal_sign="width">
+                                <div id="picDivCol1" style="position: relative;height: 100%;width: 100%">
+                                    <img id="imgShowCol1" class="showcasing_img3_4" src="http://yun.anytec.cn:8080/img/index/two/max_img1_5.png">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="upload_box3_4">
+
+                            <div class="contrast_btn3_4">
+                                本地上传
+                                <input onchange="uploadPicVerifyCol(this,1)" class="contrast_file3_4" type="file" value="本地上传">
+                            </div>
+                            <div class="upload_text3_4">
+                                <input class="upload_mintext3_4" id="inputUrlCol1" type="text" placeholder="请输入图片URL" />
+                                <div class="detect_btn3_4" onclick="verifyUrlCol(1)">检测</div>
+                            </div>
+                            <div class="faBox">
+                                <div class="fa_text">设置阀值：</div>
+                                <div class="fa_input"><input min="0" max="100" value="75" type="range" id="threCol"></div>
+                                <div class="fa_value"><input id="confCol" type="text" value="0.75"/></div>
+                            </div>
+                            <div class="detect_minimg3_4">
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_1.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_2.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_3.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_4.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,1)" class="img_active" src="http://yun.anytec.cn:8080/img/index/two/max_img1_5.png"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right_formal3_4">
+                    <!--右侧图片上传区-->
+                    <div class="results_gightimg3_4">
+                        <div class="results_maxbox3_4" reveal_sign="width">
+                            <div class="results_maximg3_4" reveal_sign="width">
+                                <div id="picDivCol2" style="position: relative;height: 100%;width: 100%;">
+                                    <img id="imgShowCol2" class="showcasing_img3_4" src="http://yun.anytec.cn:8080/img/index/two/group4.png">
+                                </div>
+                                <%--<img class="showcasing_img3" src="img/index/two/max_img5.png" />--%>
+                            </div>
+                        </div>
+                        <div class="upload_box3_4">
+                            <div class="contrast_btn3_4">
+                                本地上传
+                                <input onchange="uploadPicVerifyCol(this,2)" class="contrast_file3_4" type="file" value="本地上传">
+                            </div>
+                            <div class="upload_text3_4">
+                                <input class="upload_mintext3_4" id="inputUrlCol2" type="text" placeholder="请输入图片URL" />
+                                <div class="detect_btn3_4" onclick="verifyUrlCol(2)">检测</div>
+                            </div>
+                            <div class="detect_minimg3_4">
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/group1.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/group2.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/group3.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,2)" class="img_active" src="http://yun.anytec.cn:8080/img/index/two/group4.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/group5.png"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="left_formal3_4">
+                    <!--左侧代码框-->
+                    <div class="code_box3_4">
+                        <div class="code_title3_4">
+                            <span><img class="code_img3_4" src="img/index/two/icon-right.png"></span>&nbsp;&nbsp;Response JSON
+                        </div>
+                        <div class="code_text3_4">
+									<textarea id="reponseVerifyCol" disabled="disabled">
+                            </textarea>
+                        </div>
+                    </div>
+                    <!--左侧人脸属性框-->
+                    <div class="attribute_box3_4">
+                        <div class="attribute_title3_4">
+                            <span><img class="attribute_img3_4" src="img/index/two/icon-bottom.png"></span>&nbsp;&nbsp;比对结果
+                        </div>
+                        <div id="resultVerifyCol" class="attribute_text3_4">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--第五屏(人脸搜索)-->
     <div class="section">
         <div class="container-fluid fluid_four">
             <!--顶部倒三角背景以及文字-->
@@ -445,9 +553,8 @@
                 </div>
             </div>
             <!--底部版权-->
-            <div class="copyright6">
-                <div class="copyright6_1">Copyright 2017 All Right Reserved 深圳市恩钛控股有限公司  ICP:08118166 网站地图</div>
-                <div class="copyright6_2">地址：深圳市南山区粤海街道高新南七道高新工业村018号R3-A座四层</div>
+            <div class="copyright6"><div class="copyright6_1">Copyright 2017 All Right Reserved 深圳市恩钛控股有限公司  ICP:08118166 网站地图</div>
+            <div class="copyright6_2">地址：深圳市南山区粤海街道高新南七道高新工业村018号R3-A座四层</div>
             </div>
         </div>
     </div>
@@ -456,7 +563,8 @@
 </body>
 <script type="text/javascript" src="js/lib/jquery.min.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
-<script type="text/javascript" src="js/index-function.min.js"></script>
+<%--<script type="text/javascript" src="js/index-function.min.js"></script>--%>
+<script type="text/javascript" src="js/index-function.js"></script>
 <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/lib/jquery.fullPage.js"></script>
 </div>
