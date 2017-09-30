@@ -16,17 +16,17 @@
 
 <nav class="navbar navbar-default navbar-static-top">
 
-        <!--<div class="navbar-header">-->
-            <!--<a class="navbar-brand" href="#">-->
-                <!--<img alt="Brand" src="../../img/index/one/logo.png">-->
-            <!--</a>-->
-        <!--</div>-->
+    <!--<div class="navbar-header">-->
+    <!--<a class="navbar-brand" href="#">-->
+    <!--<img alt="Brand" src="../../img/index/one/logo.png">-->
+    <!--</a>-->
+    <!--</div>-->
     <div class="container">
         <ul class="nav nav-pills">
-            <li class="active" ><a href="index">用户管理</a></li>
+            <li class="active"><a href="index">用户管理</a></li>
             <li><a href="mealManager">套餐管理</a></li>
             <li><a href="logManager">日志管理</a></li>
-            <p class="navbar-text navbar-right"><a href="logout" class="navbar-link">退出登录</a></p>
+            <p class="navbar-text navbar-right"><a href="logout" class="navbar-link ">退出登录</a></p>
         </ul>
     </div>
 </nav>
@@ -35,11 +35,11 @@
 <!--页面主题-->
 <div class="panel-body" style="padding-bottom:0px;">
     <div class="panel panel-default">
-        <div class="panel-heading">查询条件</div>
+        <div class="panel-heading"><div class="text-primary">查询条件</div></div>
         <div class="panel-body">
             <form id="formSearch" class="form-horizontal">
                 <div class="form-group" style="margin-top:15px">
-                    <label class="control-label col-sm-1" for="name">用户名</label>
+                    <label class="control-label col-sm-1 text-primary" for="name">用户名</label>
                     <div class="col-sm-3">
                         <input type="text" class="form-control" id="name">
                     </div>
@@ -103,7 +103,7 @@
 
                         <div class="form-group">
                             <label for="token" class="text-info">token&nbsp;&emsp;:</label>
-                            <input type="text" id="token" name="token" required class="text-info">
+                            <input type="text" id="token" name="token" required class="text-info" readonly>
                         </div>
 
                         <div class="form-group">
@@ -125,8 +125,6 @@
         </div>
     </form>
 </div>
-
-
 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form method="post" id="addForm">
         <div class="modal-dialog">
@@ -179,11 +177,13 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </form>
-    <!--<span id="addmsg"></span>-->
+
 </div>
 <script>
+
     $("#btn_query").click(function () {
         $("#tb_departments").bootstrapTable("refresh")
+
     });
     $(function () {
 
@@ -215,7 +215,7 @@
                 pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 5,                       //每页的记录行数（*）
                 pageList: [2, 3, 5, 10],           //可供选择的每页的行数（*）
-                search: true,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                search: false,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
                 //strictSearch: true,
                 //showColumns: true,                  //是否显示所有的列
                 // showRefresh: true,                  //是否显示刷新按钮
@@ -385,7 +385,7 @@
             $("#msg").text("未选中状态")
             flag=false;
         }else{
-            flag=true;
+           flag=true;
         }
         if (flag) {
             $.ajax({
@@ -411,25 +411,25 @@
         $("#msg").text("")
         //alert("heheh")
         if($("#userName1").val().length<6){
-            //
+          //
             $("#msg").text("用户名必须大于6位")
             flag=false;
         }else{
-            //   alert("run here")
-            $.ajax({
-                url: "/admin/checkName",
-                type: "post",
-                dataType: "json",
-                data: {"userName": $("#userName1").val()},
-                success: function (data) {
-                    if (data) {
-                        flag = false;
-                        $("#msg").text("用户已经存在");
-                    } else {
-                        flag = true;
-                    }
+         //   alert("run here")
+        $.ajax({
+            url: "/admin/checkName",
+            type: "post",
+            dataType: "json",
+            data: {"userName": $("#userName1").val()},
+            success: function (data) {
+                if (data) {
+                    flag = false;
+                    $("#msg").text("用户已经存在");
+                } else {
+                    flag = true;
                 }
-            });
+            }
+        });
         }
     })
 
