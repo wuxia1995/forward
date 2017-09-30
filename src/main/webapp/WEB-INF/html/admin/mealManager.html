@@ -1,6 +1,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>套餐管理</title>
+    <meta charset="UTF-8">
+    <!--<script src="../js/lib/jquery-1.10.2.min.js"></script>-->
+    <!--<script  src="../js/lib/bootstrap.min.js"></script>-->
+
+    <!--<link href="../css/bootstrap.css" rel="stylesheet">-->
     <link href="../../css/bootstrap-table.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
@@ -14,7 +19,7 @@
     <div class="container">
         <ul class="nav nav-pills">
             <li><a href="index">用户管理</a></li>
-            <li class="active" ><a href="mealManager">套餐管理</a></li>
+            <li class="active"><a href="mealManager">套餐管理</a></li>
             <li><a href="logManager">日志管理</a></li>
             <p class="navbar-text navbar-right"><a href="logout" class="navbar-link">退出登录</a></p>
         </ul>
@@ -23,17 +28,31 @@
 </nav>
 
 
-<div class="panel-body" style="padding-bottom:0px;">
+<div class="panel-body " style="padding-bottom:0px;" >
     <div class="panel panel-default">
-        <div class="panel-heading">查询条件</div>
+        <div class="panel-heading "><div class="text-primary">查询条件</div></div>
         <div class="panel-body">
             <form id="formSearch" class="form-horizontal">
                 <div class="form-group" style="margin-top:15px">
-                    <label class="control-label col-sm-1" for="userName">用户名</label>
-                    <div class="col-sm-3">
+                    <label class="control-label col-sm-1 text-primary" for="name">用户名</label>
+                    <div class="col-sm-2">
                         <input type="text" class="form-control" id="name">
                     </div>
-                    <div class="col-sm-4" style="text-align:left;">
+                    <label class="control-label col-sm-1 text-primary">套餐类型</label>
+                    <div class="col-sm-2">
+                         <select class="text-primary" id="selected" style="width: 150px;height: 34px">
+                              <option>
+                                  请选择
+                              </option>
+                             <option name="type" value="date">
+                                 按天收费
+                             </option>
+                             <option name="type" value="times">
+                                 按次收费
+                             </option>
+                         </select>
+                    </div>
+                    <div class="col-sm-2" style="text-align:left;">
                         <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-info">查询</button>
                     </div>
                 </div>
@@ -48,7 +67,7 @@
         <a href="javascript:void(0);" class="btn btn-info " onclick="deleteItem();">删除</a>
         </button>
     </div>
-    <table id="tb_departments"></table>
+    <table id="tb_departments" ></table>
 </div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form id="mealForm" method="post">
@@ -134,7 +153,6 @@
     </form>
 </div>
 
-
 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form method="post" id="addForm">
         <div class="modal-dialog">
@@ -215,8 +233,8 @@
 <script>
 
     $("#btn_query").click(function () {
-        $("#tb_departments").bootstrapTable("refresh")
-
+        $("#tb_departments").bootstrapTable("refresh");
+        $("#selected").get(0).selectedIndex=0;
     });
     $(function () {
 
@@ -235,7 +253,7 @@
         //初始化Table
         oTableInit.Init = function () {
             $('#tb_departments').bootstrapTable({
-                url: '/admin/testSetMeals',         //请求后台的URL（*）
+                url: '/admin/findMeals',         //请求后台的URL（*）
                 method: 'get',                      //请求方式（*）
                 toolbar: '#toolbar',                //工具按钮用哪个容器
                 striped: true,                      //是否显示行间隔色
@@ -248,7 +266,7 @@
                 pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 5,                       //每页的记录行数（*）
                 pageList: [2, 3, 5, 10],           //可供选择的每页的行数（*）
-                search: true,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                search: false,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
                 //strictSearch: true,
                 //showColumns: true,                  //是否显示所有的列
                 // showRefresh: true,                  //是否显示刷新按钮
@@ -316,7 +334,7 @@
                 limit: params.limit,   //页面大小
                 offset: params.offset,//查询的起始位置
                 "name": $("#name").val(),
-
+                "type":$('#selected option:selected').val()=="请选择"?null:$('#selected option:selected').val()
             };
             return temp;
         };
@@ -464,7 +482,7 @@
     });
     $("#endTime").change(function () {
         $("#updateMsg").text("");
-        alert("oooooooo")
+
         if ($("input:radio[name='contype']:checked").val() == "date") {
             if ($("#beginTime").val() == null || $("#endTime").val() == null) {
                 $("#updateMsg").text("开始时间或结束时间不能为空");
@@ -491,7 +509,7 @@
                 flag1 = false;
                 $("#updateMsg").text("总次数或剩余次数为空");
             } else {
-                flag1=true;
+                   flag1=true;
                 if (parseInt($("#totalTimes").val()) < parseInt($("#leftTimes").val())) {
                     flag1 = false;
                     $("#updateMsg").text("总次数小于剩余次数");
@@ -586,7 +604,7 @@
     })
 
     $("#submit").click(function () {
-        // console.log($("#totalTimes1").val())
+       // console.log($("#totalTimes1").val())
         if($("input:radio[name='contype']:checked").val()==null){
             $("#msg").text("")
             $("#msg").text("未选中套餐");
@@ -630,6 +648,5 @@
     }
 
 </script>
-
 </body>
 </html>

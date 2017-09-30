@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,13 +66,13 @@ public class AdminController {
         if(null!=name&&!"".equals(name)&&name.equals("sessionStatus")){
             return "admin/customerManager";
         }
-        return "login";
+        return "admin/login-admin";
     }
     //退出登录
     @RequestMapping("logout")
     public String logout(HttpSession session) {
         session.removeAttribute("admin");
-        return "admin/login";
+        return "admin/login-admin";
     }
     //跳转到首页
     @RequestMapping("logManager")
@@ -80,7 +81,7 @@ public class AdminController {
         if(null!=name&&!"".equals(name)&&name.equals("sessionStatus")){
             return "admin/logManager";
         }
-        return "login";
+        return "admin/login-admin";
     }
     //跳转到首页
     @RequestMapping("mealManager")
@@ -89,7 +90,7 @@ public class AdminController {
         if(null!=name&&!"".equals(name)&&name.equals("sessionStatus")){
             return "admin/mealManager";
         }
-        return "login";
+        return "admin/login-admin";
     }
 
     @RequestMapping("/checkName")
@@ -250,11 +251,10 @@ public class AdminController {
             jsonObject.put("total",customerService.totalCount());
         }else{
             List<Customer> list=new ArrayList<Customer>();
-            list.add(customerService.findByName(name));
+            list=customerService.findLikeName(name);
             jsonObject.put("rows",list);
-            jsonObject.put("total",1);
+            jsonObject.put("total",list.size());
         }
-        // jsonObject.put("total",customerService.);
         return jsonObject;
     }
 
@@ -331,16 +331,31 @@ public class AdminController {
 
     @RequestMapping("findLogs")
     @ResponseBody
-    public JSONObject findLogs(HttpSession session,int limit,int offset,String name){
+    public JSONObject findLogs(HttpSession session, int limit,int offset,String name,
+                               String type,String start,String over)  {
+        String admin= (String) session.getAttribute("admin");
         JSONObject jsonObject=new JSONObject();
-        if(name.equals("")||name==null){
-            jsonObject.put("rows",logService.findPage(limit,offset));
-            jsonObject.put("total",logService.totalCount());
+        if(!"".equals(admin)&&admin!=null&&admin.equals("sessionStatus")){
+            if("".equals(name)){
+                name=null;
+            }
+            if("".equals(type)){
+                type=null;
+            }
+            if ("".equals(start)){
+                start=null;
+            }
+            if ("".equals(over)){
+                over=null;
+            }
+            List<Log> list=logService.findWithConditions(name,limit,offset,type,start,over);
+            long total=logService.findCount(name, limit, offset, type, start, over);
+            jsonObject.put("total",total);
+            jsonObject.put("rows",list);
         }else{
-            jsonObject.put("rows",logService.findByNameWithLimit(name,limit,offset));
-            jsonObject.put("total", logService.findByName(name).size());
+            jsonObject.put("total",0);
+            jsonObject.put("rows",null);
         }
-
         return jsonObject;
     }
 
@@ -361,30 +376,27 @@ public class AdminController {
         return mav;
     }
 
-    @RequestMapping("testSetMeals")
+    @RequestMapping("findMeals")
     @ResponseBody
-    public JSONObject testMeals(HttpSession session,int limit,int offset,String name) {
-        //   String admin = (String) session.getAttribute("admin");
-        JSONObject jsonObject = new JSONObject();
-//        if (admin.equals("ntech")) {
-//
-//        }
-//        logger.info("findSetMeal failed");
-//
-//        return null;
-        logger.info("findSetMeals succeed");
-        // setMealService.findAll()
-
-        if(name.equals("")||name==null){
-            jsonObject.put("rows", setMealService.findByPage(limit,offset));
-            jsonObject.put("total", setMealService.totalCount());
-
+    public JSONObject testMeals(HttpSession session,int limit,int offset,String name,String type) {
+        String admin = (String) session.getAttribute("admin");
+        if("".equals(name)){
+            name=null;
         }
-        else{
-            List<SetMeal> list=new ArrayList<SetMeal>();
-            list.add(setMealService.findByName(name));
+        if("".equals(type)){
+            type=null;
+        }
+        JSONObject jsonObject = new JSONObject();
+        //logger.info("findSetMeals succeed");
+        if(!"".equals(admin)&&null!=admin&&admin.equals("sessionStatus")){
+            List<SetMeal> list=setMealService.findByConditions(offset,limit,name,type);
             jsonObject.put("rows",list);
-            jsonObject.put("total", 1);
+            jsonObject.put("total",setMealService.findCount(name,type));
+            logger.info("findSetMeals succeed");
+        }else{
+            logger.info("dont hava privilege");
+            jsonObject.put("rows",null);
+            jsonObject.put("total",0);
         }
 
         return jsonObject;

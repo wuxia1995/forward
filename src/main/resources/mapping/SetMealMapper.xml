@@ -255,9 +255,28 @@
       enable = #{enable,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
+  <!--按条件分页查找数据-->
   <select id="findPage"  resultMap="BaseResultMap">
     select * from set_meal limit #{offset},#{limit}
   </select>
-
+  <select id="findConditions"  resultMap="BaseResultMap">
+     SELECT  * from set_meal where 1=1
+     <if test="name!=null">
+       and user_name like concat('%',#{name},'%')
+     </if>
+     <if test="type!=null">
+       and contype=#{type}
+     </if>
+    limit #{offset},#{limit}
+  </select>
+  <!--查询查找的总数-->
+  <select id="findCount" resultType="java.lang.Long">
+    SELECT  count(*) from set_meal where 1=1
+    <if test="name!=null">
+      and user_name like concat('%',#{name},'%')
+    </if>
+    <if test="type!=null">
+      and contype=#{type}
+    </if>
+  </select>
 </mapper>

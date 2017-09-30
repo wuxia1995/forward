@@ -370,8 +370,70 @@ function uploadPicVerifyCol(obj, id) {
                     imgShow.style.width = "100%"
                 }
                 $("#imgShowCol" + id).attr("src", imgUrl)
+                var checkFile = checkLeftFile()
+                $.ajax({
+                    url: "customer/faceNumber",
+                    type: "post",
+                    processData: false,
+                    contentType: false,
+                    data: checkFile,
+                    success: function (data) {
+                        console.log(data);
+                        if (data == 1) {
+                            another = id == 1 ? 2 : 1
+                            var imgAno = document.getElementById("imgShowCol" + another)
+                            var formData = new FormData();
+                            if (imgAno.src.indexOf("data:image") == 0 || imgAno.src.indexOf("data:;base64") == 0) {
+                                formData.append("photo1", file)
+                                if (id == 1) {
+                                    formData.append("photo2", rightUploadFileCol)
+                                } else if (id == 2) {
+                                    formData.append("photo2", leftUploadFileCol)
+                                } else {
+                                    return false
+                                }
+                            } else {
+                                formData.append("photo1", file)
+                                formData.append("photo2", imgAno.src)
+                            }
+                            formData.append("mf_selector", "all");
+                            formData.append("threshold", threshold);
+                            $.ajax({
+                                url: 'customer/verify-face',
+                                type: 'POST',
+                                // dataType: "json",
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                async: true,
+                                success: function (data) {
+                                    var dataObj = eval('(' + data + ')')
+                                    if (data == "") {
+                                        $("#resultVerifyCol").html("有图片未检测到人脸");
+                                        $("#reponseVerifyCol").html("有图片未检测到人脸");
+                                        return false;
+                                    }
+                                    readResDataCol(dataObj, id)
+                                },
+                                error: function (data) {
+                                    removeDivCol()
+                                    $("#resultVerifyCol").html("文件格式不符或文件太大,支持png,jpeg,webp格式且像素小于1920*1080的图片");
+                                    $("#reponseVerifyCol").html("文件格式不符或文件太大,支持png,jpeg,webp格式且像素小于1920*1080的图片");
+                                    return false;
+                                }
+                            });
+                        } else {
+                            $("#resultVerifyCol").html("");
+                            $("#reponseVerifyCol").html("");
+                            alert("左侧框的人脸数不是1,请确保左侧人脸数只有一张")
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        alert("出现错误")
+                    }
+                })
             })
-            img.src = e.target.result;
             if (id == 1) {
                 leftUploadFileCol = file
             }
@@ -382,69 +444,7 @@ function uploadPicVerifyCol(obj, id) {
         }
         reader.readAsDataURL(file)
         //上传文件时当前的图片内容是文件,对比的对象可能时文件或者url
-        var checkFile = checkLeftFile()
-        $.ajax({
-            url: "customer/faceNumber",
-            type: "post",
-            processData: false,
-            contentType: false,
-            data: checkFile,
-            success: function (data) {
-                console.log(data);
-                if (data == 1) {
-                    another = id == 1 ? 2 : 1
-                    var imgAno = document.getElementById("imgShowCol" + another)
-                    var formData = new FormData();
-                    if (imgAno.src.indexOf("data:image") == 0 || imgAno.src.indexOf("data:;base64") == 0) {
-                        formData.append("photo1", file)
-                        if (id == 1) {
-                            formData.append("photo2", rightUploadFileCol)
-                        } else if (id == 2) {
-                            formData.append("photo2", leftUploadFileCol)
-                        } else {
-                            return false
-                        }
-                    } else {
-                        formData.append("photo1", file)
-                        formData.append("photo2", imgAno.src)
-                    }
-                    formData.append("mf_selector", "all");
-                    formData.append("threshold", threshold);
-                    $.ajax({
-                        url: 'customer/verify-face',
-                        type: 'POST',
-                        // dataType: "json",
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        async: true,
-                        success: function (data) {
-                            var dataObj = eval('(' + data + ')')
-                            if (data == "") {
-                                $("#resultVerifyCol").html("有图片未检测到人脸");
-                                $("#reponseVerifyCol").html("有图片未检测到人脸");
-                                return false;
-                            }
-                            readResDataCol(dataObj, id)
-                        },
-                        error: function (data) {
-                            removeDivCol()
-                            $("#resultVerifyCol").html("文件格式不符或文件太大,支持png,jpeg,webp格式且像素小于1920*1080的图片");
-                            $("#reponseVerifyCol").html("文件格式不符或文件太大,支持png,jpeg,webp格式且像素小于1920*1080的图片");
-                            return false;
-                        }
-                    });
-                } else {
-                    $("#resultVerifyCol").html("");
-                    $("#reponseVerifyCol").html("");
-                    alert("左侧框的人脸数不是1,请确保左侧人脸数只有一张")
-                }
-            },
-            error: function (data) {
-                console.log(data);
-                alert("出现错误")
-            }
-        })
+
     }else {
         removeDivCol()
         $('#resultVerifyCol').html("");

@@ -218,4 +218,37 @@
     select * from  log where user_name=#{name} order by time desc limit #{offset},#{limit}
   </select>
 
+  <!-- 按条件分页查询-->
+<select id="findWithConditions" resultMap="BaseResultMap">
+   SELECT  * from log where 1=1
+  <if test="name!=null">
+    AND  user_name LIKE  concat('%',#{name},'%')
+  </if>
+  <if test="type!=null">
+    AND content LIKE concat('%',#{type},'%')
+  </if>
+  <if test="start!=null">
+    AND  time&gt;=#{start}
+  </if>
+  <if test="end!=null">
+    AND  time&lt;=#{end}
+  </if>
+  limit #{offset},#{limit}
+</select>
+  <!--查出总数-->
+  <select id="findCount" resultType="java.lang.Long">
+    SELECT  count(*) from log where 1=1
+    <if test="name!=null">
+      AND  user_name LIKE  concat('%',#{name},'%')
+    </if>
+    <if test="type!=null">
+      AND content LIKE concat('%',#{type},'%')
+    </if>
+    <if test="start!=null">
+      AND  time&gt;=#{start}
+    </if>
+    <if test="end!=null">
+      AND  time&lt;=#{end}
+    </if>
+  </select>
 </mapper>

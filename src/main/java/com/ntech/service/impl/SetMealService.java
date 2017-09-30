@@ -136,4 +136,12 @@ public class SetMealService implements ISetMealService {
     }
 
 
+    public List<SetMeal> findByConditions(int offset, int limit, String name, String type) {
+         logger.info("find by conditions");
+        return setMealMapper.findConditions(offset,limit,name,type);
+    }
+
+     public long findCount( String name, String type){
+         return setMealMapper.findCount(name,type);
+     }
 }

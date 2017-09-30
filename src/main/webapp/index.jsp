@@ -149,7 +149,7 @@
                         <div class="img_bgbox2" reveal_sign="width">
                             <div  class="detect_img2">
                                 <div id="imgShowDetectDiv" style="position: relative;height: 100%;width: 100%;">
-                                <img id="imgShowDetect" src="http://192.168.10.212:8080/img/index/two/max_img1.png">
+                                <img id="imgShowDetect" src="http://yun.anytec.cn:8080/img/index/two/max_img1.png">
                                 </div>
                             </div>
                         </div>
@@ -172,11 +172,11 @@
                         </div>
                         <div class="upload2-3">
                             <div class="upload2-3img">
-                                <div id="" class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" class="img_active" src="http://192.168.10.212:8080/img/index/two/max_img1.png"></div>
-                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)"src="http://192.168.10.212:8080/img/index/two/max_img2.png"></div>
-                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" src="http://192.168.10.212:8080/img/index/two/max_img3.png"></div>
-                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" src="http://192.168.10.212:8080/img/index/two/max_img4.png"></div>
-                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" src="http://192.168.10.212:8080/img/index/two/max_img5.png"></div>
+                                <div id="" class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" class="img_active" src="http://yun.anytec.cn:8080/img/index/two/max_img1.png"></div>
+                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)"src="http://yun.anytec.cn:8080/img/index/two/max_img2.png"></div>
+                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" src="http://yun.anytec.cn:8080/img/index/two/max_img3.png"></div>
+                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" src="http://yun.anytec.cn:8080/img/index/two/max_img4.png"></div>
+                                <div class="detect_fiveimg2" reveal_sign="width"><img onclick="detectReq(this.src)" src="http://yun.anytec.cn:8080/img/index/two/max_img5.png"></div>
                                 <br style="clear:both;"/><!--清除浮动-->
                             </div>
                         </div>
@@ -224,7 +224,7 @@
                         <div class="results_maxbox3" reveal_sign="width">
                             <div class="results_maximg3" reveal_sign="width">
                                 <div id="picDiv1" style="position: relative;height: 100%;width: 100%">
-                                    <img id="imgShow1" class="showcasing_img3" src="http://192.168.10.212:8080/img/index/two/max_img1.png">
+                                    <img id="imgShow1" class="showcasing_img3" src="http://yun.anytec.cn:8080/img/index/two/max_img1.png">
                                 </div>
                             </div>
                         </div>
@@ -239,11 +239,11 @@
                                 <div class="detect_btn3" onclick="verifyUrl(1)">检测</div>
                             </div>
                             <div class="detect_minimg3">
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://192.168.10.212:8080/img/index/two/max_img1.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://192.168.10.212:8080/img/index/two/max_img2.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://192.168.10.212:8080/img/index/two/max_img3.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://192.168.10.212:8080/img/index/two/max_img4.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" class="img_active"  src="http://192.168.10.212:8080/img/index/two/max_img1_5.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img2.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img3.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img4.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,1)" class="img_active"  src="http://yun.anytec.cn:8080/img/index/two/max_img1_5.png"></div>
                             </div>
                         </div>
                     </div>
@@ -254,7 +254,7 @@
                         <div class="results_maxbox3" reveal_sign="width">
                             <div class="results_maximg3" reveal_sign="width">
                                 <div id="picDiv2" style="position: relative;height: 100%;width: 100%;">
-                                    <img id="imgShow2" class="showcasing_img3" src="http://192.168.10.212:8080/img/index/two/max_img1.png">
+                                    <img id="imgShow2" class="showcasing_img3" src="http://yun.anytec.cn:8080/img/index/three/max_img1_1.png">
                                 </div>
                                 <%--<img class="showcasing_img3" src="img/index/two/max_img5.png" />--%>
                             </div>
@@ -269,11 +269,11 @@
                                 <div class="detect_btn3"  onclick="verifyUrl(2)">检测</div>
                             </div>
                             <div class="detect_minimg3">
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://192.168.10.212:8080/img/index/two/max_img1.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://192.168.10.212:8080/img/index/two/max_img2.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://192.168.10.212:8080/img/index/two/max_img3.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://192.168.10.212:8080/img/index/two/max_img4.png"></div>
-                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" class="img_active" src="http://192.168.10.212:8080/img/index/two/max_img1_5.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/three/max_img1_1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/three/max_img2_1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/three/max_img3_1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" src="http://yun.anytec.cn:8080/img/index/three/max_img4_1.png"></div>
+                                <div class="detect_fiveimg3" reveal_sign="width"><img onclick="verifyReq(this.src,2)" class="img_active" src="http://yun.anytec.cn:8080/img/index/two/max_img1_5.png"></div>
                             </div>
                         </div>
                     </div>
@@ -300,7 +300,7 @@
                         <div class="results_maxbox3_4" reveal_sign="width">
                             <div class="results_maximg3_4" reveal_sign="width">
                                 <div id="picDivCol1" style="position: relative;height: 100%;width: 100%">
-                                    <img id="imgShowCol1" class="showcasing_img3_4" src="http://192.168.10.212:8080/img/index/two/max_img1_5.png">
+                                    <img id="imgShowCol1" class="showcasing_img3_4" src="http://yun.anytec.cn:8080/img/index/two/max_img1_5.png">
                                 </div>
                             </div>
                         </div>
@@ -320,11 +320,11 @@
                                 <div class="fa_value"><input id="confCol" type="text" value="0.75"/></div>
                             </div>
                             <div class="detect_minimg3_4">
-                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,1)" src="http://192.168.10.212:8080/img/index/two/max_img1_1.png"></div>
-                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,1)" src="http://192.168.10.212:8080/img/index/two/max_img1_2.png"></div>
-                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,1)" src="http://192.168.10.212:8080/img/index/two/max_img1_3.png"></div>
-                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,1)" src="http://192.168.10.212:8080/img/index/two/max_img1_4.png"></div>
-                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,1)" class="img_active" src="http://192.168.10.212:8080/img/index/two/max_img1_5.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_1.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_2.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_3.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,1)" src="http://yun.anytec.cn:8080/img/index/two/max_img1_4.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,1)" class="img_active" src="http://yun.anytec.cn:8080/img/index/two/max_img1_5.png"></div>
                             </div>
                         </div>
                     </div>
@@ -335,7 +335,7 @@
                         <div class="results_maxbox3_4" reveal_sign="width">
                             <div class="results_maximg3_4" reveal_sign="width">
                                 <div id="picDivCol2" style="position: relative;height: 100%;width: 100%;">
-                                    <img id="imgShowCol2" class="showcasing_img3_4" src="http://192.168.10.212:8080/img/index/two/group4.png">
+                                    <img id="imgShowCol2" class="showcasing_img3_4" src="http://yun.anytec.cn:8080/img/index/two/group4.png">
                                 </div>
                                 <%--<img class="showcasing_img3" src="img/index/two/max_img5.png" />--%>
                             </div>
@@ -350,11 +350,11 @@
                                 <div class="detect_btn3_4" onclick="verifyUrlCol(2)">检测</div>
                             </div>
                             <div class="detect_minimg3_4">
-                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,2)" src="http://192.168.10.212:8080/img/index/two/group1.png"></div>
-                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,2)" src="http://192.168.10.212:8080/img/index/two/group2.png"></div>
-                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,2)" src="http://192.168.10.212:8080/img/index/two/group3.png"></div>
-                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,2)" class="img_active" src="http://192.168.10.212:8080/img/index/two/group4.png"></div>
-                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,2)" src="http://192.168.10.212:8080/img/index/two/group5.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/group1.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/group2.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/group3.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,2)" class="img_active" src="http://yun.anytec.cn:8080/img/index/two/group4.png"></div>
+                                <div class="detect_fiveimg3_4" reveal_sign="width"><img onclick="verifyReqCol(this.src,2)" src="http://yun.anytec.cn:8080/img/index/two/group5.png"></div>
                             </div>
                         </div>
                     </div>
@@ -417,11 +417,11 @@
                         				<div class="fa_value"><input id="confidence" type="text" value="0.5"/></div>
                         			</div>
                         <div class="detect_minimg4">
-                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://192.168.10.212:8080/img/index/two/max_img1.png"></div>
-                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" class="img_active" src="http://192.168.10.212:8080/img/index/two/max_img2.png"></div>
-                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://192.168.10.212:8080/img/index/two/max_img3.png"></div>
-                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://192.168.10.212:8080/img/index/two/max_img4.png"></div>
-                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://192.168.10.212:8080/img/index/two/max_img5.png"></div>
+                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://yun.anytec.cn:8080/img/index/two/max_img1.png"></div>
+                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" class="img_active" src="http://yun.anytec.cn:8080/img/index/two/max_img2.png"></div>
+                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://yun.anytec.cn:8080/img/index/two/max_img3.png"></div>
+                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://yun.anytec.cn:8080/img/index/two/max_img4.png"></div>
+                            <div class="detect_fiveimg4"><img onclick="searchReqDemo(this)" src="http://yun.anytec.cn:8080/img/index/two/max_img5.png"></div>
                         </div>
                     </div>
                 </div>
@@ -563,6 +563,7 @@
 </body>
 <script type="text/javascript" src="js/lib/jquery.min.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
+<%--<script type="text/javascript" src="js/index-function.min.js"></script>--%>
 <%--<script type="text/javascript" src="js/index-function.min.js"></script>--%>
 <script type="text/javascript" src="js/index-function.js"></script>
 <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
