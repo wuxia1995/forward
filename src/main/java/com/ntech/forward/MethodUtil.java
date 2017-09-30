@@ -89,6 +89,7 @@ public class MethodUtil {
 						//文本
 						String filedName = item.getFieldName();
 						String value;
+						logger.info(item.getString("utf-8"));
 						if(item.getString().equals(new String(item.getString().getBytes("iso-8859-1"), "iso-8859-1"))) {
 							logger.info("PARAM_CHARSET: iso-8859-1");
 							value = new String(item.getString().getBytes("iso-8859-1"),"utf-8");
