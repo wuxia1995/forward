@@ -564,6 +564,7 @@
 <script type="text/javascript" src="js/lib/jquery.min.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
 <%--<script type="text/javascript" src="js/index-function.min.js"></script>--%>
+<%--<script type="text/javascript" src="js/index-function.min.js"></script>--%>
 <script type="text/javascript" src="js/index-function.js"></script>
 <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/lib/jquery.fullPage.js"></script>
